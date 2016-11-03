@@ -35,5 +35,5 @@
 #+END_EXAMPLE
 ** Known bugs
    - Long context lines
-     (https://tools.ietf.org/html/rfc5545#section-3.1) is not parsed
+     (https://tools.ietf.org/html/rfc5545#section-3.1) are not parsed
      properly.
