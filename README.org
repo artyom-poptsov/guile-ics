@@ -1,0 +1,39 @@
+* Guile-ICS
+  iCalendar format ([[https://tools.ietf.org/html/rfc5545][RFC5545]]) parser for GNU Guile.
+
+  The project is on early under development stage, so API may not be
+  stabilized yet.
+
+** License
+   Guile-ICS is free software: you can redistribute it and/or modify it under
+   the terms of the GNU General Public License as published by the Free
+   Software Foundation, either version 3 of the License, or (at your option)
+   any later version.  Please see =COPYING= file for the terms of GNU General
+   Public License.
+
+** Usage
+   The module may be used as follows:
+#+BEGIN_EXAMPLE
+#!/usr/bin/guile \
+-L ../modules -e main -s
+!#
+
+(use-modules (ics)
+             (srfi srfi-9 gnu)
+             (ice-9 pretty-print)
+             ;; Guile-ICS
+             (ics parser)
+             (ics common)) ; For 'set-debug!'
+
+(define parser (make-parser (open-input-file "./basic.ics")))
+
+(define (main args)
+  ;; (set-debug! #t)              ; Optionally enable debug mode
+  (let ((res (ics->scm parser)))
+    (display "RESULT: \n")
+    (pretty-print res)))
+#+END_EXAMPLE
+** Known bugs
+   - Long context lines
+     (https://tools.ietf.org/html/rfc5545#section-3.1) is not parsed
+     properly.
