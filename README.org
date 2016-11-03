@@ -1,7 +1,7 @@
 * Guile-ICS
   iCalendar format ([[https://tools.ietf.org/html/rfc5545][RFC5545]]) parser for GNU Guile.
 
-  The project is on early under development stage, so API may not be
+  The project is on early development stage, so API may not be
   stabilized yet.
 
 ** License
