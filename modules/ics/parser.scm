@@ -19,7 +19,7 @@
   #:use-module (ice-9 rdelim)
   #:use-module (scheme documentation)
   #:export (<ics-parser> make-parser parser? parser-port
-                         parser-read-char))
+                         parser-read-char parser-unread-char))
 
 
 ;;;
@@ -34,6 +34,9 @@
 
 (define (parser-read-char parser)
   (read-char (parser-port parser)))
+
+(define (parser-unread-char parser ch)
+  (unread-char ch (parser-port parser)))
 
 
 ;;;

@@ -109,7 +109,18 @@ END:VCALENDAR
           (case ch
             ((#\cr)
              (read-property buffer))
-            ((#\linefeed *eof-object*)
+            ((#\linefeed)
+             (let ((next-ch (parser-read-char parser)))
+               ;; Lines longer than 75 octets should be split into
+               ;; multiple line representations; in this case a single
+               ;; space character immediately follows CRLF (see RFC
+               ;; 5545, section 3.1)
+               (if (equal? next-ch #\space)
+                   (read-property buffer)
+                   (begin
+                     (parser-unread-char parser next-ch)
+                     buffer))))
+            ((*eof-object*)
              buffer)
             (else
              (read-property (string-append buffer (string ch))))))))
