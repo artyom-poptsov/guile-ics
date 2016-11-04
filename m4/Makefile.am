@@ -1,3 +1,2 @@
 EXTRA_DIST = \
-	guile.m4 \
-	lib-link.m4
+	guile.m4
