@@ -34,6 +34,13 @@
 (test-assert "fsm-read-property"
   (let ((parser (make-string-parser (string-append "VCALENDAR"
                                                    (string #\cr)
+                                                   (string #\lf)
+                                                   "VERSION"))))
+    (string=? (fsm-read-property parser) "VCALENDAR")))
+
+(test-assert "fsm-read-property, property followed by EOF"
+  (let ((parser (make-string-parser (string-append "VCALENDAR"
+                                                   (string #\cr)
                                                    (string #\lf)))))
     (string=? (fsm-read-property parser) "VCALENDAR")))
 
