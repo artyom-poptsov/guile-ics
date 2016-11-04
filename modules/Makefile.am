@@ -15,12 +15,51 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Guile-ICS.  If not, see <http://www.gnu.org/licenses/>.
 
+include $(top_srcdir)/am/guilec
+
 SUBDIRS =
+
+SCM_SOURCES = \
+	ics.scm
+
+GOBJECTS = $(SCM_SOURCES:%.scm=%.go)
+
+ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/
+nobase_dist_ccache_DATA = $(GOBJECTS)
+
+# Make sure source files are installed first, so that the mtime of
+# installed compiled files is greater than that of installed source
+# files.  See
+# <http://lists.gnu.org/archive/html/guile-devel/2010-07/msg00125.html>
+# for details.
+guile_ssh_install_go_files = install-nobase_dist_ccacheDATA
+$(guile_ssh_install_go_files): install-nobase_dist_pkgguilesiteDATA
+
+guilec_warnings =				\
+  -Wunbound-variable -Warity-mismatch		\
+  -Wunused-variable -Wunused-toplevel
+
+guilec_opts = 					\
+	--load-path=$(abs_srcdir)	\
+	--load-path=$(abs_builddir)	\
+	--target=$(host)			\
+	$(guilec_warnings)
+
+# TODO: Move environment setup to a separate file.
+guilec_env  = 									\
+	GUILE_AUTO_COMPILE=0 							\
+	GUILE_LOAD_PATH="$(abs_top_srcdir)/modules"
+
+.scm.go:
+	$(AM_V_GUILEC)$(guilec_env) $(GUILEC) $(guilec_opts) \
+	--output=$@ $<
+
+CLEANFILES = $(GOBJECTS)
 
 EXTRA_DIST =
 
 clean-go:
-	@cd ssh; make clean-go
+	@cd ics; make clean-go
 .PHONY: clean-go
 
 ## Makefile.am ends here.
