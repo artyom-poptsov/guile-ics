@@ -21,6 +21,7 @@ SUBDIRS =
 
 SCM_SOURCES = \
 	common.scm	\
+	ical-object.scm	\
 	fsm.scm		\
 	parser.scm
 

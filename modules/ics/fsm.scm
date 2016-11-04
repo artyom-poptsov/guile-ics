@@ -22,11 +22,11 @@
 (define-module (ics fsm)
   #:use-module (scheme documentation)
   #:use-module (ics common)
+  #:use-module (ics ical-object)
   #:use-module (ics parser)
   #:export (ics-token-begin?
             ics-token-end?
             ics-calendar-object?
-            ->ical-object
             ;; FSM
             fsm-read-property
             fsm-skip-property
@@ -60,13 +60,6 @@
 (define (ics-calendar-object? x)
   "Check if X is a iCalendar object."
   (string=? x %ics-icalendar-object))
-
-
-;;; Helper procedures.
-
-(define (->ical-object icalprops component)
-  (list (cons 'ICALPROPS (list icalprops))
-        (cons 'COMPONENT (list component))))
 
 
 ;;; FSM.
