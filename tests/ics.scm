@@ -22,6 +22,7 @@
 ;;; Code:
 
 (use-modules (srfi srfi-64)
+             (ice-9 rdelim)
              (ics)
              (ics parser)
              (ics fsm))
@@ -43,6 +44,22 @@
                                                    (string #\cr)
                                                    (string #\lf)))))
     (string=? (fsm-read-property parser) "VCALENDAR")))
+
+
+(test-assert "fsm-skip-property"
+  (let ((parser (make-string-parser (string-append "VCALENDAR"
+                                                   (string #\cr)
+                                                   (string #\lf)
+                                                   "VERSION"))))
+    (fsm-skip-property parser)
+    (string=? (read-line (parser-port parser)) "VERSION")))
+
+(test-assert "fsm-skip-property, property followed by EOF"
+  (let ((parser (make-string-parser (string-append "VCALENDAR"
+                                                   (string #\cr)
+                                                   (string #\lf)))))
+    (fsm-skip-property parser)
+    (eof-object? (read-char (parser-port parser)))))
 
 
 (test-end "ics")
