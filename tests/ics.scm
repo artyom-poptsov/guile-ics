@@ -32,6 +32,23 @@
 
 ;;; Finite-State Machine tests.
 
+(test-assert "ics-token-begin?"
+  (and (ics-token-begin? "BEGIN")
+       (not (ics-token-begin? "END"))))
+
+(test-assert "ics-token-end?"
+  (and (ics-token-end? "END")
+       (not (ics-token-end? "BEGIN"))))
+
+(test-assert "ics-calendar-object?"
+  (and (ics-calendar-object? "VCALENDAR")
+       (not (ics-calendar-object? "BEGIN"))))
+
+
+(test-assert "->ical-object"
+  (equal? (->ical-object '() '()) '((ICALPROPS ()) (COMPONENT ()))))
+
+
 (test-assert "fsm-read-property"
   (let ((parser (make-string-parser (string-append "VCALENDAR"
                                                    (string #\cr)
