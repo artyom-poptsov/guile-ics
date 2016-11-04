@@ -87,6 +87,10 @@ END:VCALENDAR
 (define (ics-token-end? x)
   (string=? x %ics-token-end))
 
+(define (ics-calendar-object? x)
+  "Check if X is a iCalendar object."
+  (string=? x %ics-icalendar-object))
+
 
 ;;; Helper procedures.
 
@@ -157,7 +161,7 @@ END:VCALENDAR
   (define (read-component-name)
     (let ((name (fsm-read-property parser)))
       (debug-fsm "fsm-read-component-name" "NAME: ~a~%" name)
-      (if (string=? name %ics-icalendar-object)
+      (if (ics-calendar-object? name)
           (begin
             (debug-fsm "fsm-read-ical-stream" "RESULT: ~a~%" result)
             (let ((result (cons (fsm-read-ical-object parser '() '())
