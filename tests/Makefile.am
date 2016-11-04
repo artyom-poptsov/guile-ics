@@ -45,7 +45,7 @@ AM_SCM_LOG_FLAGS = \
 	-s
 
 EXTRA_DIST = \
-	${SCM_TESTS}		\
+	${SCM_TESTS}
 
 ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ssh
 nobase_dist_ccache_DATA = $(GOBJECTS)
