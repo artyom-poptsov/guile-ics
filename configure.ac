@@ -63,6 +63,7 @@ fi
 AC_SUBST([guilesitedir])
 
 AC_CONFIG_FILES([Makefile tests/Makefile am/Makefile build-aux/Makefile])
+AC_CONFIG_FILES([modules/Makefile])
 
 # Generate a Makefile, based on the results.
 AC_OUTPUT
