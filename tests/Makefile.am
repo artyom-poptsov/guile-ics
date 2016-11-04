@@ -19,7 +19,8 @@
 
 include $(top_srcdir)/am/guilec
 
-SCM_TESTS =
+SCM_TESTS = \
+	ics.scm
 
 TESTS = ${SCM_TESTS}
 
@@ -35,9 +36,7 @@ AM_TESTS_ENVIRONMENT = \
 # LOG_COMPILER was introduced in Automake 1.12; don't expect "make
 # check" or "make distcheck" to work with earlier versions.
 SCM_LOG_COMPILER = \
-	${top_builddir}/libtool \
-	-dlopen ${top_builddir}/libguile-ssh/libguile-ssh.la \
-	--mode=execute $(GUILE)
+	$(GUILE)
 
 AM_SCM_LOG_FLAGS = \
 	-L "$(top_srcdir)" \

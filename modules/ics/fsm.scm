@@ -88,7 +88,8 @@
                (if (equal? next-ch #\space)
                    (read-property buffer)
                    (begin
-                     (parser-unread-char parser next-ch)
+                     (unless (eof-object? next-ch)
+                       (parser-unread-char parser next-ch))
                      buffer))))
             ((*eof-object*)
              buffer)
