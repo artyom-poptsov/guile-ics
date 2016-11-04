@@ -16,9 +16,11 @@
 (define-module (ics parser)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-9 gnu)
+  #:use-module (srfi srfi-26)
   #:use-module (ice-9 rdelim)
   #:use-module (scheme documentation)
-  #:export (<ics-parser> make-parser parser? parser-port
+  #:export (<ics-parser> make-parser make-string-parser
+                         parser? parser-port
                          parser-read-char parser-unread-char))
 
 
@@ -28,6 +30,12 @@
   (make-parser port)
   parser?
   (port parser-port))
+
+
+;;;
+
+(define (make-string-parser str)
+  (call-with-input-string str (cut make-parser <>)))
 
 
 ;;;

@@ -56,12 +56,17 @@ END:VCALENDAR
   ;; Guile-ICS
   #:use-module (ics common)
   #:use-module (ics fsm)
-  #:export (ics->scm))
+  #:export (ics->scm ics-string->scm))
 
 
 (define (ics->scm parser)
   (debug-fsm-transition "fsm-read-ical-stream")
   (fsm-read-ical-stream parser '()))
+
+(define (ics-string->scm str)
+  "Parse ICS string STR."
+  (let ((parser (make-string-parser str)))
+    (ics->scm parser)))
 
 
 ;;;
