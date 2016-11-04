@@ -17,11 +17,12 @@
 
 include $(top_srcdir)/am/guilec
 
-SUBDIRS = \
-	ics
+SUBDIRS =
 
 SCM_SOURCES = \
-	ics.scm
+	common.scm	\
+	fsm.scm		\
+	parser.scm
 
 GOBJECTS = $(SCM_SOURCES:%.scm=%.go)
 
