@@ -68,7 +68,7 @@ END:VCALENDAR
 
 ;;;
 
-(define (ics->scm port)
+(define* (ics->scm #:optional (port (current-input-port)))
   (ics-read (make-parser port)))
 
 (define (ics-string->scm str)
