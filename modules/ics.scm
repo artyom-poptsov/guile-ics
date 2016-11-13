@@ -60,9 +60,16 @@ END:VCALENDAR
   #:export (ics->scm ics-string->scm))
 
 
+;;;
+
+(define (ics-read parser)
+  (fsm-read-ical-stream parser '()))
+
+
+;;;
+
 (define (ics->scm port)
-  (debug-fsm-transition "fsm-read-ical-stream")
-  (fsm-read-ical-stream (make-parser port) '()))
+  (ics-read (make-parser port)))
 
 (define (ics-string->scm str)
   "Parse ICS string STR."
