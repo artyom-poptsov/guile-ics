@@ -25,7 +25,8 @@
              (ice-9 rdelim)
              (ics)
              (ics parser)
-             (ics fsm))
+             (ics fsm)
+             (ics ical-object))
 
 (test-begin "ics")
 
