@@ -73,8 +73,7 @@ END:VCALENDAR
 
 (define (ics-string->scm str)
   "Parse ICS string STR."
-  (let ((parser (make-string-parser str)))
-    (ics->scm parser)))
+  (ics-read (make-string-parser str)))
 
 
 ;;;
