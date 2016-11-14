@@ -50,6 +50,8 @@
   (equal? (->ical-object '() '()) '((ICALPROPS ()) (COMPONENT ()))))
 
 
+;;; Finite-State Machine Tests.
+
 (test-assert "fsm-read-property"
   (let ((parser (make-string-parser (string-append "VCALENDAR"
                                                    (string #\cr)
@@ -80,6 +82,18 @@
     (eof-object? (read-char (parser-port parser)))))
 
 
+(test-assert "fsm-read-ical-object, valid object"
+  (let ((parser (make-string-parser (string-append "SUMMARY:GNU Guile Party"
+                                                   (string #\cr #\lf)
+                                                   "END:VEVENT"
+                                                   (string #\cr #\lf)))))
+    (equal? (fsm-read-ical-object parser '() '())
+            '((ICALPROPS ((SUMMARY . "GNU Guile Party")))
+              (COMPONENT ())))))
+
+
+;;;
+
 (test-end "ics")
 
 (exit (= (test-runner-fail-count (test-runner-current)) 0))
