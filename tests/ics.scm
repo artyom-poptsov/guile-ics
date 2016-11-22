@@ -81,7 +81,8 @@
     (fsm-skip-property parser)
     (eof-object? (read-char (parser-port parser)))))
 
-(test-assert "fsm-read-ical-object"
+
+(test-assert "fsm-read-ical-object, valid object"
   (let ((parser (make-string-parser (string-append "VERSION:2.0\r\n"
                                                    "PRODID:-//hacksw/handcal//NONSGML v1.0//EN\r\n"
                                                    "BEGIN:VEVENT\r\n"
@@ -100,16 +101,6 @@
                                               (DTSTAMP . "19970610T172345Z")
                                               (UID . "19970610T172345Z-AF23B2@example.com")))
                                   (COMPONENT ()))))))))
-
-(test-assert "fsm-read-ical-object, valid object"
-  (let ((parser (make-string-parser (string-append "SUMMARY:GNU Guile Party"
-                                                   (string #\cr #\lf)
-                                                   "END:VEVENT"
-                                                   (string #\cr #\lf)))))
-    (equal? (fsm-read-ical-object parser '() '())
-            '((ICALPROPS ((SUMMARY . "GNU Guile Party")))
-              (COMPONENT ())))))
-
 
 ;;;
 
