@@ -101,6 +101,18 @@
                                               (DTSTAMP . "19970610T172345Z")
                                               (UID . "19970610T172345Z-AF23B2@example.com")))
                                   (COMPONENT ()))))))))
+
+(test-assert "fsm-read-ical-stream, valid object"
+  (let ((parser (make-string-parser (string-append "BEGIN:VCALENDAR\r\n"
+                                                   "VERSION:2.0\r\n"
+                                                   "BEGIN:VEVENT\r\n"
+                                                   "END:VEVENT\r\n"
+                                                   "END:VCALENDAR"))))
+    (equal? (fsm-read-ical-stream parser '())
+            '(((ICALPROPS ((VERSION . "2.0")))
+               (COMPONENT ((VEVENT (ICALPROPS ())
+                                   (COMPONENT ())))))))))
+
 
 ;;;
 
