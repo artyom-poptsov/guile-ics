@@ -26,8 +26,10 @@ SCM_SOURCES = \
 	parser.scm
 
 GOBJECTS = $(SCM_SOURCES:%.scm=%.go)
+moddir=$(guilesitedir)/ics
+nobase_dist_mod_DATA = $(SOURCES)
 
-ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/
+ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ics/
 nobase_dist_ccache_DATA = $(GOBJECTS)
 
 # Make sure source files are installed first, so that the mtime of
@@ -36,7 +38,7 @@ nobase_dist_ccache_DATA = $(GOBJECTS)
 # <http://lists.gnu.org/archive/html/guile-devel/2010-07/msg00125.html>
 # for details.
 guile_ssh_install_go_files = install-nobase_dist_ccacheDATA
-$(guile_ssh_install_go_files): install-nobase_dist_pkgguilesiteDATA
+$(guile_ssh_install_go_files): install-nobase_dist_modDATA
 
 guilec_warnings =				\
   -Wunbound-variable -Warity-mismatch		\

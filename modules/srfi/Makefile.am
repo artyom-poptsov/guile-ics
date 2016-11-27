@@ -21,7 +21,7 @@ include $(top_srcdir)/am/guilec
 
 GOBJECTS = srfi-64.upstream.go srfi-64.go
 
-ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ssh
+ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/
 nobase_dist_ccache_DATA = $(GOBJECTS)
 
 guilec_warnings =				\
