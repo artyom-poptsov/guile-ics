@@ -23,7 +23,8 @@ SCM_SOURCES = \
 	common.scm	\
 	ical-object.scm	\
 	fsm.scm		\
-	parser.scm
+	parser.scm	\
+	streams.scm
 
 GOBJECTS = $(SCM_SOURCES:%.scm=%.go)
 moddir=$(guilesitedir)/ics

@@ -57,7 +57,9 @@ END:VCALENDAR
   #:use-module (ics common)
   #:use-module (ics fsm)
   #:use-module (ics parser)
-  #:export (ics->scm ics-string->scm))
+  #:use-module (ics streams)
+  #:export (ics->scm ics-string->scm)
+  #:re-export (ics->stream))
 
 
 ;;;
