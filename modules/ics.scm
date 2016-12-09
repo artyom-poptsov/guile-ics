@@ -58,7 +58,8 @@ END:VCALENDAR
   #:use-module (ics fsm)
   #:use-module (ics parser)
   #:use-module (ics streams)
-  #:export (ics->scm ics-string->scm)
+  #:use-module (ics ical-object)
+  #:export (ics->scm ics-string->scm scm->ics)
   #:re-export (ics->stream))
 
 
@@ -77,5 +78,32 @@ END:VCALENDAR
   "Parse ICS string STR."
   (ics-read (make-string-parser str)))
 
+
+;;;
+
+(define* (scm->ics vcalendar #:optional (port (current-output-port)))
+  "Convert VCALENDAR list to an vcalendar format.  Print the output to
+a PORT."
+  (define (print-icalprops props)
+    (for-each (lambda (e) (format port "~a:~a\r\n" (car e) (cdr e)))
+              props))
+  (define (print-components components)
+    (for-each (lambda (component)
+                (let ((cname  (car component))
+                      (object (cdr component)))
+                  (format port "BEGIN:~a\r\n" cname)
+                  (print-icalprops (ical-object-icalprops object))
+                  (print-components (ical-object-component object))
+                  (format port "END:~a\r\n" cname)))
+              components))
+  (define (print-vcalendar)
+    (display "BEGIN:VCALENDAR\r\n" port)
+    (print-icalprops (ical-object-icalprops vcalendar))
+    (display "BEGIN:COMPONENT\r\n" port)
+    (print-components (ical-object-component vcalendar))
+    (display "END:COMPONENT\r\n" port)
+    (display "END:VCALENDAR\r\n" port))
+
+  (print-vcalendar))
 
 ;;;
