@@ -13,25 +13,20 @@
 
 ** Usage
    The module may be used as follows:
-#+BEGIN_EXAMPLE
+#+BEGIN_EXAMPLE scheme
 #!/usr/bin/guile \
--L ../modules -e main -s
+-e main
 !#
 
-(use-modules (ics)
-             (srfi srfi-9 gnu)
-             (ice-9 pretty-print)
-             ;; Guile-ICS
-             (ics parser)
-             (ics common)) ; For 'set-debug!'
-
-(define parser (make-parser (open-input-file "./basic.ics")))
+(use-modules (ice-9 pretty-print)
+             (srfi srfi-41) ; Streams
+             (ics))         ; Guile-ICS
 
 (define (main args)
-  ;; (set-debug! #t)              ; Optionally enable debug mode
-  (let ((res (ics->scm parser)))
-    (display "RESULT: \n")
-    (pretty-print res)))
+  (stream-for-each (lambda (ical-object)
+                     (display "RESULT: \n")
+                     (pretty-print ical-object))
+                   (ics->stream)))
 #+END_EXAMPLE
 ** Known bugs
 
