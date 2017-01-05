@@ -1,6 +1,6 @@
-;;; common.scm -- Common code for parsers.
+;;; common.scm -- Common code for Guile-ICS.
 
-;; Copyright (C) 2015, 2016 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2015, 2016, 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
   #:use-module ((ice-9 regex) #:select (regexp-substitute/global))
   #:use-module (scheme documentation)
   #:export (set-debug! debug debug-fsm debug-fsm-transition debug-fsm-error
-            dsv-error
+            ics-error
 
             value-or-default
             substitute unescape-chars))
@@ -70,16 +70,16 @@
   (debug-fsm-transition state 'ERROR 'final))
 
 
-(define dsv-error
+(define ics-error
   (case-lambda
     "Throw 'dsv-parser exception with the given MESSAGE and arguments ARGS.
 The procedure optionally takes STATE of FSM as the first argument and prints
 it as a debug message.."
     ((state message . args)
      (debug-fsm-error state)
-     (throw 'dsv-parser-error message args))
+     (throw 'guile-ics-error message args))
     ((message . args)
-     (throw 'dsv-parser-error message args))))
+     (throw 'guile-ics-error message args))))
 
 
 (define (value-or-default value default-value)
