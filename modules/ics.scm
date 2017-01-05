@@ -81,30 +81,32 @@ END:VCALENDAR
 
 ;;;
 
-(define* (ics-pretty-print vcalendar #:optional (port (current-output-port)))
+(define* (ics-pretty-print vcalendar
+                           #:optional (port (current-output-port))
+                           #:key (indent 2))
   "Pretty-print VCALENDAR object to a PORT.  Note that the output is
 intended for human to comprehent, not to a machine to parse."
-  (define (print-icalprops props indent)
+  (define (print-icalprops props current-indent)
     (for-each (lambda (e)
-                (let ((s (make-string indent #\space)))
+                (let ((s (make-string current-indent #\space)))
                   (format port "~a~a: ~a\n" s (car e) (cdr e))))
               props))
-  (define (print-components components indent)
-    (let ((s (make-string indent #\space)))
+  (define (print-components components current-indent)
+    (let ((s (make-string current-indent #\space)))
       (for-each (lambda (component)
                   (let ((cname  (car component))
                         (object (cdr component)))
                     (format port "~aBEGIN: ~a\n" s cname)
                     (print-icalprops (ical-object-icalprops object)
-                                     (+ indent 2))
+                                     (+ current-indent indent))
                     (print-components (ical-object-component object)
-                                      (+ indent 2))
+                                      (+ current-indent indent))
                     (format port "~aEND: ~a\n" s cname)))
                 components)))
   (define (print-vcalendar)
     (display "BEGIN: VCALENDAR\r\n" port)
-    (print-icalprops (ical-object-icalprops vcalendar) 2)
-    (print-components (ical-object-component vcalendar) 2)
+    (print-icalprops (ical-object-icalprops vcalendar) indent)
+    (print-components (ical-object-component vcalendar) indent)
     (display "END: VCALENDAR\r\n" port))
 
   (print-vcalendar))

@@ -26,7 +26,8 @@
 ;;; Code:
 
 (use-modules (ice-9 getopt-long)
-             (ice-9 pretty-print)
+             ((ice-9 pretty-print)
+              #:renamer (symbol-prefix-proc 'ice-9:))
              (srfi srfi-41)
              (ics)
              (ics ical-object)
@@ -39,6 +40,11 @@ Usage ics [options]
 The default behaviour of the program is to read iCalendar stream from
 stdin and pretty-print it to the stdout.
 
+Options:
+  --help, -h                 Print this message and exit.
+  --pretty-print, -p <indent>
+                             Pretty-print iCalendar stream to the
+                             stdout.
 ")
   (exit))
 
@@ -46,19 +52,29 @@ stdin and pretty-print it to the stdout.
 ;;; Option spec.
 
 (define %option-spec
-  '((help  (single-char #\h) (value #f))))
+  '((help         (single-char #\h) (value #f))
+    (pretty-print (single-char #\p) (value optional))))
 
 
 ;;; Entry point.
 
+(define (handle-pretty-print indent)
+  (stream-for-each (lambda (e)
+                     (ics-pretty-print e #:indent indent))
+                   (ics->stream)))
+
 (define (main args)
   (let* ((options      (getopt-long args %option-spec))
-         (help-needed? (option-ref options 'help #f)))
-    (when help-needed?
-      (print-help-and-exit))
-    (stream-for-each (lambda (e)
-                       (ics-pretty-print e))
-                     (ics->stream))))
+         (help-needed? (option-ref options 'help #f))
+         (pretty-print (option-ref options 'pretty-print 2)))
+    (cond
+     (pretty-print
+      (let ((indent (if (boolean? pretty-print)
+                        2
+                        (string->number pretty-print))))
+        (handle-pretty-print indent)))
+     (#t
+      (print-help-and-exit)))))
 
 ;; Local Variables:
 ;; mode: Scheme
