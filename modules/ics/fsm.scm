@@ -52,9 +52,11 @@
 ;;; Predicates.
 
 (define (ics-token-begin? x)
+  "Check if an X is the beginning of an IANA token."
   (string=? x %ics-token-begin))
 
 (define (ics-token-end? x)
+  "Check if an X is the ending of an IANA token."
   (string=? x %ics-token-end))
 
 (define (ics-calendar-object? x)
