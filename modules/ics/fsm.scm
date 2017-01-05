@@ -1,4 +1,6 @@
-;; Copyright (C) 2016 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;;; fsm.scm -- Finite state machine for the iCalendar parser.
+
+;; Copyright (C) 2016, 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -15,6 +17,8 @@
 
 
 ;;; Commentary:
+
+;; Finite state machine (FSM) for the iCalendar parser.
 
 
 ;;; Code:
@@ -64,7 +68,7 @@
   (string=? x %ics-icalendar-object))
 
 
-;;; FSM.
+;;; Finite State Machine.
 
 (define (fsm-read-property parser)
   (define (read-property buffer)
@@ -163,3 +167,5 @@
              (read-ical-stream (string-append buffer (string ch))))))))
   (debug-fsm-transition "fsm-read-ical-stream")
   (read-ical-stream ""))
+
+;;; fsm.scm ends here.
