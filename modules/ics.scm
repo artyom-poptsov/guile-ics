@@ -59,7 +59,7 @@ END:VCALENDAR
   #:use-module (ics parser)
   #:use-module (ics streams)
   #:use-module (ics ical-object)
-  #:export (ics->scm ics-string->scm scm->ics)
+  #:export (ics->scm ics-string->scm scm->ics ics-pretty-print)
   #:re-export (ics->stream))
 
 
@@ -80,6 +80,34 @@ END:VCALENDAR
 
 
 ;;;
+
+(define* (ics-pretty-print vcalendar #:optional (port (current-output-port)))
+  "Pretty-print VCALENDAR object to a PORT.  Note that the output is
+intended for human to comprehent, not to a machine to parse."
+  (define (print-icalprops props indent)
+    (for-each (lambda (e)
+                (let ((s (make-string indent #\space)))
+                  (format port "~a~a: ~a\n" s (car e) (cdr e))))
+              props))
+  (define (print-components components indent)
+    (let ((s (make-string indent #\space)))
+      (for-each (lambda (component)
+                  (let ((cname  (car component))
+                        (object (cdr component)))
+                    (format port "~aBEGIN: ~a\n" s cname)
+                    (print-icalprops (ical-object-icalprops object)
+                                     (+ indent 2))
+                    (print-components (ical-object-component object)
+                                      (+ indent 2))
+                    (format port "~aEND: ~a\n" s cname)))
+                components)))
+  (define (print-vcalendar)
+    (display "BEGIN: VCALENDAR\r\n" port)
+    (print-icalprops (ical-object-icalprops vcalendar) 2)
+    (print-components (ical-object-component vcalendar) 2)
+    (display "END: VCALENDAR\r\n" port))
+
+  (print-vcalendar))
 
 (define* (scm->ics vcalendar #:optional (port (current-output-port)))
   "Convert VCALENDAR list to an vcalendar format.  Print the output to
