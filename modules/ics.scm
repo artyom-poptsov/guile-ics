@@ -127,9 +127,7 @@ a PORT."
   (define (print-vcalendar)
     (display "BEGIN:VCALENDAR\r\n" port)
     (print-icalprops (ical-object-icalprops vcalendar))
-    (display "BEGIN:COMPONENT\r\n" port)
     (print-components (ical-object-component vcalendar))
-    (display "END:COMPONENT\r\n" port)
     (display "END:VCALENDAR\r\n" port))
 
   (print-vcalendar))
