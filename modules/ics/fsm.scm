@@ -37,15 +37,15 @@
 ;;; Constants.
 
 (define-with-docs %ics-token-begin
-  ""
+  "See <https://tools.ietf.org/html/rfc5545#section-3.6>."
   "BEGIN")
 
 (define-with-docs %ics-token-end
-  ""
+  "See <https://tools.ietf.org/html/rfc5545#section-3.6>."
   "END")
 
 (define-with-docs %ics-icalendar-object
-  ""
+  "See <https://tools.ietf.org/html/rfc5545#section-3.4>."
   "VCALENDAR")
 
 
