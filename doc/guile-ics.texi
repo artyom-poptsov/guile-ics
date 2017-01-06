@@ -54,6 +54,8 @@ Documentation License.''
 
 @menu
 * Introduction::
+* Installation::
+* API Reference::
 
 Appendices
 
@@ -65,6 +67,88 @@ Appendices
 
 @node Introduction
 @chapter Introduction
+
+Guile-ICS is a @url{https://www.gnu.org/software/guile/, GNU Guile}
+library that provides API for iCalendar
+(@url{https://tools.ietf.org/html/rfc5545, FC5545}) format parsing.
+
+@node Installation
+@chapter Installation
+
+Guile-ICS sources are available form GitHub at
+@url{https://github.com/artyom-poptsov/guile-ics}.  This section
+describes Guile-ICS requirements and installation process.
+
+Guile-ICS depends on the following packages:
+@itemize
+@item @url{https://www.gnu.org/software/guile/, GNU Guile}, 2.0
+@end itemize
+
+To build the latest version of Guile-ICS from the sources, you need to
+download the sources from GitHub or clone them using Git@footnote{A good
+introduction to Git is free Pro Git book, which is available online at
+@url{https://git-scm.com/book/en/v2}}.
+
+Cloning can be done as follows:
+
+@example
+$ git clone git@@github.com:artyom-poptsov/guile-ics.git
+@end example
+
+Next, you should configure the sources:
+
+@example
+$ cd guile-ics/
+$ autoreconf -vif
+$ ./configure
+@end example
+
+And finally build and install the library:
+
+@example
+$ make
+$ make install
+@end example
+
+For a basic explanation of the installation of the package, see the
+@file{INSTALL} file.
+
+Please @strong{note} that you will need
+@url{https://www.gnu.org/software/automake/, Automake} version 1.12 or
+later to run self-tests with @command{make check} (but the library
+itself can be built with older Automake version such as 1.11).
+
+@strong{important} You probably want to call @command{configure} with
+the @option{--with-guilesitedir} option so that this package is
+installed in Guile's default path.  But, if you don't know where your
+Guile site directory is, run @command{configure} without the option,
+and it will give you a suggestion.
+
+@node API Reference
+@chapter API Reference
+
+Main module for Guile-ICS is @code{(ics)}.  The module contains main
+procedures for reading and writing iCalendar data.
+
+@deffn {Scheme Procedure} ics->scm [port=(current-input-port)]
+Convert a iCalendar stream from a @var{port} to a Scheme representation;
+return a list that represents iCalendar data.
+@end deffn
+
+@deffn {Scheme Procedure} ics-string->scm str
+Convert an iCalendar string @var{str} to a Scheme representation; return
+a list that represents iCalendar data.
+@end deffn
+
+@deffn {Scheme Procedure} ics-pretty-print ical-object [port=(current-output-port)] [#:indent=2]
+Pretty-print an @var{ical-object} to a @var{port}.  Note that the output
+is intended for human to comprehent, not to a machine to parse.
+@end deffn
+
+@deffn {Scheme Procedure} scm->ics ical-object [port=(current-output-port)]
+Convert an @var{ical-object} to iCalendar format.  Print the output to a
+@var{port}.
+@end deffn
 
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License
