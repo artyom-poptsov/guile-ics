@@ -110,10 +110,10 @@ intended for human to comprehent, not to a machine to parse."
                     (format port "~aEND: ~a\n" s cname)))
                 components)))
   (define (print-vcalendar)
-    (display "BEGIN: VCALENDAR\r\n" port)
+    (display "BEGIN: VCALENDAR\n" port)
     (print-icalprops (ical-object-icalprops vcalendar) indent)
     (print-components (ical-object-component vcalendar) indent)
-    (display "END: VCALENDAR\r\n" port))
+    (display "END: VCALENDAR\n" port))
 
   (print-vcalendar))
 
