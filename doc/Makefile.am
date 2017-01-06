@@ -19,7 +19,7 @@
 
 info_TEXINFOS = guile-ics.texi
 
-guile_dsv_TEXINFOS = \
+guile_ics_TEXINFOS = \
 	guile-ics.texi	\
 	fdl.texi
 
