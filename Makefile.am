@@ -19,7 +19,7 @@
 
 ACLOCAL_AMFLAGS = -I m4 --install
 
-SUBDIRS = am build-aux modules tests m4 utils
+SUBDIRS = am build-aux modules tests m4 utils doc
 
 EXTRA_DIST =					\
 	build-aux/config.rpath			\
