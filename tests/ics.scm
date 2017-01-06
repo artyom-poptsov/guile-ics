@@ -24,6 +24,7 @@
 (use-modules (srfi srfi-64)
              (ice-9 rdelim)
              (ics)
+             (ics ical-object)
              (ics parser)
              (ics fsm)
              (ics ical-object))
