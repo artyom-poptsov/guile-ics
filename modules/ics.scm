@@ -59,6 +59,7 @@ END:VCALENDAR
 ;;; Code:
 
 (define-module (ics)
+  #:use-module (ice-9 rdelim)
   ;; Guile-ICS
   #:use-module (ics common)
   #:use-module (ics fsm)
@@ -110,10 +111,10 @@ intended for human to comprehent, not to a machine to parse."
                     (format port "~aEND: ~a\n" s cname)))
                 components)))
   (define (print-vcalendar)
-    (display "BEGIN: VCALENDAR\n" port)
+    (write-line "BEGIN: VCALENDAR" port)
     (print-icalprops (ical-object-icalprops vcalendar) indent)
     (print-components (ical-object-component vcalendar) indent)
-    (display "END: VCALENDAR\n" port))
+    (write-line "END: VCALENDAR" port))
 
   (print-vcalendar))
 
