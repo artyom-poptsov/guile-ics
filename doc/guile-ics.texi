@@ -156,8 +156,9 @@ string.
 @end deffn
 
 @deffn {Scheme Procedure} ics->stream [port (current-input-port)]
-Convert an ICS stream from a @var{port} to an SRFI-41 (@pxref{SRFI-41,,,
-guile, The GNU Guile Reference Manual}) stream.  Return the stream.
+Convert an ICS stream from a @var{port} to an SRFI-41 stream
+(@pxref{SRFI-41,,, guile, The GNU Guile Reference Manual}).  Return the
+stream.
 @end deffn
 
 @node GNU Free Documentation License
