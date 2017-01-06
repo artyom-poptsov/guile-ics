@@ -31,7 +31,8 @@
              (srfi srfi-41)
              (ics)
              (ics ical-object)
-             (ics common))
+             (ics common)
+             (ics conv))
 
 (define (print-help-and-exit)
   (display "\
@@ -53,6 +54,7 @@ Options:
 
 (define %option-spec
   '((help         (single-char #\h) (value #f))
+    (to-org-mode                    (value #f))
     (pretty-print (single-char #\p) (value optional))))
 
 
@@ -63,16 +65,24 @@ Options:
                      (ics-pretty-print e #:indent indent))
                    (ics->stream)))
 
+(define (handle-to-org-mode)
+  (stream-for-each (lambda (ical-object)
+                     (ical-object->org-mode ical-object))
+                   (ics->stream)))
+
 (define (main args)
   (let* ((options      (getopt-long args %option-spec))
          (help-needed? (option-ref options 'help #f))
-         (pretty-print (option-ref options 'pretty-print 2)))
+         (to-org-mode  (option-ref options 'to-org-mode #f))
+         (pretty-print (option-ref options 'pretty-print #f)))
     (cond
      (pretty-print
       (let ((indent (if (boolean? pretty-print)
                         2
                         (string->number pretty-print))))
         (handle-pretty-print indent)))
+     (to-org-mode
+      (handle-to-org-mode))
      (#t
       (print-help-and-exit)))))
 

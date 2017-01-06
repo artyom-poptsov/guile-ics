@@ -24,7 +24,8 @@ SCM_SOURCES = \
 	ical-object.scm	\
 	fsm.scm		\
 	parser.scm	\
-	streams.scm
+	streams.scm	\
+	conv.scm
 
 GOBJECTS = $(SCM_SOURCES:%.scm=%.go)
 moddir=$(guilesitedir)/ics
