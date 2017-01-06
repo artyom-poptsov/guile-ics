@@ -155,6 +155,11 @@ Convert an @var{ical-object} to an iCalendar format string; return the
 string.
 @end deffn
 
+@deffn {Scheme Procedure} ics->stream [port (current-input-port)]
+Convert an ICS stream from a @var{port} to an SRFI-41 (@pxref{SRFI-41,,,
+guile, The GNU Guile Reference Manual}) stream.  Return the stream.
+@end deffn
+
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License
 
