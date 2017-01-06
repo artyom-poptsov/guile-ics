@@ -64,7 +64,7 @@ Usage: fosdem [options]
 
 Options:
   --help, -h                 Print this message and exit.
-  --year, -y                 Set year (current year is used by default.)
+  --year, -y <year>          Set year (current year is used by default.)
 ")
   (exit 0))
 
