@@ -114,6 +114,29 @@
                (COMPONENT ((VEVENT (ICALPROPS ())
                                    (COMPONENT ())))))))))
 
+;;; (ics)
+
+(define %ics-string
+  (string-append "BEGIN:VCALENDAR\r\n"
+                 "VERSION:2.0\r\n"
+                 "BEGIN:VEVENT\r\n"
+                 "END:VEVENT\r\n"
+                 "END:VCALENDAR\r\n"))
+
+(define %ical-object
+  '((ICALPROPS ((VERSION . "2.0")))
+    (COMPONENT ((VEVENT (ICALPROPS ())
+                        (COMPONENT ()))))))
+
+
+(test-assert "ics-string->scm"
+    (equal? (ics-string->scm %ics-string)
+            (list %ical-object)))
+
+(test-assert "scm->ics-string"
+  (equal? (scm->ics-string %ical-object)
+          %ics-string))
+
 
 ;;;
 

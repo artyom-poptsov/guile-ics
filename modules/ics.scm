@@ -66,7 +66,7 @@ END:VCALENDAR
   #:use-module (ics parser)
   #:use-module (ics streams)
   #:use-module (ics ical-object)
-  #:export (ics->scm ics-string->scm scm->ics ics-pretty-print)
+  #:export (ics->scm ics-string->scm scm->ics scm->ics-string ics-pretty-print)
   #:re-export (ics->stream))
 
 
@@ -140,5 +140,11 @@ a PORT."
     (display "END:VCALENDAR\r\n" port))
 
   (print-vcalendar))
+
+(define (scm->ics-string ical-object)
+  "Convert an ICAL-OBJECT to an iCalendar format string; return the
+string."
+  (with-output-to-string (lambda () (scm->ics ical-object))))
+
 
 ;;; ics.scm ends here.
