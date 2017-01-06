@@ -150,6 +150,11 @@ Convert an @var{ical-object} to iCalendar format.  Print the output to a
 @var{port}.
 @end deffn
 
+@deffn {Scheme Procedure} scm->ics-string ical-object
+Convert an @var{ical-object} to an iCalendar format string; return the
+string.
+@end deffn
+
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License
 
