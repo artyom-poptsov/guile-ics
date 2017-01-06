@@ -98,6 +98,7 @@
   (read-property ""))
 
 (define (fsm-skip-property parser)
+  (debug-fsm-transition "fsm-skip-property")
   (let ((ch (parser-read-char parser)))
     (unless (or (eof-object? ch) (equal? ch #\linefeed))
       (fsm-skip-property parser))))
@@ -132,6 +133,8 @@
                (->ical-object icalprops component))
               (else
                (read-property buffer))))
+            ((#\linefeed)
+             (fsm-read-ical-object parser icalprops component))
             (else
              (read-object (string-append buffer (string ch))))))))
   (debug-fsm-transition "fsm-read-ical-object")
