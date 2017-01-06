@@ -30,18 +30,55 @@
 ;;; Code:
 
 (use-modules (ice-9 popen)
+             (ice-9 getopt-long)
              (srfi srfi-41)             ; streams
              ;; Guile-ICS
              (ics)
              (ics conv))
 
-(setlocale LC_ALL "")
+;;;
 
-(define (main args)
+
+(define %option-spec
+  '((help (single-char #\h) (value #f))
+    (year (single-char #\y) (value #t))))
+
+;;;
+
+(define (print-schedule year)
+  "Print FOSDEM schedule in org-mode format to stdout."
   ;; We have to use 'curl' because 'http-get' from (web client) does
   ;; not work with HTTPS.
-  (let ((p (open-input-pipe "curl 'https://fosdem.org/2017/schedule/ical'")))
+  (let* ((command (format #f "curl 'https://fosdem.org/~a/schedule/ical'"
+                          year))
+         (p       (open-input-pipe command)))
     (stream-for-each ical-object->org-mode (ics->stream p))))
+
+(define (current-year)
+  "Get current year."
+  (+ 1900 (tm:year (localtime (current-time)))))
+
+(define (print-help-and-exit)
+  (display "\
+Usage: fosdem [options]
+
+Options:
+  --help, -h                 Print this message and exit.
+  --year, -y                 Set year (current year is used by default.)
+")
+  (exit 0))
+
+
+;;; Entry point.
+
+(define (main args)
+  (setlocale LC_ALL "")
+  (let* ((options      (getopt-long args %option-spec))
+         (help-needed? (option-ref options 'help #f))
+         (year         (option-ref options 'year (current-year))))
+    (when help-needed?
+      (print-help-and-exit))
+    (print-schedule year)))
 
 ;;;
 
