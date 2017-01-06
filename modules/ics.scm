@@ -88,11 +88,11 @@ END:VCALENDAR
 
 ;;;
 
-(define* (ics-pretty-print vcalendar
+(define* (ics-pretty-print ical-object
                            #:optional (port (current-output-port))
                            #:key (indent 2))
-  "Pretty-print VCALENDAR object to a PORT.  Note that the output is
-intended for human to comprehent, not to a machine to parse."
+  "Pretty-print an ICAL-OBJECT object to a PORT.  Note that the output
+is intended for human to comprehent, not to a machine to parse."
   (define (print-icalprops props current-indent)
     (for-each (lambda (e)
                 (let ((s (make-string current-indent #\space)))
@@ -112,8 +112,8 @@ intended for human to comprehent, not to a machine to parse."
                 components)))
   (define (print-vcalendar)
     (write-line "BEGIN: VCALENDAR" port)
-    (print-icalprops (ical-object-icalprops vcalendar) indent)
-    (print-components (ical-object-component vcalendar) indent)
+    (print-icalprops (ical-object-icalprops ical-object) indent)
+    (print-components (ical-object-component ical-object) indent)
     (write-line "END: VCALENDAR" port))
 
   (print-vcalendar))
