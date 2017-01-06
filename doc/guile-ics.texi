@@ -161,6 +161,13 @@ Convert an ICS stream from a @var{port} to an SRFI-41 stream
 stream.
 @end deffn
 
+@section Converters
+
+@deffn {Scheme Procedure} ical-object->org-mode ical-object [port=(current-output-port)]
+Convert an @var{ical-object} to org-mode format (@pxref{Top,,, org,
+Org Mode Manual}) and print the results to a @var{port}.
+@end deffn
+
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License
 
