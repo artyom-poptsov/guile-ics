@@ -118,9 +118,9 @@ intended for human to comprehent, not to a machine to parse."
 
   (print-vcalendar))
 
-(define* (scm->ics vcalendar #:optional (port (current-output-port)))
-  "Convert VCALENDAR list to an vcalendar format.  Print the output to
-a PORT."
+(define* (scm->ics ical-object #:optional (port (current-output-port)))
+  "Convert an ICAL-OBJECT list to an vcalendar format.  Print the
+output to a PORT."
   (define (print-icalprops props)
     (for-each (lambda (e) (format port "~a:~a\r\n" (car e) (cdr e)))
               props))
@@ -135,8 +135,8 @@ a PORT."
               components))
   (define (print-vcalendar)
     (display "BEGIN:VCALENDAR\r\n" port)
-    (print-icalprops (ical-object-icalprops vcalendar))
-    (print-components (ical-object-component vcalendar))
+    (print-icalprops (ical-object-icalprops ical-object))
+    (print-components (ical-object-component ical-object))
     (display "END:VCALENDAR\r\n" port))
 
   (print-vcalendar))
