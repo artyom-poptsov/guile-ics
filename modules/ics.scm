@@ -1,4 +1,6 @@
-;; Copyright (C) 2016 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;;; ics.scm -- iCalendar parser (main module)
+
+;; Copyright (C) 2016, 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -16,6 +18,10 @@
 
 ;;; Commentary:
 
+;; Guile-ICS is iCalendar format (RFC5545) [1] parser for GNU Guile.
+;;
+;; [1] https://tools.ietf.org/html/rfc5545
+;;
 ;; Input example (from RFC5545):
 
 #!
@@ -134,4 +140,4 @@ a PORT."
 
   (print-vcalendar))
 
-;;;
+;;; ics.scm ends here.
