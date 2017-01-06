@@ -1,6 +1,4 @@
-## Config file for GNU Automake.
-##
-## Copyright (C) 2016 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-ICS.
 ##
@@ -17,27 +15,23 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Guile-ICS.  If not, see <http://www.gnu.org/licenses/>.
 
-ACLOCAL_AMFLAGS = -I m4 --install
+EXTRA_DIST = \
+	fosdem.scm.in
 
-SUBDIRS = am build-aux modules tests m4 utils doc examples
+examplesdir = $(pkgdatadir)/examples
+examples_echodir = $(pkgdatadir)/examples/echo
+examples_rpcdir = $(pkgdatadir)/examples/rpc
+dist_examples_DATA = \
+	fosdem.scm
 
-EXTRA_DIST =					\
-	build-aux/config.rpath			\
-	build-aux/compile
+substitute = sed -e 's,[@]GUILE[@],$(GUILE),g'
 
-gen-ChangeLog:
-	if test -d .git; then				\
-	  $(top_srcdir)/build-aux/gitlog-to-changelog	\
-	    194fd7d..HEAD > $(distdir)/cl-t;		\
-	  rm -f $(distdir)/ChangeLog;			\
-	  mv $(distdir)/cl-t $(distdir)/ChangeLog;	\
-	fi
+SUFFIXES = .in
 
-dist-hook: gen-ChangeLog
-.PHONY: gen-ChangeLog
+.in:
+	$(substitute) "$^" > "$@.tmp" && 	\
+	chmod +x "$@.tmp" &&			\
+	mv "$@.tmp" "$@"
 
-clean-go:
-	@cd modules; make clean-go
-.PHONY: clean-go
-
-## Makefile.am ends here
+CLEANFILES = \
+	fosdem.scm
