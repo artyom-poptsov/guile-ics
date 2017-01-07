@@ -21,10 +21,10 @@ SUBDIRS = \
 	ics \
 	srfi
 
-SCM_SOURCES = \
+SOURCES = \
 	ics.scm
 
-GOBJECTS = $(SCM_SOURCES:%.scm=%.go)
+GOBJECTS = $(SOURCES:%.scm=%.go)
 moddir=$(guilesitedir)/
 nobase_dist_mod_DATA = $(SOURCES)
 

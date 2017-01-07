@@ -19,7 +19,7 @@ include $(top_srcdir)/am/guilec
 
 SUBDIRS =
 
-SCM_SOURCES = \
+SOURCES = \
 	common.scm	\
 	ical-object.scm	\
 	fsm.scm		\
@@ -27,7 +27,7 @@ SCM_SOURCES = \
 	streams.scm	\
 	conv.scm
 
-GOBJECTS = $(SCM_SOURCES:%.scm=%.go)
+GOBJECTS = $(SOURCES:%.scm=%.go)
 moddir=$(guilesitedir)/ics
 nobase_dist_mod_DATA = $(SOURCES)
 
