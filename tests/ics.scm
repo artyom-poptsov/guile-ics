@@ -47,8 +47,8 @@
        (not (ics-calendar-object? "BEGIN"))))
 
 
-(test-assert "->ical-object"
-  (equal? (->ical-object '() '()) '((ICALPROPS ()) (COMPONENT ()))))
+(test-assert "make-ical-object"
+  (equal? (make-ical-object '() '()) '((ICALPROPS ()) (COMPONENT ()))))
 
 
 ;;; Finite-State Machine Tests.

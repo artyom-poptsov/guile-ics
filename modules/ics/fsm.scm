@@ -122,7 +122,7 @@
   (define (read-object buffer)
     (let ((ch (parser-read-char parser)))
       (if (eof-object? ch)
-          (->ical-object icalprops component)
+          (make-ical-object icalprops component)
           (case ch
             ((#\:)
              (cond
@@ -130,7 +130,7 @@
                (read-component))
               ((ics-token-end? buffer)
                (fsm-skip-property parser)
-               (->ical-object icalprops component))
+               (make-ical-object icalprops component))
               (else
                (read-property buffer))))
             ((#\linefeed)

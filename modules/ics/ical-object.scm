@@ -22,9 +22,9 @@
 (define-module (ics ical-object)
   #:export (ical-object-icalprops
             ical-object-component
-            ->ical-object))
+            make-ical-object))
 
-(define (->ical-object icalprops component)
+(define (make-ical-object icalprops component)
   "Convert an ICALPROPS list and a COMPONENT alist to an iCal object."
   (list (cons 'ICALPROPS (list icalprops))
         (cons 'COMPONENT (list component))))
