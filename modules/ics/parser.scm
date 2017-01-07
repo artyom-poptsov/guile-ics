@@ -18,7 +18,6 @@
   #:use-module (srfi srfi-9 gnu)
   #:use-module (srfi srfi-26)
   #:use-module (ice-9 rdelim)
-  #:use-module (scheme documentation)
   #:export (<ics-parser> make-parser make-string-parser
                          parser? parser-port
                          parser-read-char parser-unread-char))
