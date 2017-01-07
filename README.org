@@ -1,9 +1,5 @@
 * Guile-ICS
   iCalendar format ([[https://tools.ietf.org/html/rfc5545][RFC5545]]) parser for GNU Guile.
-
-  The project is in an early development stage, so the API is not
-  stabilized yet.
-
 ** License
    Guile-ICS is free software: you can redistribute it and/or modify it under
    the terms of the GNU General Public License as published by the Free
