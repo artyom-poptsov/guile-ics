@@ -26,7 +26,6 @@
 (define-module (ics common)
   #:use-module ((srfi srfi-1) #:select (fold))
   #:use-module ((ice-9 regex) #:select (regexp-substitute/global))
-  #:use-module (scheme documentation)
   #:export (set-debug! debug debug-fsm debug-fsm-transition debug-fsm-error
             ics-error
 
@@ -34,9 +33,7 @@
             substitute unescape-chars))
 
 
-(define-with-docs *debug?*
-  "Does debug mode enabled?"
-  #f)
+(define *debug?* #f)                    ; Is the debug mode enabled?
 
 
 (define (set-debug! enabled?)

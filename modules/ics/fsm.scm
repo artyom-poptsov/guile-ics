@@ -24,7 +24,6 @@
 ;;; Code:
 
 (define-module (ics fsm)
-  #:use-module (scheme documentation)
   #:use-module (ics common)
   #:use-module (ics ical-object)
   #:use-module (ics parser)
@@ -40,17 +39,12 @@
 
 ;;; Constants.
 
-(define-with-docs %ics-token-begin
-  "See <https://tools.ietf.org/html/rfc5545#section-3.6>."
-  "BEGIN")
+;; See <https://tools.ietf.org/html/rfc5545#section-3.6>.
+(define %ics-token-begin "BEGIN")
+(define %ics-token-end "END")
 
-(define-with-docs %ics-token-end
-  "See <https://tools.ietf.org/html/rfc5545#section-3.6>."
-  "END")
-
-(define-with-docs %ics-icalendar-object
-  "See <https://tools.ietf.org/html/rfc5545#section-3.4>."
-  "VCALENDAR")
+;; See <https://tools.ietf.org/html/rfc5545#section-3.4>.
+(define %ics-icalendar-object "VCALENDAR")
 
 
 ;;; Predicates.
