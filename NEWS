@@ -7,6 +7,19 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Changes in version 0.1.1 (2017-01-07)
+** Bugfixes
+*** Fixed library building scripts
+    Autotools would fail to build the library and run tests due to an
+    error in Automake files.  The patch fixes that.
+*** Remove bogus dependency on 'guile-lib' package
+    Some modules used 'define-with-docs' which is part of 'guile-lib'
+    package.  The dependency was not documented and lead to errors
+    when the 'guile-lib' was missing.
+
+    The dependency was removed as it seems not worthy of requiring the
+    whole library only just for 'define-with-docs' facilities.
+
 * Changes in version 0.1.0 (2017-01-07)
 ** Release of the first stable version of Guile-ICS
 
