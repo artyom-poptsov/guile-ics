@@ -46,6 +46,7 @@ Options:
   --pretty-print, -p <indent>
                              Pretty-print iCalendar stream to the
                              stdout.
+  --to-org-mode              Convert iCalendar data to org-mode format.
 ")
   (exit))
 
