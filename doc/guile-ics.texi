@@ -128,17 +128,45 @@ and it will give you a suggestion.
 @node API Reference
 @chapter API Reference
 
+This chapter describes the Guile-ICS API.  The first thing that should
+be discussed are iCalendar streams.
+
+@section iCalendar streams
+
 Main module for Guile-ICS is @code{(ics)}.  The module contains main
 procedures for reading and writing iCalendar data.
 
+The data comes in the form of iCalendar streams: these streams consist
+of one or more iCalendar objects (described in the next section.)
+
+Example of an iCalendar stream of two iCalendar objects:
+
+@lisp
+'(((ICALPROPS ((PRODID . "-//hacksw/handcal//NONSGML v1.0//EN")
+               (VERSION . "2.0")))
+   (COMPONENT
+    ((VEVENT
+      (ICALPROPS ())
+      (COMPONENT ())))))
+  ((ICALPROPS ((PRODID . "-//hacksw/handcal//NONSGML v1.0//EN")
+               (VERSION . "2.0")))
+   (COMPONENT
+    ((VEVENT
+      (ICALPROPS ())
+      (COMPONENT ()))))))
+@end lisp
+
+The procedures below can be used to convert iCalendar streams to Scheme
+lists of iCalendar objects and vice versa.
+
 @deffn {Scheme Procedure} ics->scm [port=(current-input-port)]
 Convert a iCalendar stream from a @var{port} to a Scheme representation;
-return a list that represents iCalendar data.
+return a list of iCalendar objects.
 @end deffn
 
 @deffn {Scheme Procedure} ics-string->scm str
 Convert an iCalendar string @var{str} to a Scheme representation; return
-a list that represents iCalendar data.
+a list of iCalendar objects.
 @end deffn
 
 @deffn {Scheme Procedure} ics-pretty-print ical-object [port=(current-output-port)] [#:indent=2]
@@ -160,9 +188,64 @@ string.
 Convert an ICS stream from a @var{port} to an SRFI-41 stream
 (@pxref{SRFI-41,,, guile, The GNU Guile Reference Manual}).  Return the
 stream.
+
+Example:
+
+@lisp
+(use-modules (srfi srfi-41)
+             (ice-9 pretty-print)
+             (ics))
+
+(let ((p (open-input-file "data.ics")))
+  (stream-for-each (lambda (ical-object)
+                     (pretty-print ical-object))
+                   (ics->stream p)))
+@end lisp
+
+@end deffn
+
+@section iCalendar objects
+
+iCalendar streams consist of one or more iCalendar objects.  One
+iCalendar object looks as follows:
+
+@lisp
+'((ICALPROPS
+   ((PRODID . "-//hacksw/handcal//NONSGML v1.0//EN")
+    (VERSION . "2.0")))
+  (COMPONENT
+   ((VEVENT
+     (ICALPROPS
+      ((SUMMARY . "Bastille Day Party")
+       (DTEND . "19970715T040000Z")
+       (DTSTART . "19970714T170000Z")
+       (DTSTAMP . "19970610T172345Z")
+       (UID . "19970610T172345Z-AF23B2@@example.com")))
+     (COMPONENT ())))))
+@end lisp
+
+As you can see from the example above, each iCalendar object has an
+alist of properties and an alist of one or more components.  In turn,
+each component is an iCalendar object on its own; that means that this
+data structure can be handled recusively.
+
+@deffn {Scheme Procedures} make-ical-object icalprops component
+Make an iCalendar object from an @var{icalprops} and @var{component}
+alists.
+@end deffn
+
+@deffn {Scheme Procedures} ical-object-icalprops ical-object
+Get iCalendar properties from an @var{ical-object}.
+@end deffn
+
+@deffn {Scheme Procedures} ical-object-component ical-object
+Get an iCalendar component alist from @var{ical-object}.
 @end deffn
 
 @section Converters
+
+@code{(ics conv)} module provides procedures for converting iCalendar
+objects to other formats.
 
 @deffn {Scheme Procedure} ical-object->org-mode ical-object [port=(current-output-port)]
 Convert an @var{ical-object} to org-mode format (@pxref{Top,,, org,
