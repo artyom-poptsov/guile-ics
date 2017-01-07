@@ -67,7 +67,10 @@ END:VCALENDAR
   #:use-module (ics streams)
   #:use-module (ics ical-object)
   #:export (ics->scm ics-string->scm scm->ics scm->ics-string ics-pretty-print)
-  #:re-export (ics->stream))
+  #:re-export (ics->stream
+               make-ical-object
+               ical-object-icalprops
+               ical-object-component))
 
 
 ;;;
