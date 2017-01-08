@@ -27,9 +27,11 @@
   #:use-module (ics common)
   #:use-module (ics ical-object)
   #:use-module (ics parser)
+  #:use-module (dsv)
   #:export (ics-token-begin?
             ics-token-end?
             ics-calendar-object?
+            ics-value->scm
             ;; FSM
             fsm-read-property
             fsm-skip-property
@@ -63,6 +65,15 @@
 
 
 ;;; Finite State Machine.
+
+(define (ics-value->scm ical-value)
+  "Convert an ICAL-VALUE to the Scheme representation.  Return a
+Scheme list of strings if an ICAL-VALUE is a list of comma-separated
+values, or s single string otherwise."
+  (let ((scm-value (car (dsv-string->scm ical-value #\,))))
+    (if (> (length scm-value) 1)
+        scm-value
+        (car scm-value))))
 
 (define (fsm-read-property parser)
   (define (read-property buffer)
@@ -109,7 +120,7 @@
     (debug-fsm "fsm-read-ical-object" "read-property: NAME: ~a~%"
                name)
     (let ((key (string->symbol name))
-          (val (fsm-read-property parser)))
+          (val (ics-value->scm (fsm-read-property parser))))
       (fsm-read-ical-object parser
                             (acons key val icalprops)
                             component)))

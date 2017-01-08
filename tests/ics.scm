@@ -114,6 +114,17 @@
                (COMPONENT ((VEVENT (ICALPROPS ())
                                    (COMPONENT ())))))))))
 
+
+;;; ics-value->scm
+
+(test-assert "ics-value->scm, single value"
+  (string=? (ics-value->scm "Bastille Day Party")
+            "Bastille Day Party"))
+
+(test-assert "ics-value->scm, value list"
+  (equal? (ics-value->scm "Bastille,Day,Party")
+          '("Bastille" "Day" "Party")))
+
 ;;; (ics)
 
 (define %ics-string
@@ -130,8 +141,8 @@
 
 
 (test-assert "ics-string->scm"
-    (equal? (ics-string->scm %ics-string)
-            (list %ical-object)))
+  (equal? (ics-string->scm %ics-string)
+          (list %ical-object)))
 
 (test-assert "scm->ics-string"
   (equal? (scm->ics-string %ical-object)

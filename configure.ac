@@ -57,6 +57,8 @@ GUILE_PROGS
 GUILE_FLAGS
 GUILE_SITE_DIR
 
+GUILE_MODULE_REQUIRED([dsv])
+
 if test "x$guilesitedir" = "x"; then
    guilesitedir="$datadir/guile/site/$GUILE_EFFECTIVE_VERSION"
 fi
