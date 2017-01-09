@@ -125,6 +125,10 @@
   (equal? (ics-value->scm "Bastille,Day,Party")
           '("Bastille" "Day" "Party")))
 
+(test-assert "ics-value->scm, value list with escaped symbols"
+  (equal? (ics-value->scm "Bastille,Day\\,Party")
+          '("Bastille" "Day,Party")))
+
 ;;; (ics)
 
 (define %ics-string
