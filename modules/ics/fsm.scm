@@ -32,6 +32,7 @@
             ics-token-end?
             ics-calendar-object?
             ics-value->scm
+            scm->ics-value
             ;; FSM
             fsm-read-property
             fsm-skip-property
@@ -74,6 +75,15 @@ values, or s single string otherwise."
     (if (> (length scm-value) 1)
         scm-value
         (car scm-value))))
+
+(define (scm->ics-value scm)
+  "Convert an SCM value to an iCalenar representation."
+  (define (convert data)
+    (string-append (string-drop-right (scm->dsv-string data #\,) 1)
+                   "\r\n"))
+  (if (list? scm)
+      (convert scm)
+      (convert (list scm))))
 
 (define (fsm-read-property parser)
   (define (read-property buffer)
