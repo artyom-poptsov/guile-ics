@@ -115,18 +115,18 @@
                                    (COMPONENT ())))))))))
 
 
-;;; ics-value->scm
+;;; ical-value->scm
 
-(test-assert "ics-value->scm, single value"
-  (string=? (ics-value->scm "Bastille Day Party")
+(test-assert "ical-value->scm, single value"
+  (string=? (ical-value->scm "Bastille Day Party")
             "Bastille Day Party"))
 
-(test-assert "ics-value->scm, value list"
-  (equal? (ics-value->scm "Bastille,Day,Party")
+(test-assert "ical-value->scm, value list"
+  (equal? (ical-value->scm "Bastille,Day,Party")
           '("Bastille" "Day" "Party")))
 
 (test-assert "ics-value->scm, value list with escaped symbols"
-  (equal? (ics-value->scm "Bastille,Day\\,Party")
+  (equal? (ical-value->scm "Bastille,Day\\,Party")
           '("Bastille" "Day,Party")))
 
 ;;; (ics)
