@@ -125,7 +125,9 @@ is intended for human to comprehent, not to a machine to parse."
   "Convert an ICAL-OBJECT list to an vcalendar format.  Print the
 output to a PORT."
   (define (print-icalprops props)
-    (for-each (lambda (e) (format port "~a:~a\r\n" (car e) (cdr e)))
+    (for-each (lambda (e) (format port "~a:~a"
+                             (car e)
+                             (scm->ical-value (cdr e))))
               props))
   (define (print-components components)
     (for-each (lambda (component)
