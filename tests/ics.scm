@@ -148,6 +148,25 @@
   (equal? (ics-string->scm %ics-string)
           (list %ical-object)))
 
+;; RFC 5545, 3.1.
+(test-assert "ics-string->scm, long content lines"
+  (equal?
+   (ics-string->scm (string-append
+                     "BEGIN:VCALENDAR\r\n"
+                     "PRODID:-//hacksw/handcal//NONSGML v1.0//EN\r\n"
+                     "VERSION:2.0\r\n"
+                     "BEGIN:VEVENT\r\n"
+                     "SUMMARY:Bastille,\r\n"
+                     " Day,\r\n"
+                     " Party\r\n"
+                     "END:VEVENT\r\n"
+                     "END:VCALENDAR\r\n"))
+   '(((ICALPROPS ((VERSION . "2.0")
+                  (PRODID . "-//hacksw/handcal//NONSGML v1.0//EN")))
+      (COMPONENT ((VEVENT
+                   (ICALPROPS ((SUMMARY "Bastille" "Day" "Party")))
+                   (COMPONENT ()))))))))
+
 (test-assert "scm->ics-string"
   (equal? (scm->ics-string %ical-object)
           %ics-string))
@@ -158,7 +177,7 @@
             '((ICALPROPS ((PRODID . "-//hacksw/handcal//NONSGML v1.0//EN")
                           (VERSION . "2.0")))
               (COMPONENT ((VEVENT
-                           (ICALPROPS ((SUMMARY ("Bastille" "Day" "Party"))
+                           (ICALPROPS ((SUMMARY "Bastille" "Day" "Party")
                                        (DTEND . "19970715T040000Z")
                                        (DTSTART . "19970714T170000Z")
                                        (DTSTAMP . "19970610T172345Z")
