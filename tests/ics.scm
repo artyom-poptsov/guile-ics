@@ -153,6 +153,31 @@
           %ics-string))
 
 
+(test-assert "scm->ics-string, with value lists"
+ (string=? (scm->ics-string
+            '((ICALPROPS ((PRODID . "-//hacksw/handcal//NONSGML v1.0//EN")
+                          (VERSION . "2.0")))
+              (COMPONENT ((VEVENT
+                           (ICALPROPS ((SUMMARY ("Bastille" "Day" "Party"))
+                                       (DTEND . "19970715T040000Z")
+                                       (DTSTART . "19970714T170000Z")
+                                       (DTSTAMP . "19970610T172345Z")
+                                       (UID . "19970610T172345Z-AF23B2@example.com")))
+                           (COMPONENT ()))))))
+            (string-append
+             "BEGIN:VCALENDAR\r\n"
+             "PRODID:-//hacksw/handcal//NONSGML v1.0//EN\r\n"
+             "VERSION:2.0\r\n"
+             "BEGIN:VEVENT\r\n"
+             "SUMMARY:Bastille,Day,Party\r\n"
+             "DTEND:19970715T040000Z\r\n"
+             "DTSTART:19970714T170000Z\r\n"
+             "DTSTAMP:19970610T172345Z\r\n"
+             "UID:19970610T172345Z-AF23B2@example.com\r\n"
+             "END:VEVENT\r\n"
+             "END:VCALENDAR\r\n")))
+
+
 ;;;
 
 (test-end "ics")
