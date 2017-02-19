@@ -63,6 +63,26 @@
 
 
 ;;; Finite State Machine.
+;;
+;;        .------------. .------------------------------------.
+;;        :            : :             .-----------.          :
+;;        :            : :             V           :          :
+;;        :            : :          [fsm-read-property]<-.    :
+;;        :            : :             :                 :    :
+;; START  :            : :             :  .--------------+    :
+;; :      V            : V             V  V              :    :
+;; '->[fsm-read-ical-stream]---+----->[fsm-read-ical-object]->:
+;;        A            :       :                         A    :
+;;        :            :       :       .-----------.     :    :
+;;        :            :       :       V           :     :    :
+;;        :            V       '--->[fsm-read-property]  :    :
+;;        :           END                    :           :    :
+;;        '----------------------------------'           :    :
+;;                                     .-----------.     :    :
+;;                                     V           :     :    :
+;;                             .--->[fsm-skip-property]--'    :
+;;                             :                              :
+;;                             '------------------------------'
 
 (define (fsm-read-property parser)
   (define (read-property buffer)
