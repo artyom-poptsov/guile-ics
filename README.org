@@ -7,6 +7,10 @@
    any later version.  Please see =COPYING= file for the terms of GNU General
    Public License.
 
+** Requirements
+   - [[https://www.gnu.org/software/guile/][GNU Guile]], version 2.0.9 or later
+   - [[https://github.com/artyom-poptsov/guile-dsv][Guile-DSV]], version 0.2.0 or later
+
 ** Usage
    The module may be used as follows:
 #+BEGIN_EXAMPLE scheme
