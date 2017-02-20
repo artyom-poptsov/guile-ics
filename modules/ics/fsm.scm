@@ -85,13 +85,50 @@
 ;;                             '------------------------------'
 
 (define (fsm-read-property parser)
-  (define (read-property buffer)
+  ;;
+  ;;       .---------------------------.
+  ;;       :                           :
+  ;;       :     .-----------.         :
+  ;;       V     :           V         :
+  ;; START----->[read-property]----.   :
+  ;;                               :   :
+  ;;       .-----------------------'   :
+  ;;       :                           :
+  ;;       +--->[read-escaped-char]----'
+  ;;       :
+  ;;       '--->[handle-result]----->END
+  ;;
+  (define (read-escaped-char buffer result)
+    (let ((ch (parser-read-char parser)))
+      (case ch
+        ((*eof-object*)
+         (debug-fsm-error "fsm-read-property")
+         (error "Could not read escaped char"))
+        ;; RFC 5545, 3.3.11:
+        ;;   ESCAPED-CHAR = ("\\" / "\;" / "\," / "\N" / "\n")
+        ((#\\ #\; #\,)
+         (read-property (string-append buffer (string ch)) result))
+        ((#\N #\n)
+         (read-property (string-append buffer "\n") result))
+        (else
+         (debug-fsm-error "fsm-read-property")
+         (error "Unknown escaped character.")))))
+
+  (define (handle-result buffer result)
+    (if (null? result)
+        buffer
+        (reverse (if (string-null? buffer)
+                     result
+                     (cons buffer result)))))
+
+  (define (read-property buffer result)
+    (debug-fsm "fsm-read-property" "read-property")
     (let ((ch (parser-read-char parser)))
       (if (eof-object? ch)
           buffer
           (case ch
             ((#\cr)
-             (read-property buffer))
+             (read-property buffer result))
             ((#\linefeed)
              (let ((next-ch (parser-read-char parser)))
                ;; Lines longer than 75 octets should be split into
@@ -99,17 +136,25 @@
                ;; space character immediately follows CRLF (see RFC
                ;; 5545, section 3.1)
                (if (equal? next-ch #\space)
-                   (read-property buffer)
+                   (read-property buffer result)
                    (begin
                      (unless (eof-object? next-ch)
                        (parser-unread-char parser next-ch))
-                     buffer))))
+                     (debug-fsm "fsm-read-property" "handle-result")
+                     (handle-result buffer result)))))
+            ((#\\)
+             (debug-fsm "fsm-read-property" "read-escaped-char")
+             (read-escaped-char buffer result))
+            ((#\,)
+             (read-property "" (cons buffer result)))
             ((*eof-object*)
-             buffer)
+             (debug-fsm "fsm-read-property" "handle-result")
+             (handle-result buffer result))
             (else
-             (read-property (string-append buffer (string ch))))))))
+             (read-property (string-append buffer (string ch))
+                            result))))))
   (debug-fsm-transition "fsm-read-property")
-  (read-property ""))
+  (read-property "" '()))
 
 (define (fsm-skip-property parser)
   (debug-fsm-transition "fsm-skip-property")
@@ -129,7 +174,7 @@
     (debug-fsm "fsm-read-ical-object" "read-property: NAME: ~a~%"
                name)
     (let ((key (string->symbol name))
-          (val (ical-value->scm (fsm-read-property parser))))
+          (val (fsm-read-property parser)))
       (fsm-read-ical-object parser
                             (acons key val icalprops)
                             component)))
