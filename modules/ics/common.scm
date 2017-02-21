@@ -47,7 +47,7 @@
 
 (define (debug-fsm state fmt . args)
   "Format and print a debug message from a finite-state machine (FSM)."
-  (apply debug (format #f "[~a]: ~a" state fmt) args))
+  (apply debug (format #f "[~a]: ~a~%" state fmt) args))
 
 (define debug-fsm-transition
   (case-lambda
