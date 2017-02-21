@@ -60,6 +60,7 @@ END:VCALENDAR
 
 (define-module (ics)
   #:use-module (ice-9 rdelim)
+  #:use-module (ice-9 regex)
   ;; Guile-ICS
   #:use-module (ics common)
   #:use-module (ics fsm)
@@ -124,8 +125,20 @@ is intended for human to comprehent, not to a machine to parse."
 (define* (scm->ics ical-object #:optional (port (current-output-port)))
   "Convert an ICAL-OBJECT list to an vcalendar format.  Print the
 output to a PORT."
+  (define (escape-chars text)
+    (regexp-substitute/global #f "[\n]"
+                              (regexp-substitute/global #f "([\\;,])"
+                                                        text
+                                                        'pre "\\" 0 'post)
+                              'pre "\\n" 'post))
+
+  (define (scm->ical-value value)
+    (if (list? value)
+        (string-join (map escape-chars value) ",")
+        (escape-chars value)))
+
   (define (print-icalprops props)
-    (for-each (lambda (e) (format port "~a:~a"
+    (for-each (lambda (e) (format port "~a:~a\r\n"
                              (car e)
                              (scm->ical-value (cdr e))))
               props))
