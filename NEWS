@@ -7,6 +7,16 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Unreleased
+** New features
+*** The library now supports lists of values (RFC 5545, 3.1.1.)
+*** The library now handles escaped chars in TEXT values (RFC 5545, 3.3.11)
+** Bugfixes
+*** Remove bogus dependency on 'guile-lib'
+    There was an extra dependency on (scheme documentation) module
+    that I overlooked in the previous release, which is now removed.
+
+
 * Changes in version 0.1.1 (2017-01-07)
 ** Bugfixes
 *** Fixed library building scripts
