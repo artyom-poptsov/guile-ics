@@ -66,6 +66,18 @@
                                                    (string #\lf)))))
     (string=? (fsm-read-property parser) "VCALENDAR")))
 
+(test-assert "fsm-read-property, list of values"
+  (let ((parser (make-string-parser (string-append "a,b,c\\,d"
+                                                   (string #\cr)
+                                                   (string #\lf)))))
+    (equal? (fsm-read-property parser) '("a" "b" "c,d"))))
+
+(test-assert "fsm-read-property, escaped chars"
+  (let ((parser (make-string-parser (string-append "a\\;,b\\\\,c\\,d\\n"
+                                                   (string #\cr)
+                                                   (string #\lf)))))
+    (equal? (fsm-read-property parser) '("a;" "b\\" "c,d\n"))))
+
 
 (test-assert "fsm-skip-property"
   (let ((parser (make-string-parser (string-append "VCALENDAR"
