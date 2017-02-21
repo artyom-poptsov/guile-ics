@@ -20,7 +20,6 @@
 ;;; Code:
 
 (define-module (ics ical-object)
-  #:use-module (dsv)
   #:export (ical-object-icalprops
             ical-object-component
             make-ical-object
@@ -40,26 +39,5 @@
 (define (ical-object-component ical-object)
   "Get an iCal component alist from ICAL-OBJECT."
   (cadr (assoc 'COMPONENT ical-object)))
-
-
-;;;
-
-(define (ical-value->scm ical-value)
-  "Convert an ICAL-VALUE to the Scheme representation.  Return a
-Scheme list of strings if an ICAL-VALUE is a list of comma-separated
-values, or s single string otherwise."
-  (let ((scm-value (car (dsv-string->scm ical-value #\,))))
-    (if (> (length scm-value) 1)
-        scm-value
-        (car scm-value))))
-
-(define (scm->ical-value scm)
-  "Convert an SCM value to an iCalenar representation."
-  (define (convert data)
-    (string-append (string-drop-right (scm->dsv-string data #\,) 1)
-                   "\r\n"))
-  (if (list? scm)
-      (convert scm)
-      (convert (list scm))))
 
 ;;; ical-object.scm ends here.

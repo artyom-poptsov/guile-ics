@@ -126,21 +126,6 @@
                (COMPONENT ((VEVENT (ICALPROPS ())
                                    (COMPONENT ())))))))))
 
-
-;;; ical-value->scm
-
-(test-assert "ical-value->scm, single value"
-  (string=? (ical-value->scm "Bastille Day Party")
-            "Bastille Day Party"))
-
-(test-assert "ical-value->scm, value list"
-  (equal? (ical-value->scm "Bastille,Day,Party")
-          '("Bastille" "Day" "Party")))
-
-(test-assert "ics-value->scm, value list with escaped symbols"
-  (equal? (ical-value->scm "Bastille,Day\\,Party")
-          '("Bastille" "Day,Party")))
-
 ;;; (ics)
 
 (define %ics-string
