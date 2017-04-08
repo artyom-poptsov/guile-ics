@@ -48,7 +48,7 @@
 
 
 (test-assert "make-ical-object"
-  (equal? (make-ical-object '() '()) '((ICALPROPS ()) (COMPONENT ()))))
+  (equal? (make-ical-object '() '()) '((ICALPROPS) (COMPONENT))))
 
 
 ;;; Finite-State Machine Tests.
@@ -106,14 +106,14 @@
                                                    "SUMMARY:Bastille Day Party\r\n"
                                                    "END:VEVENT"))))
     (equal? (fsm-read-ical-object parser '() '())
-            '((ICALPROPS ((PRODID . "-//hacksw/handcal//NONSGML v1.0//EN")
-                          (VERSION . "2.0")))
-              (COMPONENT ((VEVENT (ICALPROPS ((SUMMARY . "Bastille Day Party")
-                                              (DTEND . "19970715T040000Z")
-                                              (DTSTART . "19970714T170000Z")
-                                              (DTSTAMP . "19970610T172345Z")
-                                              (UID . "19970610T172345Z-AF23B2@example.com")))
-                                  (COMPONENT ()))))))))
+            '((ICALPROPS (PRODID . "-//hacksw/handcal//NONSGML v1.0//EN")
+                         (VERSION . "2.0"))
+              (COMPONENT (VEVENT (ICALPROPS (SUMMARY . "Bastille Day Party")
+                                            (DTEND . "19970715T040000Z")
+                                            (DTSTART . "19970714T170000Z")
+                                            (DTSTAMP . "19970610T172345Z")
+                                            (UID . "19970610T172345Z-AF23B2@example.com"))
+                                 (COMPONENT)))))))
 
 (test-assert "fsm-read-ical-stream, valid object"
   (let ((parser (make-string-parser (string-append "BEGIN:VCALENDAR\r\n"
@@ -122,9 +122,9 @@
                                                    "END:VEVENT\r\n"
                                                    "END:VCALENDAR"))))
     (equal? (fsm-read-ical-stream parser '())
-            '(((ICALPROPS ((VERSION . "2.0")))
-               (COMPONENT ((VEVENT (ICALPROPS ())
-                                   (COMPONENT ())))))))))
+            '(((ICALPROPS (VERSION . "2.0"))
+               (COMPONENT (VEVENT (ICALPROPS)
+                                  (COMPONENT))))))))
 
 ;;; (ics)
 
@@ -136,9 +136,9 @@
                  "END:VCALENDAR\r\n"))
 
 (define %ical-object
-  '((ICALPROPS ((VERSION . "2.0")))
-    (COMPONENT ((VEVENT (ICALPROPS ())
-                        (COMPONENT ()))))))
+  '((ICALPROPS (VERSION . "2.0"))
+    (COMPONENT (VEVENT (ICALPROPS)
+                       (COMPONENT)))))
 
 
 (test-assert "ics-string->scm"
@@ -158,11 +158,11 @@
                      " Party\r\n"
                      "END:VEVENT\r\n"
                      "END:VCALENDAR\r\n"))
-   '(((ICALPROPS ((VERSION . "2.0")
-                  (PRODID . "-//hacksw/handcal//NONSGML v1.0//EN")))
-      (COMPONENT ((VEVENT
-                   (ICALPROPS ((SUMMARY "Bastille" "Day" "Party")))
-                   (COMPONENT ()))))))))
+   '(((ICALPROPS (VERSION . "2.0")
+                 (PRODID . "-//hacksw/handcal//NONSGML v1.0//EN"))
+      (COMPONENT (VEVENT
+                  (ICALPROPS (SUMMARY "Bastille" "Day" "Party"))
+                  (COMPONENT)))))))
 
 (test-assert "scm->ics-string"
   (equal? (scm->ics-string %ical-object)
@@ -171,15 +171,15 @@
 
 (test-assert "scm->ics-string, with value lists"
  (string=? (scm->ics-string
-            '((ICALPROPS ((PRODID . "-//hacksw/handcal//NONSGML v1.0//EN")
-                          (VERSION . "2.0")))
-              (COMPONENT ((VEVENT
-                           (ICALPROPS ((SUMMARY "Bastille" "Day" "Party")
-                                       (DTEND . "19970715T040000Z")
-                                       (DTSTART . "19970714T170000Z")
-                                       (DTSTAMP . "19970610T172345Z")
-                                       (UID . "19970610T172345Z-AF23B2@example.com")))
-                           (COMPONENT ()))))))
+            '((ICALPROPS (PRODID . "-//hacksw/handcal//NONSGML v1.0//EN")
+                         (VERSION . "2.0"))
+              (COMPONENT (VEVENT
+                          (ICALPROPS (SUMMARY "Bastille" "Day" "Party")
+                                     (DTEND . "19970715T040000Z")
+                                     (DTSTART . "19970714T170000Z")
+                                     (DTSTAMP . "19970610T172345Z")
+                                     (UID . "19970610T172345Z-AF23B2@example.com"))
+                          (COMPONENT)))))
             (string-append
              "BEGIN:VCALENDAR\r\n"
              "PRODID:-//hacksw/handcal//NONSGML v1.0//EN\r\n"

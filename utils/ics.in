@@ -58,13 +58,17 @@ Options:
     (to-org-mode                    (value #f))
     (pretty-print (single-char #\p) (value optional))))
 
+(set-debug! #t)
+
 
 ;;; Entry point.
 
 (define (handle-pretty-print indent)
-  (stream-for-each (lambda (e)
-                     (ics-pretty-print e #:indent indent))
-                   (ics->stream)))
+  (let ((l (ics->stream)))
+    (format #t "handle-pretty-print: ~a~%" l)
+    (stream-for-each (lambda (e)
+                       (ics-pretty-print e #:indent indent))
+                     l)))
 
 (define (handle-to-org-mode)
   (stream-for-each (lambda (ical-object)

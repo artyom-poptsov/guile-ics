@@ -28,16 +28,16 @@
 
 (define (make-ical-object icalprops component)
   "Convert an ICALPROPS list and a COMPONENT alist to an iCal object."
-  (list (cons 'ICALPROPS (list icalprops))
-        (cons 'COMPONENT (list component))))
+  (list (cons 'ICALPROPS icalprops)
+        (cons 'COMPONENT component)))
 
 
 (define (ical-object-icalprops ical-object)
   "Get iCal properties from an ICAL-OBJECT."
-  (cadr (assoc 'ICALPROPS ical-object)))
+  (assoc 'ICALPROPS ical-object))
 
 (define (ical-object-component ical-object)
   "Get an iCal component alist from ICAL-OBJECT."
-  (cadr (assoc 'COMPONENT ical-object)))
+  (assoc 'COMPONENT ical-object))
 
 ;;; ical-object.scm ends here.
