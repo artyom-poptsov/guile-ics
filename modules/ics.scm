@@ -69,9 +69,8 @@ END:VCALENDAR
   #:use-module (ics ical-object)
   #:export (ics->scm ics-string->scm scm->ics scm->ics-string ics-pretty-print)
   #:re-export (ics->stream
-               make-ical-object
-               ical-object-icalprops
-               ical-object-component))
+               ical-object-properties
+               ical-object-components))
 
 
 ;;;
@@ -108,57 +107,22 @@ is intended for human to comprehent, not to a machine to parse."
                   (let ((cname  (car component))
                         (object (cdr component)))
                     (format port "~aBEGIN: ~a\n" s cname)
-                    (print-icalprops (ical-object-icalprops object)
+                    (print-icalprops (ical-properties object)
                                      (+ current-indent indent))
-                    (print-components (ical-object-component object)
+                    (print-components (ical-components object)
                                       (+ current-indent indent))
                     (format port "~aEND: ~a\n" s cname)))
                 (cdr components))))
   (define (print-vcalendar)
     (write-line "BEGIN: VCALENDAR" port)
-    (print-icalprops (ical-object-icalprops ical-object) indent)
-    (print-components (ical-object-component ical-object) indent)
+    (print-icalprops (ical-properties ical-object) indent)
+    (print-components (ical-components ical-object) indent)
     (write-line "END: VCALENDAR" port))
 
   (print-vcalendar))
 
 (define* (scm->ics ical-object #:optional (port (current-output-port)))
-  "Convert an ICAL-OBJECT list to an vcalendar format.  Print the
-output to a PORT."
-  (define (escape-chars text)
-    (regexp-substitute/global #f "[\n]"
-                              (regexp-substitute/global #f "([\\;,])"
-                                                        text
-                                                        'pre "\\" 0 'post)
-                              'pre "\\n" 'post))
-
-  (define (scm->ical-value value)
-    (if (list? value)
-        (string-join (map escape-chars value) ",")
-        (escape-chars value)))
-
-  (define (print-icalprops props)
-    (for-each (lambda (e) (format port "~a:~a\r\n"
-                             (car e)
-                             (scm->ical-value (cdr e))))
-              (cdr props)))
-  (define (print-components components)
-    (for-each (lambda (component)
-                (when (pair? component)
-                  (let ((cname  (car component))
-                        (object (cdr component)))
-                    (format port "BEGIN:~a\r\n" cname)
-                    (print-icalprops (ical-object-icalprops object))
-                    (print-components (ical-object-component object))
-                    (format port "END:~a\r\n" cname))))
-              components))
-  (define (print-vcalendar)
-    (display "BEGIN:VCALENDAR\r\n" port)
-    (print-icalprops (ical-object-icalprops ical-object))
-    (print-components (ical-object-component ical-object))
-    (display "END:VCALENDAR\r\n" port))
-
-  (print-vcalendar))
+  (ical-object->ics ical-object port))
 
 (define (scm->ics-string ical-object)
   "Convert an ICAL-OBJECT to an iCalendar format string; return the

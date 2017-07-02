@@ -24,6 +24,7 @@
 ;;; Code:
 
 (define-module (ics fsm)
+  #:use-module (oop goops)
   #:use-module (ics common)
   #:use-module (ics ical-object)
   #:use-module (ics parser)
@@ -167,6 +168,8 @@
     (debug-fsm "fsm-read-ical-object" "read-component~%")
     (let ((key (string->symbol (fsm-read-property parser)))
           (val (fsm-read-ical-object parser '() '())))
+      (debug-fsm "fsm-read-ical-object" "read-component: key: ~a; val: ~a~%"
+                 key val)
       (fsm-read-ical-object parser
                             icalprops
                             (acons key val component))))
@@ -175,13 +178,17 @@
                name)
     (let ((key (string->symbol name))
           (val (fsm-read-property parser)))
+      (debug-fsm "fsm-read-ical-object" "read-property: key: ~a; val: ~a~%"
+                 key val)
       (fsm-read-ical-object parser
                             (acons key val icalprops)
                             component)))
   (define (read-object buffer)
     (let ((ch (parser-read-char parser)))
       (if (eof-object? ch)
-          (make-ical-object icalprops component)
+          (make <ical-object>
+            #:properties icalprops
+            #:components component)
           (case ch
             ((#\:)
              (cond
@@ -189,7 +196,9 @@
                (read-component))
               ((ics-token-end? buffer)
                (fsm-skip-property parser)
-               (make-ical-object icalprops component))
+               (make <ical-object>
+                 #:components component
+                 #:properties icalprops))
               (else
                (read-property buffer))))
             ((#\linefeed)
