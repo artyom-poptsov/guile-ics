@@ -1,0 +1,37 @@
+(define-module (ics ical-property)
+  #:use-module (oop goops)
+  #:export (<ical-property>
+            ical-property-name
+            ical-property-value
+            ical-property-parameters
+            ical-property->string))
+
+
+;;;
+
+(define-class <ical-property> ()
+  (name       #:accessor     ical-property-name
+              #:init-value   #f
+              #:init-keyword #:name)
+  (value      #:accessor     ical-property-value
+              #:init-value   #f
+              #:init-keyword #:value)
+  (parameters #:accessor     ical-property-parameters
+              #:init-value   #f
+              #:init-keyword #:parameters))
+
+(define-method (ical-property->string (obj <ical-property>))
+  (define (parameters->string parameters)
+    (string-join (map (lambda (parameter)
+                        (format #f "~a=~a" (car parameter)
+                                (cdr parameter)))
+                      parameters)
+                 ";"))
+  (let ((parameters (ical-property-parameters obj))
+        (name       (ical-property-name obj))
+        (value      (ical-property-value obj)))
+    (if parameters
+        (format #f "~a;~a:~a" name (parameters->string parameters) value)
+        (string-append name ":" value))))
+
+;;;
