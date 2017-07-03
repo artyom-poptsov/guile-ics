@@ -22,6 +22,7 @@ SUBDIRS =
 SOURCES = \
 	common.scm	\
 	ical-object.scm	\
+	ical-property.scm	\
 	fsm.scm		\
 	parser.scm	\
 	streams.scm	\
