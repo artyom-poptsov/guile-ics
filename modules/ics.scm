@@ -101,9 +101,13 @@ is intended for human to comprehent, not to a machine to parse."
   (define (print-icalprops props current-indent)
     (for-each (lambda (e)
                 (let ((s (make-string current-indent #\space)))
-                  (format port "~a~a: ~a\n" s
-                          (ical-property-name e)
-                          (ical-property-value e))))
+                  (format port "~a~a" s (ical-property-name e))
+                  (for-each (lambda (property)
+                              (format port ";~a=~a"
+                                      (car property)
+                                      (cdr property)))
+                            (ical-property-parameters e))
+                  (format port ": ~a\n" (ical-property-value e))))
               props))
   (define (print-components components current-indent)
     (let ((s (make-string current-indent #\space)))

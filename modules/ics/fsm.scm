@@ -24,6 +24,7 @@
 ;;; Code:
 
 (define-module (ics fsm)
+  #:use-module (srfi srfi-26)
   #:use-module (oop goops)
   #:use-module (ics common)
   #:use-module (ics ical-object)
@@ -175,16 +176,33 @@
       (fsm-read-ical-object parser
                             icalprops
                             (cons val component))))
+  (define (parse-name name)
+    (map (lambda (e)
+           (debug-fsm "fsm-read-ical-object" "read-property: e: ~a~%"
+                      e)
+           (let ((key&value (string-split e #\=)))
+             (debug-fsm "fsm-read-ical-object" "read-property: key&value: ~a~%"
+                        key&value)
+             (if (> (length key&value) 1)
+                 (cons (string->symbol (car key&value))
+                       (cadr key&value))
+                 (list (car key&value)))))
+         (string-split name #\;)))
+
   (define (read-property name)
     (debug-fsm "fsm-read-ical-object" "read-property: NAME: ~a~%"
                name)
-    (let ((key (string->symbol name))
-          (val (fsm-read-property parser)))
+    (let* ((parsed (parse-name name))
+           (d      (debug-fsm "fsm-read-ical-object" "read-property: parsed: ~a~%"
+                              parsed))
+           (key (caar parsed))
+           (val (fsm-read-property parser)))
       (debug-fsm "fsm-read-ical-object" "read-property: key: ~a; val: ~a~%"
                  key val)
       (let ((ical-property (make <ical-property>
-                             #:name key
-                             #:value val)))
+                             #:name  key
+                             #:value val
+                             #:parameters (cdr parsed))))
         (fsm-read-ical-object parser
                               (cons ical-property icalprops)
                               component))))
