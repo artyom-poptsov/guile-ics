@@ -27,6 +27,7 @@
   #:use-module (oop goops)
   #:use-module (ics common)
   #:use-module (ics ical-object)
+  #:use-module (ics ical-property)
   #:use-module (ics parser)
   #:export (ics-token-begin?
             ics-token-end?
@@ -170,9 +171,10 @@
           (val (fsm-read-ical-object parser '() '())))
       (debug-fsm "fsm-read-ical-object" "read-component: key: ~a; val: ~a~%"
                  key val)
+      (slot-set! val 'name key)
       (fsm-read-ical-object parser
                             icalprops
-                            (acons key val component))))
+                            (cons val component))))
   (define (read-property name)
     (debug-fsm "fsm-read-ical-object" "read-property: NAME: ~a~%"
                name)
@@ -180,9 +182,12 @@
           (val (fsm-read-property parser)))
       (debug-fsm "fsm-read-ical-object" "read-property: key: ~a; val: ~a~%"
                  key val)
-      (fsm-read-ical-object parser
-                            (acons key val icalprops)
-                            component)))
+      (let ((ical-property (make <ical-property>
+                             #:name key
+                             #:value val)))
+        (fsm-read-ical-object parser
+                              (cons ical-property icalprops)
+                              component))))
   (define (read-object buffer)
     (let ((ch (parser-read-char parser)))
       (if (eof-object? ch)
