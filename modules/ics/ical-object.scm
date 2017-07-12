@@ -58,9 +58,15 @@
         (escape-chars value)))
 
   (define (print-properties props)
-    (for-each (lambda (e) (format port "~a:~a\r\n"
-                             (car e)
-                             (scm->ical-value (cdr e))))
+    (for-each (lambda (e)
+                (let ((s (make-string current-indent #\space)))
+                  (format port "~a~a" s (ical-property-name e))
+                  (for-each (lambda (property)
+                              (format port ";~a=~a"
+                                      (car property)
+                                      (cdr property)))
+                            (ical-property-parameters e))
+                  (format port ": ~a\n" (ical-property-value e))))
               props))
   (define (print-components components)
     (for-each (lambda (component)
