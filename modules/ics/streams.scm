@@ -41,7 +41,7 @@
       (if (ics-calendar-object? name)
           (begin
             (debug-fsm "fsm-read-ical-stream" "RESULT: ~a~%" result)
-            (fsm-read-ical-object parser '() '()))
+            (fsm-read-ical-object parser %ics-icalendar-object '() '()))
           (fsm-read-ical-stream-1 parser result))))
   (define (read-ical-stream buffer)
     (let ((ch (parser-read-char parser)))

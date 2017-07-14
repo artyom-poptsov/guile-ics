@@ -33,6 +33,10 @@
   #:export (ics-token-begin?
             ics-token-end?
             ics-calendar-object?
+            ;; Tokens
+            %ics-icalendar-object
+            %ics-token-begin
+            %ics-token-end
             ;; FSM
             fsm-read-property
             fsm-skip-property
@@ -165,15 +169,15 @@
     (unless (or (eof-object? ch) (equal? ch #\linefeed))
       (fsm-skip-property parser))))
 
-(define (fsm-read-ical-object parser icalprops component)
+(define (fsm-read-ical-object parser name icalprops component)
   (define (read-component)
     (debug-fsm "fsm-read-ical-object" "read-component~%")
-    (let ((key (string->symbol (fsm-read-property parser)))
-          (val (fsm-read-ical-object parser '() '())))
+    (let* ((key (string->symbol (fsm-read-property parser)))
+           (val (fsm-read-ical-object parser key '() '())))
       (debug-fsm "fsm-read-ical-object" "read-component: key: ~a; val: ~a~%"
                  key val)
-      (slot-set! val 'name key)
       (fsm-read-ical-object parser
+                            name
                             icalprops
                             (cons val component))))
   (define (parse-name name)
@@ -204,6 +208,7 @@
                              #:value val
                              #:parameters (cdr parsed))))
         (fsm-read-ical-object parser
+                              name
                               (cons ical-property icalprops)
                               component))))
   (define (read-object buffer)
@@ -225,7 +230,7 @@
               (else
                (read-property buffer))))
             ((#\linefeed)
-             (fsm-read-ical-object parser icalprops component))
+             (fsm-read-ical-object parser name icalprops component))
             (else
              (read-object (string-append buffer (string ch))))))))
   (debug-fsm-transition "fsm-read-ical-object")
@@ -239,7 +244,9 @@
       (if (ics-calendar-object? name)
           (begin
             (debug-fsm "fsm-read-ical-stream" "RESULT: ~a~%" result)
-            (let ((result (cons (fsm-read-ical-object parser '() '())
+            (let ((result (cons (fsm-read-ical-object parser
+                                                      %ics-icalendar-object
+                                                      '() '())
                                 result)))
               (debug-fsm "fsm-read-ical-stream" "RESULT: ~a~%" result)
               (fsm-read-ical-stream parser result)))
