@@ -23,10 +23,12 @@
   #:use-module (oop goops)
   #:use-module (ice-9 rdelim)
   #:use-module (ice-9 regex)
+  #:use-module (srfi srfi-1)            ; find
   #:export (<ical-object>
             ical-object->ics
             ical-object-name
             ical-object-properties
+            ical-object-property-ref
             ical-object-components))
 
 
@@ -43,6 +45,15 @@
               #:init-value '()
               #:init-keyword #:components))
 
+
+(define-method (ical-object-property-ref (ical-object <ical-object>)
+                                     (name <symbol>))
+  "Get an iCalendar property by a NAME, return the property object or
+#f if no property found."
+  (find (lambda (property) (equal? (ical-property-name property) name))
+        (ical-object-properties ical-object)))
+
+
 (define-method (ical-object->ics (obj <ical-object>)
                                  (port <port>))
   (define (escape-chars text)
