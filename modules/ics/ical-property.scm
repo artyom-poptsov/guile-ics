@@ -1,9 +1,11 @@
 (define-module (ics ical-property)
   #:use-module (oop goops)
+  #:use-module (srfi srfi-1)
   #:export (<ical-property>
             ical-property-name
             ical-property-value
             ical-property-parameters
+            ical-property-parameter
             ical-property->string))
 
 
@@ -16,9 +18,16 @@
   (value      #:accessor     ical-property-value
               #:init-value   #f
               #:init-keyword #:value)
+  ;; alist
   (parameters #:accessor     ical-property-parameters
               #:init-value   #f
               #:init-keyword #:parameters))
+
+(define-method (ical-property-parameter-ref (ical-object <ical-object>)
+                                            (name <symbol>))
+  "Get a iCalendar property parameter by a NAME, return a property
+parameter value, or return #f if no parameter found."
+  (assoc-ref name (ical-property-parameters ical-object)))
 
 (define-method (ical-property->string (obj <ical-property>))
   (define (parameters->string parameters)
