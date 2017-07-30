@@ -169,15 +169,15 @@
     (unless (or (eof-object? ch) (equal? ch #\linefeed))
       (fsm-skip-property parser))))
 
-(define (fsm-read-ical-object parser name icalprops component)
+(define (fsm-read-ical-object parser object-name icalprops component)
   (define (read-component)
     (debug-fsm "fsm-read-ical-object" "read-component~%")
-    (let* ((key (string->symbol (fsm-read-property parser)))
+    (let* ((key (fsm-read-property parser))
            (val (fsm-read-ical-object parser key '() '())))
       (debug-fsm "fsm-read-ical-object" "read-component: key: ~a; val: ~a~%"
                  key val)
       (fsm-read-ical-object parser
-                            name
+                            object-name
                             icalprops
                             (cons val component))))
   (define (parse-name name)
@@ -208,13 +208,14 @@
                              #:value val
                              #:parameters (cdr parsed))))
         (fsm-read-ical-object parser
-                              name
+                              object-name
                               (cons ical-property icalprops)
                               component))))
   (define (read-object buffer)
     (let ((ch (parser-read-char parser)))
       (if (eof-object? ch)
           (make <ical-object>
+            #:name       object-name
             #:properties icalprops
             #:components component)
           (case ch
@@ -225,12 +226,13 @@
               ((ics-token-end? buffer)
                (fsm-skip-property parser)
                (make <ical-object>
+                 #:name       object-name
                  #:components component
                  #:properties icalprops))
               (else
                (read-property buffer))))
             ((#\linefeed)
-             (fsm-read-ical-object parser name icalprops component))
+             (fsm-read-ical-object parser object-name icalprops component))
             (else
              (read-object (string-append buffer (string ch))))))))
   (debug-fsm-transition "fsm-read-ical-object")
