@@ -23,6 +23,20 @@
               #:init-value   #f
               #:init-keyword #:parameters))
 
+
+;;; Custom printers
+
+(define-method (display (ical-property <ical-property>) (port <port>))
+  (format port "#<ical-property ~a ~a>" (ical-property-name ical-property)
+          (number->string (object-address ical-property) 16)))
+
+(define-method (write (ical-property <ical-property>) (port <port>))
+  (format port "#<ical-property ~a ~a>" (ical-property-name ical-property)
+          (number->string (object-address ical-property) 16)))
+
+
+;;;
+
 (define-method (ical-property-parameter-ref (ical-property <ical-property>)
                                             (name <symbol>))
   "Get a iCalendar property parameter by a NAME, return a property
