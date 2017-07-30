@@ -48,7 +48,7 @@
 
 
 (define-method (ical-object-property-ref (ical-object <ical-object>)
-                                     (name <string>))
+                                         (name <string>))
   "Get an iCalendar property by a NAME, return the property object or
 #f if no property found."
   (find (lambda (property) (equal? (ical-property-name property) name))
