@@ -36,12 +36,15 @@
 ;;;
 
 (define-class <ical-object> ()
+  ;; string
   (name       #:accessor ical-object-name
               #:init-value #f
               #:init-keyword #:name)
+  ;; list
   (properties #:accessor ical-object-properties
               #:init-value '()
               #:init-keyword #:properties)
+  ;; list
   (components #:accessor ical-object-components
               #:init-value '()
               #:init-keyword #:components))
