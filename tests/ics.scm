@@ -180,27 +180,27 @@
            (string=? (ical-object-name vevent) "VEVENT")
            (null? (ical-object-components vevent))))))
 
-#!
-
 ;; RFC 5545, 3.1.
 (test-assert "ics-string->scm, long content lines"
-  (equal?
-   (ics-string->scm (string-append
-                     "BEGIN:VCALENDAR\r\n"
-                     "PRODID:-//hacksw/handcal//NONSGML v1.0//EN\r\n"
-                     "VERSION:2.0\r\n"
-                     "BEGIN:VEVENT\r\n"
-                     "SUMMARY:Bastille,\r\n"
-                     " Day,\r\n"
-                     " Party\r\n"
-                     "END:VEVENT\r\n"
-                     "END:VCALENDAR\r\n"))
-   '(((ICALPROPS (VERSION . "2.0")
-                 (PRODID . "-//hacksw/handcal//NONSGML v1.0//EN"))
-      (COMPONENT (VEVENT
-                  (ICALPROPS (SUMMARY "Bastille" "Day" "Party"))
-                  (COMPONENT)))))))
+  (let* ((vcalendar (car (ics-string->scm
+                          (string-append
+                           "BEGIN:VCALENDAR\r\n"
+                           "BEGIN:VEVENT\r\n"
+                           "SUMMARY:Bastille,\r\n"
+                           " Day,\r\n"
+                           " Party\r\n"
+                           "END:VEVENT\r\n"
+                           "END:VCALENDAR\r\n"))))
+         (vevent  (car (ical-object-components vcalendar)))
+         (summary (ical-object-property-ref vevent "SUMMARY")))
+    (and (string=? (ical-property-name summary) "SUMMARY")
+         (let ((summary-value (ical-property-value summary)))
+           (and (= (length summary-value) 3)
+                (string=? (list-ref summary-value 0) "Bastille")
+                (string=? (list-ref summary-value 1) "Day")
+                (string=? (list-ref summary-value 2) "Party"))))))
 
+#!
 (test-assert "scm->ics-string"
   (equal? (scm->ics-string %ical-object)
           %ics-string))
