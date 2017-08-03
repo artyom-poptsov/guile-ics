@@ -210,8 +210,6 @@
                       "END:VCALENDAR\r\n"))
          (object (car (ics-string->scm source-str)))
          (output-str (scm->ics-string object)))
-    (format (current-error-port) "orig: ~s~%" source-str)
-    (format (current-error-port) "dest: ~s~%" output-str)
     (string=? source-str output-str)))
 
 
@@ -228,7 +226,6 @@
          (object (car (ics-string->scm source-str)))
          (description (ical-object-property-ref object "DESCRIPTION"))
          (description-value (ical-property-value description)))
-    (format (current-error-port) "~s~%" description-value)
     (string=? description-value
               "Project XYZ Review Meeting will include the following agenda items: \
 (a) Market Overview, (b) Finances, (c) Project Management")))
