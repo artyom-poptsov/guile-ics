@@ -211,6 +211,17 @@
                               object-name
                               (cons ical-property icalprops)
                               component))))
+
+  (define (read-object-in-quotes buffer)
+    (let ((ch (parser-read-char parser)))
+      (when (eof-object? ch)
+        (error "Unexpected EOF inside quotes."))
+      (case ch
+        ((#\")
+         (read-object buffer))
+        (else
+         (read-object-in-quotes (string-append buffer (string ch)))))))
+
   (define (read-object buffer)
     (let ((ch (parser-read-char parser)))
       (if (eof-object? ch)
@@ -219,6 +230,8 @@
             #:properties icalprops
             #:components component)
           (case ch
+            ((#\")
+             (read-object-in-quotes buffer))
             ((#\:)
              (cond
               ((ics-token-begin? buffer)

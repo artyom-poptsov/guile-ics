@@ -25,6 +25,7 @@
              (oop goops)
              (ice-9 rdelim)
              (ics)
+             (ics common)
              (ics parser)
              (ics fsm)
              (ics ical-object)
@@ -212,6 +213,25 @@
     (format (current-error-port) "orig: ~s~%" source-str)
     (format (current-error-port) "dest: ~s~%" output-str)
     (string=? source-str output-str)))
+
+
+;;;
+
+(test-assert "ics-string->scm, property parameters"
+  (let* ((source-str (string-append
+                      "BEGIN:VCALENDAR\r\n"
+                      "DESCRIPTION;ALTREP=\"CID:part3.msg.970415T083000@example.com\":\r\n"
+                      " Project XYZ Review Meeting will include the following agenda\r\n"
+                      "  items: (a) Market Overview\\, (b) Finances\\, (c) Project Man\r\n"
+                      " agement\r\n"
+                      "END:VCALENDAR\r\n"))
+         (object (car (ics-string->scm source-str)))
+         (description (ical-object-property-ref object "DESCRIPTION"))
+         (description-value (ical-property-value description)))
+    (format (current-error-port) "~s~%" description-value)
+    (string=? description-value
+              "Project XYZ Review Meeting will include the following agenda items: \
+(a) Market Overview, (b) Finances, (c) Project Management")))
 
 
 ;;;
