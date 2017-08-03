@@ -159,7 +159,7 @@
                      "2.0")
            (string=? (ical-object-name vevent) "VEVENT")))))
 
-#!
+
 ;;; (ics)
 
 (define %ics-string
@@ -169,15 +169,18 @@
                  "END:VEVENT\r\n"
                  "END:VCALENDAR\r\n"))
 
-(define %ical-object
-  '((ICALPROPS (VERSION . "2.0"))
-    (COMPONENT (VEVENT (ICALPROPS)
-                       (COMPONENT)))))
-
 
 (test-assert "ics-string->scm"
-  (equal? (ics-string->scm %ics-string)
-          (list %ical-object)))
+  (let* ((vcalendar (car (ics-string->scm %ics-string)))
+         (version   (ical-object-property-ref vcalendar "VERSION")))
+    (and (string=? (ical-object-name vcalendar) "VCALENDAR")
+         (string=? (ical-property-name version)  "VERSION")
+         (string=? (ical-property-value version) "2.0")
+         (let ((vevent (car (ical-object-components vcalendar))))
+           (string=? (ical-object-name vevent) "VEVENT")
+           (null? (ical-object-components vevent))))))
+
+#!
 
 ;; RFC 5545, 3.1.
 (test-assert "ics-string->scm, long content lines"
