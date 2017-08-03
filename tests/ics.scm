@@ -200,11 +200,20 @@
                 (string=? (list-ref summary-value 1) "Day")
                 (string=? (list-ref summary-value 2) "Party"))))))
 
-#!
 (test-assert "scm->ics-string"
-  (equal? (scm->ics-string %ical-object)
-          %ics-string))
+  (let* ((source-str (string-append
+                      "BEGIN:VCALENDAR\r\n"
+                      "BEGIN:VEVENT\r\n"
+                      "SUMMARY:Bastille,Day,Party\r\n"
+                      "END:VEVENT\r\n"
+                      "END:VCALENDAR\r\n"))
+         (object (car (ics-string->scm source-str)))
+         (output-str (scm->ics-string object)))
+    (format (current-error-port) "orig: ~s~%" source-str)
+    (format (current-error-port) "dest: ~s~%" output-str)
+    (string=? source-str output-str)))
 
+#!
 
 (test-assert "scm->ics-string, with value lists"
  (string=? (scm->ics-string
