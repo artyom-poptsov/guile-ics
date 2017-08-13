@@ -25,6 +25,7 @@
   #:use-module (ice-9 regex)
   #:use-module (srfi srfi-1)            ; find
   #:use-module (ics ical-property)
+  #:use-module (ics ical-content)
   #:export (<ical-object>
             ical-object->ics
             ical-object-name
@@ -35,11 +36,7 @@
 
 ;;;
 
-(define-class <ical-object> ()
-  ;; string
-  (name       #:accessor ical-object-name
-              #:init-value #f
-              #:init-keyword #:name)
+(define-class <ical-object> (<ical-content>)
   ;; list
   (properties #:accessor ical-object-properties
               #:init-value '()
@@ -59,6 +56,11 @@
 (define-method (write (ical-object <ical-object>) (port <port>))
   (format port "#<ical-object ~a ~a>"  (ical-object-name ical-object)
           (number->string (object-address ical-object) 16)))
+
+
+;;;
+
+(define ical-object-name ical-content-name)
 
 
 ;;;
@@ -95,23 +97,23 @@
                           (ical-property-parameters e))
                 (let ((value (ical-property-value e)))
                   (if (list? value)
-                      (format port ":~a\r\n" (string-join value ","))
-                      (format port ":~a\r\n" value))))
+                      (ical-format port ":~a" (string-join value ","))
+                      (ical-format port ":~a" value))))
 
               props))
   (define (print-components components)
     (for-each (lambda (object)
                 (let ((cname (ical-object-name object)))
-                  (format port "BEGIN:~a\r\n" cname)
+                  (ical-format port "BEGIN:~a" cname)
                   (print-properties (ical-object-properties object))
                   (print-components (ical-object-components object))
-                  (format port "END:~a\r\n" cname)))
+                  (ical-format port "END:~a" cname)))
               components))
   (define (print-vcalendar)
-    (display "BEGIN:VCALENDAR\r\n" port)
+    (ical-write-line "BEGIN:VCALENDAR" port)
     (print-properties (ical-object-properties obj))
     (print-components (ical-object-components obj))
-    (display "END:VCALENDAR\r\n" port))
+    (ical-write-line "END:VCALENDAR" port))
 
   (print-vcalendar))
 

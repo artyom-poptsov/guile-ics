@@ -11,10 +11,7 @@
 
 ;;;
 
-(define-class <ical-property> ()
-  (name       #:accessor     ical-property-name
-              #:init-value   #f
-              #:init-keyword #:name)
+(define-class <ical-property> (<ical-content>)
   (value      #:accessor     ical-property-value
               #:init-value   #f
               #:init-keyword #:value)
@@ -33,6 +30,11 @@
 (define-method (write (ical-property <ical-property>) (port <port>))
   (format port "#<ical-property ~a ~a>" (ical-property-name ical-property)
           (number->string (object-address ical-property) 16)))
+
+
+;;;
+
+(define ical-property-name ical-content-name)
 
 
 ;;;
