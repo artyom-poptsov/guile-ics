@@ -21,6 +21,7 @@ SUBDIRS =
 
 SOURCES = \
 	common.scm	\
+	ical-content.scm	\
 	ical-object.scm	\
 	ical-property.scm	\
 	fsm.scm		\
