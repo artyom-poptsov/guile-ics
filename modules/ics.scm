@@ -61,6 +61,9 @@ END:VCALENDAR
 (define-module (ics)
   #:use-module (ice-9 rdelim)
   #:use-module (ice-9 regex)
+  #:use-module (srfi  srfi-26)
+  #:use-module ((string transform)
+                #:select (escape-special-chars))
   ;; Guile-ICS
   #:use-module (ics common)
   #:use-module (ics fsm)
@@ -107,7 +110,15 @@ is intended for human to comprehent, not to a machine to parse."
                                       (car property)
                                       (cdr property)))
                             (ical-property-parameters e))
-                  (format port ": ~a\n" (ical-property-value e))))
+                  (let* ((raw-value (ical-property-value e))
+                         (value (if (list? raw-value)
+                                    (string-join
+                                     (map (cut escape-special-chars <> #\, #\\)
+                                          raw-value)
+                                     ",")
+                                    (escape-special-chars raw-value #\, #\\))))
+                    (format port ": ~a\n" value))))
+
               props))
   (define (print-components components current-indent)
     (let ((s (make-string current-indent #\space)))
