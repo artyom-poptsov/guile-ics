@@ -1,6 +1,7 @@
 (define-module (ics ical-property)
   #:use-module (oop goops)
   #:use-module (srfi srfi-1)
+  #:use-module (ics ical-content)
   #:export (<ical-property>
             ical-property-name
             ical-property-value
