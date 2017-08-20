@@ -97,8 +97,11 @@
                           (ical-property-parameters e))
                 (let ((value (ical-property-value e)))
                   (if (list? value)
-                      (ical-format port ":~a" (string-join value ","))
-                      (ical-format port ":~a" value))))
+                      (ical-format port ":~a"
+                                   (string-join (map scm->ical-value
+                                                     value)
+                                                ","))
+                      (ical-format port ":~a" (scm->ical-value value)))))
 
               props))
   (define (print-components components)
