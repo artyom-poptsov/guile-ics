@@ -22,11 +22,13 @@
 ;;; Code:
 
 (define-module (ics ical-content)
+  #:use-module (ice-9 regex)
   #:use-module (oop goops)
   #:export (<ical-content>
             ical-content-name
             ical-write-line
-            ical-format))
+            ical-format
+            scm->ical-value))
 
 
 ;;;
@@ -59,5 +61,21 @@
   "Write output specified by the FMT string to DEST with CRLF line
 ending."
   (ical-write-line (apply format #f fmt arg) dest))
+
+
+;;;
+
+;; RFC 5545, 3.3.11.
+(define (escape-chars text)
+  (regexp-substitute/global #f "[\n]"
+                            (regexp-substitute/global #f "([\\;,])"
+                                                      text
+                                                      'pre "\\" 0 'post)
+                            'pre "\\n" 'post))
+
+(define (scm->ical-value value)
+  (if (list? value)
+      (string-join (map escape-chars value) ",")
+      (escape-chars value)))
 
 ;;; ical-content.scm ends here.

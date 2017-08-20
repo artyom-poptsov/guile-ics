@@ -22,7 +22,6 @@
 (define-module (ics ical-object)
   #:use-module (oop goops)
   #:use-module (ice-9 rdelim)
-  #:use-module (ice-9 regex)
   #:use-module (srfi srfi-1)            ; find
   #:use-module (ics ical-property)
   #:use-module (ics ical-content)
@@ -75,18 +74,6 @@
 
 (define-method (ical-object->ics (obj <ical-object>)
                                  (port <port>))
-  (define (escape-chars text)
-    (regexp-substitute/global #f "[\n]"
-                              (regexp-substitute/global #f "([\\;,])"
-                                                        text
-                                                        'pre "\\" 0 'post)
-                              'pre "\\n" 'post))
-
-  (define (scm->ical-value value)
-    (if (list? value)
-        (string-join (map escape-chars value) ",")
-        (escape-chars value)))
-
   (define (print-properties props)
     (for-each (lambda (e)
                 (format port "~a" (ical-property-name e))
@@ -95,14 +82,11 @@
                                     (car property)
                                     (cdr property)))
                           (ical-property-parameters e))
-                (let ((value (ical-property-value e)))
+                (let ((value (scm->ical-value (ical-property-value e))))
                   (if (list? value)
                       (ical-format port ":~a"
-                                   (string-join (map scm->ical-value
-                                                     value)
-                                                ","))
-                      (ical-format port ":~a" (scm->ical-value value)))))
-
+                                   (string-join value ","))
+                      (ical-format port ":~a" value))))
               props))
   (define (print-components components)
     (for-each (lambda (object)
