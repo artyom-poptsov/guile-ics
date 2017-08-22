@@ -140,6 +140,8 @@ is intended for human to comprehent, not to a machine to parse."
   (print-vcalendar))
 
 (define* (scm->ics ical-object #:optional (port (current-output-port)))
+  "Convert an ICAL-OBJECT to an iCalendar format and print it to a
+PORT.  If no port is specified, current output port is used."
   (ical-object->ics ical-object port))
 
 (define (scm->ics-string ical-object)
