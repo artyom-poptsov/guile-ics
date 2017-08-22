@@ -48,16 +48,19 @@
 ;;;
 
 (define (ics-read parser)
+  "Read iCalendar data using a PARSER, return a new iCalendar object."
   (fsm-read-ical-stream parser '()))
 
 
 ;;;
 
 (define* (ics->scm #:optional (port (current-input-port)))
+  "Parse input data from a PORT, return a new iCalendar object.  If no
+port is specified, read the data from the current input port."
   (ics-read (make-parser port)))
 
 (define (ics-string->scm str)
-  "Parse ICS string STR."
+  "Parse iCalendar string STR, return a new iCalendar object."
   (ics-read (make-string-parser str)))
 
 
@@ -68,7 +71,10 @@
                            #:key (indent 2))
   "Pretty-print an ICAL-OBJECT object to a PORT.  Note that the output
 is intended for human to comprehent, not to a machine to parse."
+
   (define (print-icalprops props current-indent)
+    "Print iCalendar properties from a PROPS list using a
+CURRENT-INDENT for indentation."
     (for-each (lambda (e)
                 (let ((s (make-string current-indent #\space)))
                   (format port "~a~a" s (ical-property-name e))
@@ -87,7 +93,10 @@ is intended for human to comprehent, not to a machine to parse."
                     (format port ": ~a\n" value))))
 
               props))
+
   (define (print-components components current-indent)
+    "Print components from a COMPONENTS list using a CURRENT-INDENT
+for indentation."
     (let ((s (make-string current-indent #\space)))
       (for-each (lambda (component)
                   (let ((cname (ical-object-name component)))
@@ -98,13 +107,18 @@ is intended for human to comprehent, not to a machine to parse."
                                       (+ current-indent indent))
                     (format port "~aEND: ~a\n" s cname)))
                 components)))
+
   (define (print-vcalendar)
+    "Print a VCALENDAR object from an iCalendar stream."
     (write-line "BEGIN: VCALENDAR" port)
     (print-icalprops (ical-object-properties ical-object) indent)
     (print-components (ical-object-components ical-object) indent)
     (write-line "END: VCALENDAR" port))
 
   (print-vcalendar))
+
+
+;;;
 
 (define* (scm->ics ical-object #:optional (port (current-output-port)))
   "Convert an ICAL-OBJECT to an iCalendar format and print it to a
