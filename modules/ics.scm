@@ -21,39 +21,6 @@
 ;; Guile-ICS is iCalendar format (RFC5545) [1] parser for GNU Guile.
 ;;
 ;; [1] https://tools.ietf.org/html/rfc5545
-;;
-;; Input example (from RFC5545):
-
-#!
-BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//hacksw/handcal//NONSGML v1.0//EN
-BEGIN:VEVENT
-UID:19970610T172345Z-AF23B2@example.com
-DTSTAMP:19970610T172345Z
-DTSTART:19970714T170000Z
-DTEND:19970715T040000Z
-SUMMARY:Bastille Day Party
-END:VEVENT
-END:VCALENDAR
-!#
-
-;; Output example:
-
-#!
-(((ICALPROPS
-    ((PRODID . "-//hacksw/handcal//NONSGML v1.0//EN")
-     (VERSION . "2.0")))
-  (COMPONENT
-    ((VEVENT
-       (ICALPROPS
-         ((SUMMARY . "Bastille Day Party")
-          (DTEND . "19970715T040000Z")
-          (DTSTART . "19970714T170000Z")
-          (DTSTAMP . "19970610T172345Z")
-          (UID . "19970610T172345Z-AF23B2@example.com")))
-       (COMPONENT ()))))))
-!#
 
 
 ;;; Code:
