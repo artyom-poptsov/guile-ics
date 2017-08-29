@@ -21,12 +21,12 @@ SUBDIRS =
 
 SOURCES = \
 	common.scm	\
+	ical-stream.scm	\
 	ical-content.scm	\
 	ical-object.scm	\
 	ical-property.scm	\
 	fsm.scm		\
 	parser.scm	\
-	streams.scm	\
 	conv.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)

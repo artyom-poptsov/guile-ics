@@ -31,25 +31,18 @@
   #:use-module (srfi  srfi-26)
   #:use-module ((string transform)
                 #:select (escape-special-chars))
+  #:use-module (oop goops)
   ;; Guile-ICS
   #:use-module (ics common)
   #:use-module (ics fsm)
   #:use-module (ics parser)
-  #:use-module (ics streams)
+  #:use-module (ics ical-stream)
   #:use-module (ics ical-object)
   #:use-module (ics ical-property)
-  #:export (ics->scm ics-string->scm scm->ics scm->ics-string ics-pretty-print)
-  #:re-export (ics->stream
-               ical-object-name
+  #:export (ics->scm ics-string->scm ics->stream scm->ics scm->ics-string ics-pretty-print)
+  #:re-export (ical-object-name
                ical-object-properties
                ical-object-components))
-
-
-;;;
-
-(define (ics-read parser)
-  "Read iCalendar data using a PARSER, return a new iCalendar object."
-  (fsm-read-ical-stream parser '()))
 
 
 ;;;
@@ -57,11 +50,15 @@
 (define* (ics->scm #:optional (port (current-input-port)))
   "Parse input data from a PORT, return a new iCalendar object.  If no
 port is specified, read the data from the current input port."
-  (ics-read (make-parser port)))
+  (ical-stream->scm (make <ical-stream> #:source port)))
 
 (define (ics-string->scm str)
   "Parse iCalendar string STR, return a new iCalendar object."
-  (ics-read (make-string-parser str)))
+  (ical-stream->scm (make <ical-stream> #:source str)))
+
+(define* (ics->stream #:optional (port (current-input-port)))
+  "Convert an ICS stream to an SRFI-41 stream.  Return the stream."
+  (ical-stream->scm-stream (make <ical-stream> #:source port)))
 
 
 ;;;
