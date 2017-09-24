@@ -139,25 +139,99 @@ procedures for reading and writing iCalendar data.
 The data comes in the form of iCalendar streams: these streams consist
 of one or more iCalendar objects (described in the next section.)
 
-Example of an iCalendar stream of two iCalendar objects:
+Example of an iCalendar stream of one iCalendar object from RFC5545,
+section 3.4:
+
+@example
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//hacksw/handcal//NONSGML v1.0//EN
+BEGIN:VEVENT
+UID:19970610T172345Z-AF23B2@@example.com
+DTSTAMP:19970610T172345Z
+DTSTART:19970714T170000Z
+DTEND:19970715T040000Z
+SUMMARY:Bastille,Day\,Party
+X-WR-TIMEZONE;VALUE=TEXT:Europe/Brussels
+END:VEVENT
+END:VCALENDAR
+@end example
+
+Let's assume that this iCaneldar object is written in a file
+@file{example.ics}, then we can convert it to a Scheme representation
+using @code{ics->scm} procedure:
 
 @lisp
-'(((ICALPROPS ((PRODID . "-//hacksw/handcal//NONSGML v1.0//EN")
-               (VERSION . "2.0")))
-   (COMPONENT
-    ((VEVENT
-      (ICALPROPS ())
-      (COMPONENT ())))))
-  ((ICALPROPS ((PRODID . "-//hacksw/handcal//NONSGML v1.0//EN")
-               (VERSION . "2.0")))
-   (COMPONENT
-    ((VEVENT
-      (ICALPROPS ())
-      (COMPONENT ()))))))
+(ics->scm (open-input-file "example.ics"))
+@result{} (#<ical-object VCALENDAR 23cf630>)
 @end lisp
 
 The procedures below can be used to convert iCalendar streams to Scheme
 lists of iCalendar objects and vice versa.
+
+@section Guile-ICS classes
+
+@subsection <ical-content>
+A common class that represents iCalendar contents.
+
+@subsubsection Fields
+
+@multitable @columnfractions .25 .25 .5
+@headitem Init Keyword @tab Type @tab Description
+@item #:name
+@tab <string>
+@tab The name of an iCalendar content.
+@end multitable
+
+@subsubsection Public Methods
+
+@deffn {method} ical-content-name ical-content
+Returns the name of a @var{ical-content} object.
+@end deffn
+
+@subsection <ical-object>
+
+@subsubsection Fields
+
+@multitable @columnfractions .25 .25 .5
+@headitem Init keyword @tab Type @tab Description
+@item #:properties
+@tab <list>
+@tab iCalendar object properties (instances of @code{<ical-property>} class).
+@item #:components
+@tab <list>
+@tab iCalendar components (see RFC5545, section 3.6.).
+Components are instances of @code{<ical-object>} class themselves.
+@end multitable
+
+@subsubsection Public Methods
+
+@deffn {method} ical-object-name ical-object
+Return an @var{ical-object} name.
+@end deffn
+
+@deffn {method} ical-object-properties ical-object
+Return an @var{ical-object} properties list.
+@end deffn
+
+@deffn {method} ical-object-property-ref ical-object name
+Return an @var{ical-object} property value by a @var{name}.
+@end deffn
+
+@deffn {method} ical-object-components ical-object
+Return an @var{ical-object} components list.
+@end deffn
+
+@deffn {method} ical-object->ics ical-object port
+Convert an @var{ical-object} to a iCalendar format and print the result
+to a specified @var{port}.
+@end deffn
+
+@subsection <ical-property>
+
+@subsection <ical-stream>
+
+@section iCalendar to Scheme converters
 
 @deffn {Scheme Procedure} ics->scm [port=(current-input-port)]
 Convert a iCalendar stream from a @var{port} to a Scheme representation;
