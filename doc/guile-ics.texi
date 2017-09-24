@@ -172,7 +172,9 @@ lists of iCalendar objects and vice versa.
 @section Guile-ICS classes
 
 @subsection <ical-content>
-A common class that represents iCalendar contents.
+
+A common class that represents generic iCalendar contents.  The class is
+defined in @code{(ics ical-content)} module.
 
 @subsubsection Fields
 
@@ -190,6 +192,13 @@ Returns the name of a @var{ical-content} object.
 @end deffn
 
 @subsection <ical-object>
+
+iCalendar object (see RFC5545, section 3) stores calendaring and
+scheduling information.  iCalendar object class consists of a sequence
+of calendar properties and one or more iCalendar objects (that is,
+instances of @code{<ical-object>} class.)
+
+The class is defined in @code{(ics ical-object)} module.
 
 @subsubsection Fields
 
@@ -229,6 +238,14 @@ to a specified @var{port}.
 
 @subsection <ical-property>
 
+A property is the definition of an individual attribute describing a
+calendar object (see RFC5545, section 3.5.)  Since Guile-ICS tries to
+unify the way of handling iCalendar information, iCalendar property
+class is used for both iCalendar objects (as defined in RFC5545) and for
+components of iCalendar objects.
+
+The class is defined in @code{(ics ical-property)} module.
+
 @subsubsection Fields
 
 @multitable @columnfractions .25 .25 .5
@@ -266,6 +283,37 @@ Convert an @var{ical-property} to a iCalendar string, return the string.
 @end deffn
 
 @subsection <ical-stream>
+
+The class is defined in @code{(ics ical-stream)} module.
+
+@subsubsection Fields
+
+@multitable @columnfractions .25 .25 .5
+@headitem Init Keyword @tab Type @tab Description
+@item #:source
+@tab <port> || <string>
+@tab iCalendar data source.
+@end multitable
+
+@subsubsection Public Methods
+
+@deffn {method} ical-stream-source ical-stream
+Return a source of an @var{ical-stream}.
+@end deffn
+
+@deffn {method} ical-stream-parser ical-stream
+Make a new iCalendar stream parser for an @var{ical-stream}, return a
+new parser.
+@end deffn
+
+@deffn {method} ical-stream->scm ical-stream
+Convert an @var{ical-stream} to a Scheme list of iCalendar objects
+(@code{<ical-object>}).  Return the list.
+@end deffn
+
+@deffn {method} ical-stream->scm-stream ical-stream
+Convert an @var{ical-stream} to a SRFI-41 stream.  Return the stream.
+@end deffn
 
 @section iCalendar to Scheme converters
 
