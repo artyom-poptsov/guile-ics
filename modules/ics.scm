@@ -39,13 +39,18 @@
   #:use-module (ics ical-stream)
   #:use-module (ics ical-object)
   #:use-module (ics ical-property)
-  #:export (ics->scm ics-string->scm ics->stream scm->ics scm->ics-string ics-pretty-print)
+  #:export (ics->scm
+            ics-string->scm
+            ics->stream
+            scm->ics
+            scm->ics-string
+            ics-pretty-print)
   #:re-export (ical-object-name
                ical-object-properties
                ical-object-components))
 
 
-;;;
+;;; iCalendar to Scheme converters.
 
 (define* (ics->scm #:optional (port (current-input-port)))
   "Parse input data from a PORT, return a new iCalendar object.  If no
@@ -61,7 +66,20 @@ port is specified, read the data from the current input port."
   (ical-stream->scm-stream (make <ical-stream> #:source port)))
 
 
-;;;
+;;; Scheme to iCalendar converters.
+
+(define* (scm->ics ical-object #:optional (port (current-output-port)))
+  "Convert an ICAL-OBJECT to an iCalendar format and print it to a
+PORT.  If no port is specified, current output port is used."
+  (ical-object->ics ical-object port))
+
+(define (scm->ics-string ical-object)
+  "Convert an ICAL-OBJECT to an iCalendar format string; return the
+string."
+  (with-output-to-string (lambda () (scm->ics ical-object))))
+
+
+;;; iCalendar printers.
 
 (define* (ics-pretty-print ical-object
                            #:optional (port (current-output-port))
@@ -113,19 +131,6 @@ for indentation."
     (write-line "END: VCALENDAR" port))
 
   (print-vcalendar))
-
-
-;;;
-
-(define* (scm->ics ical-object #:optional (port (current-output-port)))
-  "Convert an ICAL-OBJECT to an iCalendar format and print it to a
-PORT.  If no port is specified, current output port is used."
-  (ical-object->ics ical-object port))
-
-(define (scm->ics-string ical-object)
-  "Convert an ICAL-OBJECT to an iCalendar format string; return the
-string."
-  (with-output-to-string (lambda () (scm->ics ical-object))))
 
 
 ;;; ics.scm ends here.
