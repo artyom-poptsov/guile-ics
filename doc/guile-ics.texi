@@ -194,7 +194,7 @@ Returns the name of a @var{ical-content} object.
 @subsubsection Fields
 
 @multitable @columnfractions .25 .25 .5
-@headitem Init keyword @tab Type @tab Description
+@headitem Init Keyword @tab Type @tab Description
 @item #:properties
 @tab <list>
 @tab iCalendar object properties (instances of @code{<ical-property>} class).
@@ -228,6 +228,42 @@ to a specified @var{port}.
 @end deffn
 
 @subsection <ical-property>
+
+@subsubsection Fields
+
+@multitable @columnfractions .25 .25 .5
+@headitem Init Keyword @tab Type @tab Description
+@item #:value
+@tab <string>
+@tab iCalendar property value.
+@item #:parameters
+@tab <alist>
+@tab iCalendar property parameters (see RFC5545, section 3.2.),
+stored as an association list.
+@end multitable
+
+@subsubsection Public Methods
+
+@deffn {method} ical-property-name ical-property
+Return an @var{ical-property} name.
+@end deffn
+
+@deffn {method} ical-property-value ical-property
+Return an @var{ical-property} value.
+@end deffn
+
+@deffn {method} ical-property-parameters ical-property
+Return an @var{ical-property} parameters association list.
+@end deffn
+
+@deffn {method} ical-property-parameter-ref ical-property name
+Return an @var{ical-property} value for a parameter with a given
+@var{name}.  Return @code{#f} if no parameter found.
+@end deffn
+
+@deffn {method} ical-property->string ical-property
+Convert an @var{ical-property} to a iCalendar string, return the string.
+@end deffn
 
 @subsection <ical-stream>
 
