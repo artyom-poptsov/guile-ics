@@ -53,8 +53,8 @@
 ;;; iCalendar to Scheme converters.
 
 (define* (ics->scm #:optional (port (current-input-port)))
-  "Parse input data from a PORT, return a new iCalendar object.  If no
-port is specified, read the data from the current input port."
+  "Parse input data from a PORT, return a list of iCalendar objects.
+If no port is specified, read the data from the current input port."
   (ical-stream->scm (make <ical-stream> #:source port)))
 
 (define (ics-string->scm str)
