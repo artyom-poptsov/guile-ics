@@ -195,8 +195,10 @@ Returns the name of a @var{ical-content} object.
 
 iCalendar object (see RFC5545, section 3) stores calendaring and
 scheduling information.  iCalendar object class consists of a sequence
-of calendar properties and one or more iCalendar objects (that is,
-instances of @code{<ical-object>} class.)
+of calendar properties and one or more iCalendar component. Each
+component is an iCalendar object (that is, instances of
+@code{<ical-object>} class) on its own; that means that this data
+structure can be handled recusively.
 
 The class is defined in @code{(ics ical-object)} module.
 
@@ -234,6 +236,22 @@ Return an @var{ical-object} components list.
 @deffn {method} ical-object->ics ical-object port
 Convert an @var{ical-object} to a iCalendar format and print the result
 to a specified @var{port}.
+@end deffn
+
+@subsubsection Miscellaneous Procedures
+
+@deffn {Scheme Procedure} ical-write-line obj [port=(current-output-port)]
+Display an @var{obj} to a @var{port} with CRLF line ending.
+@end deffn
+
+@deffn {Scheme Procedure} ical-format dest fmt arg ...
+Write output specified by the @var{fmt} string to a @var{dest} with CRLF
+line ending.
+@end deffn
+
+@deffn {Scheme Procedure} scm->ical-value value
+Convert a Scheme @var{value} (either a string or a list of strings) to a
+iCalendar representation.  Return a string.
 @end deffn
 
 @subsection <ical-property>
@@ -362,57 +380,55 @@ Example:
 
 @end deffn
 
-@section iCalendar objects
-
-iCalendar streams consist of one or more iCalendar objects.  One
-iCalendar object looks as follows:
-
-@lisp
-'((ICALPROPS
-   ((PRODID . "-//hacksw/handcal//NONSGML v1.0//EN")
-    (VERSION . "2.0")))
-  (COMPONENT
-   ((VEVENT
-     (ICALPROPS
-      ((SUMMARY . "Bastille Day Party")
-       (DTEND . "19970715T040000Z")
-       (DTSTART . "19970714T170000Z")
-       (DTSTAMP . "19970610T172345Z")
-       (UID . "19970610T172345Z-AF23B2@@example.com")))
-     (COMPONENT ())))))
-@end lisp
-
-As you can see from the example above, each iCalendar object has an
-alist of properties and an alist of one or more components.  In turn,
-each component is an iCalendar object on its own; that means that this
-data structure can be handled recusively.
-
-@deffn {Scheme Procedures} make-ical-object icalprops component
-Make an iCalendar object from an @var{icalprops} and @var{component}
-alists.
-@end deffn
-
-@deffn {Scheme Procedures} ical-object-icalprops ical-object
-Get iCalendar properties from an @var{ical-object}.
-@end deffn
-
-@deffn {Scheme Procedures} ical-object-component ical-object
-Get an iCalendar component alist from @var{ical-object}.
-@end deffn
-
-@section Converters
+@section Extra Converters
 
 @code{(ics conv)} module provides procedures for converting iCalendar
 objects to other formats.
 
 @deffn {Scheme Procedure} ical-object->org-mode ical-object [port=(current-output-port)]
-Convert an @var{ical-object} to org-mode format (@pxref{Top,,, org,
-Org Mode Manual}) and print the results to a @var{port}.
+Convert an @var{ical-object} to org-mode format (@pxref{Top,,, org, Org
+Mode Manual}) and print the results to a @var{port}.
 @end deffn
 
 @section Examples
 
 See the @file{examples} directory.
+
+@section Finite-State Machine (FSM)
+
+The @code{(ics fsm)} module contains an implementation of a FSM that
+parses iCalendar data.
+
+@deffn {Scheme Procedure} ics-token-begin? x
+Check if an @var{x} is the beginning of an IANA token.
+@end deffn
+
+@deffn {Scheme Procedure} ics-token-end? x
+Check if an @var{x} is the ending of an IANA token.
+@end deffn
+
+@deffn {Scheme Procedure} ics-calendar-object? x
+Check if @var{x} is a iCalendar object.
+@end deffn
+
+@deffn {Scheme Procedure} fsm-read-property parser
+Read iCalendar property using a @var{parser}.
+@end deffn
+
+@deffn {Scheme Procedure} fsm-skip-property parser
+Skip current iCalendar property using a @var{parser}.
+@end deffn
+
+@deffn {Scheme Procedure} fsm-read-ical-object parser object-name icalprops component
+Read an iCalendar object @var{object-name} from an iCalendar stream
+using a @var{parser}.  Return an object with iCalendar properties
+@var{ical-props} and a @var{component} list.
+@end deffn
+
+@deffn {Scheme Procedure} fsm-read-ical-stream parser result
+Read iCalendar stream using a @var{parser}, return a list of
+@code{<ical-object>} instances.
+@end deffn
 
 @node Tools
 @chapter Tools
