@@ -16,13 +16,13 @@
 ## along with Guile-ICS.  If not, see <http://www.gnu.org/licenses/>.
 
 EXTRA_DIST = \
-	fosdem.scm.in
+	fosdem.scm.in \
+	schedule.scm.in
 
 examplesdir = $(pkgdatadir)/examples
-examples_echodir = $(pkgdatadir)/examples/echo
-examples_rpcdir = $(pkgdatadir)/examples/rpc
 dist_examples_DATA = \
-	fosdem.scm
+	fosdem.scm \
+	schedule.scm
 
 substitute = sed -e 's,[@]GUILE[@],$(GUILE),g'
 
@@ -34,4 +34,5 @@ SUFFIXES = .in
 	mv "$@.tmp" "$@"
 
 CLEANFILES = \
-	fosdem.scm
+	fosdem.scm \
+	schedule.scm

@@ -1,0 +1,76 @@
+#!@GUILE@ \
+-e main
+!#
+
+;;; fossdem.scm -- Read events in iCalendar format and print schedule.
+
+;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;;
+;; This program is free software: you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation, either version 3 of the
+;; License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+;;; Commentary:
+
+;; Read events in iCalendar format and print it to stdout in the
+;; following format:
+;;
+;;   <event-name>: <start> - <end>
+;;
+;; Usage example:
+;;
+;;   $ ./schedule.scm https://example.org/basic.ics
+;;
+
+;;; Code:
+
+(use-modules (ice-9 popen)
+             (ice-9 getopt-long)
+             (srfi srfi-41)             ; streams
+             ;; Guile-ICS
+             (ics)
+             (ics ical-object)
+             (ics ical-property))
+
+
+;;;
+
+(define (print-schedule url)
+  "Print FOSDEM schedule in org-mode format to stdout."
+  ;; We have to use 'curl' because 'http-get' from (web client) does
+  ;; not work with HTTPS.
+  (let* ((command (format #f "curl --silent '~a'" url))
+         (p       (open-input-pipe command)))
+    (let ((ical-object (car (ics->scm p))))
+      (for-each (lambda (event)
+                  (let ((name  (ical-object-property-ref event "SUMMARY"))
+                        (start (ical-object-property-ref event "DTSTART"))
+                        (end   (ical-object-property-ref event "DTEND")))
+                    (format #t "~a: ~a - ~a~%"
+                            (ical-property-value name)
+                            (ical-property-value start)
+                            (ical-property-value end))))
+                (ical-object-components ical-object)))))
+
+
+;;;
+
+(define (main args)
+  "Entry point."
+  (print-schedule (cadr args)))
+
+;; Local Variables:
+;; Mode: Scheme
+;; End:
+
+;;; fosdem.scm ends here.
