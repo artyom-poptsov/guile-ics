@@ -6,7 +6,7 @@
             ical-property-name
             ical-property-value
             ical-property-parameters
-            ical-property-parameter
+            ical-property-parameter-ref
             ical-property->string))
 
 
