@@ -73,6 +73,8 @@
 ;;;
 
 (define-method (ical-stream->scm (ical-stream <ical-stream>))
+  "Convert an ICAL-STREAM to a list of iCalendar objects.  Return the
+list."
   (ics-read (ical-stream-parser ical-stream)))
 
 
