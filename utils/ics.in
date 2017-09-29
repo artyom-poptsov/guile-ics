@@ -58,7 +58,7 @@ Options:
     (to-org-mode                    (value #f))
     (pretty-print (single-char #\p) (value optional))))
 
-(set-debug! #t)
+(set-debug! #f)
 
 
 ;;; Entry point.
