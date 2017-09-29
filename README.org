@@ -27,8 +27,4 @@
                      (pretty-print ical-object))
                    (ics->stream)))
 #+END_EXAMPLE
-** Known bugs
-   - Properties with parameters (separated by semicolon) are not
-     handled properly (see [[https://tools.ietf.org/html/rfc5545#section-3.1.1][RFC5545, Section 3.1.1]].)
-   - iCalendar value lists represented as Scheme strings, not as
-     Scheme lists.
+
