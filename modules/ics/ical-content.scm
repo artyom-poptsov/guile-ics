@@ -74,6 +74,8 @@ ending."
                             'pre "\\n" 'post))
 
 (define (scm->ical-value value)
+  "Convert a VALUE to iCalendar format.  VALUE can be either a list of
+strings or a string."
   (if (list? value)
       (string-join (map escape-chars value) ",")
       (escape-chars value)))
