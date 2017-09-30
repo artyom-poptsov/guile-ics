@@ -1,3 +1,31 @@
+;;; ical-property.scm -- iCalendar property definition.
+
+;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;;
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; The program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with the program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+;;; Commentary:
+
+;; This module contains definition of <ical-property> class; the class
+;; represents an individual attribute of an iCalendar object.
+;;
+;; See the Texinfo documentation for details.
+
+
+;;; Code:
+
 (define-module (ics ical-property)
   #:use-module (oop goops)
   #:use-module (srfi srfi-1)
@@ -61,4 +89,4 @@ parameter value, or return #f if no parameter found."
         (format #f "~a;~a:~a" name (parameters->string parameters) value)
         (string-append name ":" value))))
 
-;;;
+;;; ical-property.scm ends here.
