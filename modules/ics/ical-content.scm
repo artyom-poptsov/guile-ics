@@ -18,6 +18,11 @@
 
 ;;; Commentary:
 
+;; This module contains definition of <ical-content> class -- a common
+;; class that represents generic iCalendar contents.
+;;
+;; See the Texinfo documentation for details.
+
 
 ;;; Code:
 
