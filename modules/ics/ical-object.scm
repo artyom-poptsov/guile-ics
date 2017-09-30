@@ -16,6 +16,10 @@
 
 ;;; Commentary:
 
+;; This module contains the definitin of a <ical-object> class.
+;;
+;; See the documentation in Texinfo format for details.
+
 
 ;;; Code:
 
