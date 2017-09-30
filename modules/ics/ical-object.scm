@@ -74,6 +74,8 @@
 
 (define-method (ical-object->ics (obj <ical-object>)
                                  (port <port>))
+  "Convert an ICAL-OBJECT to the iCalendar format and print the result
+to a specified PORT."
   (define (print-properties props)
     (for-each (lambda (e)
                 (format port "~a" (ical-property-name e))
