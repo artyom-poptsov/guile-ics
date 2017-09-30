@@ -68,6 +68,13 @@
   "Check if X is a iCalendar object."
   (string=? x %ics-icalendar-object))
 
+;;; Helper procedures.
+
+(define (string-append-char str ch)
+  "Return a newly allocated string whose characters form the
+concatenation of the given string STR and char CH."
+  (string-append str (string ch)))
+
 
 ;;; Finite State Machine.
 ;;
@@ -114,7 +121,7 @@
         ;; RFC 5545, 3.3.11:
         ;;   ESCAPED-CHAR = ("\\" / "\;" / "\," / "\N" / "\n")
         ((#\\ #\; #\,)
-         (read-property (string-append buffer (string ch)) result))
+         (read-property (string-append-char buffer ch) result))
         ((#\N #\n)
          (read-property (string-append buffer "\n") result))
         (else
@@ -158,7 +165,7 @@
              (debug-fsm "fsm-read-property" "handle-result")
              (handle-result buffer result))
             (else
-             (read-property (string-append buffer (string ch))
+             (read-property (string-append-char buffer ch)
                             result))))))
   (debug-fsm-transition "fsm-read-property")
   (read-property "" '()))
@@ -220,7 +227,7 @@
         ((#\")
          (read-object buffer))
         (else
-         (read-object-in-quotes (string-append buffer (string ch)))))))
+         (read-object-in-quotes (string-append-char buffer ch))))))
 
   (define (read-object buffer)
     (let ((ch (parser-read-char parser)))
@@ -247,7 +254,7 @@
             ((#\linefeed)
              (fsm-read-ical-object parser object-name icalprops component))
             (else
-             (read-object (string-append buffer (string ch))))))))
+             (read-object (string-append-char buffer ch)))))))
   (debug-fsm-transition "fsm-read-ical-object")
   (read-object ""))
 
@@ -280,7 +287,7 @@
                (debug-fsm-transition "fsm-read-ical-stream")
                (fsm-read-ical-stream parser result))))
             (else
-             (read-ical-stream (string-append buffer (string ch))))))))
+             (read-ical-stream (string-append-char buffer ch)))))))
   (debug-fsm-transition "fsm-read-ical-stream")
   (read-ical-stream ""))
 
