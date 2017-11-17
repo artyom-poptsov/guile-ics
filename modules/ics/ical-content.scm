@@ -47,13 +47,25 @@
 
 ;;;
 
+(define-generic display)
+(define-generic write)
+
 (define-method (display (ical-content <ical-content>) (port <port>))
+  (next-method)
   (format port "#<ical-content ~a ~a>"  (ical-content-name ical-content)
           (number->string (object-address ical-content) 16)))
 
 (define-method (write (ical-content <ical-content>) (port <port>))
-  (format port "#<ical-content ~a ~a>"  (ical-content-name ical-content)
-          (number->string (object-address ical-content) 16)))
+  (next-method)
+  (display ical-content port))
+
+(define-method (display (ical-content <ical-content>))
+  (next-method)
+  (display ical-content (current-output-port)))
+
+(define-method (write (ical-content <ical-content>))
+  (next-method)
+  (display ical-content (current-output-port)))
 
 
 ;;;

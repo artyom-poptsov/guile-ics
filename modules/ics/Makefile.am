@@ -25,6 +25,7 @@ SOURCES = \
 	ical-content.scm	\
 	ical-object.scm	\
 	ical-property.scm	\
+	ical-data.scm \
 	fsm.scm		\
 	parser.scm	\
 	conv.scm
