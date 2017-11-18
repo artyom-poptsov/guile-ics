@@ -36,9 +36,9 @@
   #:use-module (ics common)
   #:use-module (ics fsm)
   #:use-module (ics parser)
-  #:use-module (ics ical-stream)
-  #:use-module (ics ical-object)
-  #:use-module (ics ical-property)
+  #:use-module (ics type ics-stream)
+  #:use-module (ics type ics-object)
+  #:use-module (ics type ics-property)
   #:export (ics->scm
             ics-string->scm
             ics->stream

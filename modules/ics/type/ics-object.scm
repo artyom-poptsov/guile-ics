@@ -23,12 +23,12 @@
 
 ;;; Code:
 
-(define-module (ics ical-object)
+(define-module (ics type ics-object)
   #:use-module (oop goops)
   #:use-module (ice-9 rdelim)
   #:use-module (srfi srfi-1)            ; find
-  #:use-module (ics ical-property)
-  #:use-module (ics ical-content)
+  #:use-module (ics type ics-property)
+  #:use-module (ics type ics-content)
   #:export (<ical-object>
             ical-object->ics
             ical-object-name

@@ -27,8 +27,8 @@
   #:use-module (srfi srfi-26)
   #:use-module (oop goops)
   #:use-module (ics common)
-  #:use-module (ics ical-object)
-  #:use-module (ics ical-property)
+  #:use-module (ics type ics-object)
+  #:use-module (ics type ics-property)
   #:use-module (ics parser)
   #:export (ics-token-begin?
             ics-token-end?

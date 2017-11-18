@@ -26,7 +26,7 @@
 
 ;;; Code:
 
-(define-module (ics ical-content)
+(define-module (ics type ics-content)
   #:use-module (ice-9 regex)
   #:use-module (oop goops)
   #:export (<ical-content>

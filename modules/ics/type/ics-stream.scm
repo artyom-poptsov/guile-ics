@@ -21,12 +21,12 @@
 
 ;;; Code:
 
-(define-module (ics ical-stream)
+(define-module (ics type ics-stream)
   #:use-module (srfi srfi-41)
   #:use-module (ics common)
   #:use-module (ics parser)
   #:use-module (ics fsm)
-  #:use-module (ics ical-object)
+  #:use-module (ics type ics-object)
   #:use-module (oop goops)
   #:export (<ical-stream>
             ical-stream-source

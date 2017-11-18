@@ -17,13 +17,13 @@
 
 include $(top_srcdir)/am/guilec
 
-SUBDIRS = type
+SUBDIRS =
 
 SOURCES = \
-	common.scm	\
-	fsm.scm		\
-	parser.scm	\
-	conv.scm
+	ics-stream.scm	\
+	ics-content.scm	\
+	ics-object.scm	\
+	ics-property.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 moddir=$(guilesitedir)/ics
