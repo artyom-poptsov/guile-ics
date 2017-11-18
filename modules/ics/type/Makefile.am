@@ -20,10 +20,10 @@ include $(top_srcdir)/am/guilec
 SUBDIRS =
 
 SOURCES = \
-	ics-stream.scm	\
-	ics-content.scm	\
-	ics-object.scm	\
-	ics-property.scm
+	stream.scm	\
+	content.scm	\
+	object.scm	\
+	property.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 moddir=$(guilesitedir)/ics

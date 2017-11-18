@@ -26,11 +26,11 @@
 
 ;;; Code:
 
-(define-module (ics type ics-property)
+(define-module (ics type property)
   #:use-module (ice-9 regex)
   #:use-module (oop goops)
   #:use-module (srfi srfi-1)
-  #:use-module (ics type ics-content)
+  #:use-module (ics type content)
   #:export (<ical-property>
             ical-property-name
             ical-property-value

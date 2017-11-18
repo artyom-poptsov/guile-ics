@@ -28,8 +28,8 @@
              (ics common)
              (ics parser)
              (ics fsm)
-             (ics type ics-object)
-             (ics type ics-property))
+             (ics type object)
+             (ics type property))
 
 (test-begin "ics")
 
