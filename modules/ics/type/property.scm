@@ -137,11 +137,11 @@
     (FLOAT       . ,ics-property->ics-property:float)
     (INTEGER     . ,ics-property->ics-property:integer)
     (PERIOD      . ,ics-property->ics-property:period)
-    (RECUR       . ,ics-property->ics-property:recur)))
+    (RECUR       . ,ics-property->ics-property:recur)
+    (TEXT        . ,ics-property->ics-property:text)))
 
     ;; TODO:
 
-    ;; (TEXT        . ,ics-property->ics-property:text)
     ;; (UTC-OFFSET  . ,ics-property->ics-property:utc-offset)
     ;; (URI         . ,ics-property->ics-property:uri)))
 
