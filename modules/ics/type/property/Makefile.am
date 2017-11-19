@@ -35,7 +35,7 @@ SOURCES = \
 	time.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
-moddir=$(guilesitedir)/ics
+moddir=$(guilesitedir)/ics/type/property/
 nobase_dist_mod_DATA = $(SOURCES)
 
 ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ics/
