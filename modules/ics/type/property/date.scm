@@ -62,6 +62,6 @@
   (let ((value (ics-property-value property)))
     (make <ics-property:date>
       #:name  (ics-property-name property)
-      #:value (strptime "%Y%m%dT%H%M%S%Z" value))))
+      #:value (strptime "%Y%m%d" value))))
 
 ;;; date.scm ends here.
