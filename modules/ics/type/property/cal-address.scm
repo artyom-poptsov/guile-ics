@@ -36,6 +36,9 @@
   (next-method)
   (slot-set! ics-property 'type 'CAL-ADDRESS))
 
+
+;;; Printers.
+
 (define-method (display (property <ics-property:cal-address>) (port <port>))
   (format port "#<ics-property:cal-address ~a: ~a ~a>"
           (ics-property-name property)
@@ -44,6 +47,12 @@
 
 (define-method (write (property <ics-property:cal-address>) (port <port>))
   (display property port))
+
+(define-method (display (property <ics-property:cal-address>))
+  (display property (current-output-port)))
+
+(define-method (write (property <ics-property:cal-address>))
+  (display property (current-output-port)))
 
 
 ;;; Converters.
