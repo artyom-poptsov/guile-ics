@@ -48,6 +48,12 @@
 (define-method (write (property <ics-property:boolean>) (port <port>))
   (display property port))
 
+(define-method (display (property <ics-property:boolean>))
+  (display property (current-output-port)))
+
+(define-method (write (property <ics-property:boolean>))
+  (display property (current-output-port)))
+
 
 ;;; Converters.
 
