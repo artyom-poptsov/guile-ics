@@ -68,6 +68,11 @@
               #:init-value   #f
               #:init-keyword #:parameters))
 
+(define-method (initialize (property <ics-property>) initargs)
+  (next-method)
+  (unless (memq #:value initargs)
+    (throw 'guile-ics-error "#:value slot is mandatory" initargs)))
+
 (define (object-address->string object)
   (number->string (object-address object) 16))
 
