@@ -26,6 +26,7 @@
   #:use-module (ics type property property)
   #:export (<ics-property:binary>
             ics-property->ics-property:binary
+            ics-property:binary->ics-property
             ics-property:binary-encoding))
 
 
@@ -73,5 +74,15 @@
     #:format-type (ics-property-parameter-ref property "FMTTYPE")
     #:encoding    (ics-property-parameter-ref property "ENCODING")
     #:value       (ics-property-value         property)))
+
+(define-method (ics-property:binary->ics-property
+                (property <ics-property:binary>))
+  (make <ics-property>
+    #:name        (ics-property-name property)
+    #:type        #f
+    #:format-type #f
+    #:value       (ics-property-value property)
+    #:parameters  `((FMTTYPE  . ,(ics-property-format-type property))
+                    (ENCODING . ,(ics-property:binary-encoding property)))))
 
 ;;; binary.scm ends here.
