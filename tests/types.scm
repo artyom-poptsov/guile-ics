@@ -33,9 +33,9 @@
 (test-begin "types")
 
 
-;;;
+;;; BINARY
 
-(test-assert "type: binary: make"
+(test-assert "binary: make"
   (let ((p (make <ics-property:binary>
              #:name "ATTACH"
              #:format-type "image/vnd.microsoft.icon"
@@ -43,20 +43,50 @@
              #:value       "AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAgIAAAICAgADAwMAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAAAAABNEMQAAAAAAAkQgAAAAAAJEREQgAAACECQ0QgEgAAQxQzM0E0AABERCRCREQAADRDJEJEQwAAAhA0QwEQAAAAAEREAAAAAAAAREQAAAAAAAAkQgAAAAAAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")))
     p))
 
-(test-assert "type: boolean: make"
+(test-assert "binary: ics-property->ics-property:binary"
+  (let* ((p (make <ics-property>
+              #:name        "ATTACH"
+              #:value       "R05VIEd1aWxlCg=="
+              #:parameters '((ENCODING . "BASE64")
+                             (FMTTYPE  . "image/vnd.microsoft.icon"))))
+         (b (ics-property->ics-property:binary p)))
+    (and (equal? (ics-property:binary-encoding b) 'BASE64)
+         (equal? (ics-property-format-type b) "image/vnd.microsoft.icon")
+         (string=? (ics-property-value b) "R05VIEd1aWxlCg=="))))
+
+(test-assert "binary: ics-property:binary=?"
+  (let* ((p (make <ics-property>
+              #:name        "ATTACH"
+              #:value       "R05VIEd1aWxlCg=="
+              #:parameters '((ENCODING . "BASE64")
+                             (FMTTYPE  . "image/vnd.microsoft.icon"))))
+         (b1 (ics-property->ics-property:binary p))
+         (b2 (ics-property->ics-property:binary p)))
+    (ics-property:binary=? b1 b2)))
+
+
+;;; BOOLEAN
+
+(test-assert "boolean: make"
   (let ((p (make <ics-property:boolean>
              #:name  "NON-SMOKING"
              #:value #t)))
     p))
 
-(test-assert "type: cal-address: make"
+
+;;; CAL-ADDRESS
+
+(test-assert "cal-address: make"
   (let ((p (make <ics-property:cal-address>
              #:name       "ORGANIZER"
              #:value      "mailto:jsmith@example.com"
              #:parameters '((CN . "John Smith")))))
     p))
 
-(test-assert "type: date: make"
+
+;;; DATE
+
+(test-assert "date: make"
   (let ((p (make <ics-property:date>
              #:name "RDATE"
              #:value (strptime "%Y%m%d" "19970714"))))

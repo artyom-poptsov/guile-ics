@@ -25,6 +25,7 @@
   #:use-module (oop goops)
   #:use-module (ics type property property)
   #:export (<ics-property:binary>
+            ics-property:binary=?
             ics-property->ics-property:binary
             ics-property:binary->ics-property
             ics-property:binary-encoding))
@@ -62,6 +63,22 @@
 
 (define-method (write (property <ics-property:binary>))
   (display property (current-output-port)))
+
+
+;;; Predicates.
+
+(define-method (ics-property:binary=? (property1 <ics-property:binary>)
+                                      (property2 <ics-property:binary>))
+  (and (string=? (ics-property-name property1)
+                 (ics-property-name property2))
+       (string=? (ics-property-format-type property1)
+                 (ics-property-format-type property2))
+       (equal?   (ics-property:binary-encoding property1)
+                 (ics-property:binary-encoding property2))
+       (string=? (ics-property-value property1)
+                 (ics-property-value property2))
+       (equal?   (ics-property-parameters property1)
+                 (ics-property-parameters property2))))
 
 
 ;;; Converters
