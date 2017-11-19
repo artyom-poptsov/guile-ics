@@ -48,7 +48,7 @@
 ;;; Printers.
 
 (define-method (display (property <ics-property:binary>) (port <port>))
-  (format port "#<ics-property:period ~a (ENCODING: ~a) ~a>"
+  (format port "#<ics-property:binary ~a (ENCODING: ~a) ~a>"
           (ics-property-name property)
           (ics-property:binary-encoding property)
           (object-address->string property)))
