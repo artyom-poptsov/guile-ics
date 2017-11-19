@@ -1,4 +1,4 @@
-;;; binary.scm -- iCalendar binary property definition.
+;;; binary.scm -- iCalendar BINARY (RFC5545, 3.3.1.) type.
 
 ;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
@@ -18,8 +18,6 @@
 
 ;;; Commentary:
 
-;; BINARY (RFC5545, 3.3.1)
-
 
 ;;; Code:
 
@@ -29,6 +27,9 @@
   #:export (<ics-property:binary>
             ics-property->ics-property:binary
             ics-property:binary-encoding))
+
+
+;;; Class definition.
 
 (define-class <ics-property:binary> (<ics-property>)
   ;; symbol
@@ -42,6 +43,9 @@
 (define-method (initialize (property <ics-property:binary>) initargs)
   (next-method)
   (slot-set! property 'ics-property-type 'BINARY))
+
+
+;;; Converters
 
 (define-method (ics-property->ics-property:binary
                 (property <ics-property>))

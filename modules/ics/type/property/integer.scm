@@ -1,3 +1,26 @@
+;;; integer.scm -- iCalendar INTEGER (RFC5545, 3.3.8) type.
+
+;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;;
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; The program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with the program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+;;; Commentary:
+
+
+;;; Code:
+
 (define-module (ics type property integer)
   #:use-module (oop goops)
   #:use-module (ics type property property)
@@ -5,7 +28,7 @@
                 ics-property->ics-property:integer))
 
 
-;;; INTEGER (RFC5545, 3.3.8)
+;;; Class definition.
 
 (define-class <ics-property:integer> (<ics-property>))
 
@@ -13,7 +36,8 @@
   (next-method)
   (slot-set! property 'ics-property-type 'INTEGER))
 
-;; Printers
+
+;;; Printers.
 
 (define-method (display (property <ics-property:integer>) (port <port>))
   (format port "#<ics-property:integer ~a: ~a ~a>"
@@ -30,10 +54,13 @@
 (define-method (write (property <ics-property:integer>))
   (display property (current-output-port)))
 
-;; Converters
+
+;;; Converters.
 
 (define-method (ics-property->ics-property:integer
                 (property <ics-property>))
   (make <ics-property:integer>
     #:name  (ics-property-name property)
     #:value (string->number (ics-property-value property))))
+
+;;; integer.scm ends here.

@@ -1,3 +1,26 @@
+;;; duration.scm -- iCalendar DURATION (RFC5545, 3.3.6) type.
+
+;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;;
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; The program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with the program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+;;; Commentary:
+
+
+;;; Code:
+
 (define-module (ics type property duration)
   #:use-module (oop goops)
   #:use-module (ics type property property)
@@ -5,7 +28,7 @@
                 ics-property->ics-property:duration))
 
 
-;;; DURATION (RFC5545, 3.3.6)
+;;; Class definition.
 
 (define-class <ics-property:duration> (<ics-property>))
 
@@ -13,7 +36,8 @@
   (next-method)
   (slot-set! property 'ics-property-type 'DURATION))
 
-;; Printers
+
+;;; Printers.
 
 (define-method (display (property <ics-property:duration>) (port <port>))
   (format port "#<ics-property:duration ~a: ~a ~a>"
@@ -30,10 +54,13 @@
 (define-method (write (property <ics-property:duration>))
   (display property (current-output-port)))
 
-;; Converters
+
+;;; Converters.
 
 (define-method (ics-property->ics-property:duration
                 (property <ics-property>))
   (make <ics-property:duration>
     #:name  (ics-property-name property)
     #:value (ics-property-value property)))
+
+;;; duration.scm ends here.
