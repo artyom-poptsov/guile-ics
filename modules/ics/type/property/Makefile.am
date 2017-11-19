@@ -17,12 +17,18 @@
 
 include $(top_srcdir)/am/guilec
 
-SUBDIRS = property
+SUBDIRS =
 
 SOURCES = \
-	stream.scm	\
-	content.scm	\
-	object.scm	\
+	binary.scm	\
+	boolean.scm	\
+	cal-address.scm \
+	date.scm	\
+	date-time.scm	\
+	duration.scm	\
+	float.scm	\
+	integer.scm	\
+	period.scm	\
 	property.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
