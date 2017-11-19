@@ -40,6 +40,7 @@
   #:use-module (ics type property integer)
   #:use-module (ics type property period)
   #:use-module (ics type property recur)
+  #:use-module (ics type property text)
   #:export (ics-property->typed-property))
 
 ;; This macro is taken from Guile-JSON.
@@ -61,23 +62,9 @@
                    (ics type property float)
                    (ics type property integer)
                    (ics type property period)
-                   (ics type property recur))
+                   (ics type property recur)
+                   (ics type property text))
 
-
-
-;;; TEXT (RFC5545, 3.3.10)
-;; TODO:
-
-;; (define-class <ics-property:text> (<ics-property>))
-
-;; (define-method (initialize (property <ics-property:text>))
-;;   (next-method)
-;;   (slot-set! property 'ics-property-type 'TEXT))
-
-;; (define-method (ics-property->ics-property:text
-;;                 (property <ics-property>))
-;;   (make <ics-property:text>
-;;     #:value (ics-property-value property)))
 
 ;;; TIME (RFC5545, 3.3.1)
 ;; TODO:
