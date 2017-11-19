@@ -88,6 +88,7 @@ properties are identical, #f otherwise."
 (define-method (ics-property:boolean->ics-property
                 (property <ics-property:boolean>))
   (make <ics-property>
+    #:name  (ics-property-name property)
     ;; Although the RFC states that boolean values are
     ;; case-insensitive, we're using uppercase spelling
     ;; for unification sake.
