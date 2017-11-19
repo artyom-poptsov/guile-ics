@@ -30,7 +30,7 @@
               #:renamer (symbol-prefix-proc 'ice-9:))
              (srfi srfi-41)
              (ics)
-             (ics ical-object)
+             (ics type object)
              (ics common)
              (ics conv))
 
@@ -71,8 +71,8 @@ Options:
                      l)))
 
 (define (handle-to-org-mode)
-  (stream-for-each (lambda (ical-object)
-                     (ical-object->org-mode ical-object))
+  (stream-for-each (lambda (ics-object)
+                     (ics-object->org-mode ics-object))
                    (ics->stream)))
 
 (define (main args)
