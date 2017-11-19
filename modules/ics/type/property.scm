@@ -63,20 +63,6 @@
                    (ics type property period)
                    (ics type property recur))
 
-
-;;; 
-;; TODO:
-
-;; (define-class <ics-property:recur> (<ics-property>))
-
-;; (define-method (initialize (property <ics-property:recur>))
-;;   (next-method)
-;;   (slot-set! property 'ics-property-type 'RECUR))
-
-;; (define-method (ics-property->ics-property:recur
-;;                 (property <ics-property>))
-;;   (make <ics-property:recur>
-;;     #:value (ics-property-value property)))
 
 
 ;;; TEXT (RFC5545, 3.3.10)
