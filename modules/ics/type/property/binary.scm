@@ -50,9 +50,10 @@
 ;;; Printers.
 
 (define-method (display (property <ics-property:binary>) (port <port>))
-  (format port "#<ics-property:binary ~a (ENCODING: ~a) ~a>"
+  (format port "#<ics-property:binary ~a ENCODING: ~a FORMAT-TYPE: ~a ~a>"
           (ics-property-name property)
           (ics-property:binary-encoding property)
+          (ics-property-format-type property)
           (object-address->string property)))
 
 (define-method (write (property <ics-property:binary>) (port <port>))
