@@ -71,8 +71,8 @@
   (make <ics-property:binary>
     #:name        (ics-property-name          property)
     #:parameters  (ics-property-parameters    property)
-    #:format-type (ics-property-parameter-ref property "FMTTYPE")
-    #:encoding    (ics-property-parameter-ref property "ENCODING")
+    #:format-type (ics-property-parameter-ref property 'FMTTYPE)
+    #:encoding    (ics-property-parameter-ref property 'ENCODING)
     #:value       (ics-property-value         property)))
 
 (define-method (ics-property:binary->ics-property
