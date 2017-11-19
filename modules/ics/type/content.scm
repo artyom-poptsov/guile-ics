@@ -41,8 +41,12 @@
 (define-class <ics-content> ()
   ;; string
   (name       #:accessor ics-content-name
-              #:init-value #f
               #:init-keyword #:name))
+
+(define-method (initialize (property <ics-content>) initargs)
+  (next-method)
+  (unless (memq #:name initargs)
+    (throw 'guile-ics-error "#:name slot is mandatory" initargs)))
 
 
 ;;;
