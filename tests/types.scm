@@ -73,6 +73,15 @@
              #:value #t)))
     p))
 
+(test-assert "boolean: ics-property:boolean=?"
+  (let ((p1 (make <ics-property:boolean>
+              #:name "NON-SMOKING"
+              #:value #t))
+        (p2 (make <ics-property:boolean>
+              #:name "NON-SMOKING"
+              #:value #t)))
+    (ics-property:boolean=? p1 p2)))
+
 
 ;;; CAL-ADDRESS
 
