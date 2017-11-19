@@ -34,7 +34,7 @@
 
 (define-method (initialize (property <ics-property:boolean>))
   (next-method)
-  (slot-set! property 'ics-property-type 'BOOLEAN))
+  (slot-set! property 'type 'BOOLEAN))
 
 
 ;;; Printers.

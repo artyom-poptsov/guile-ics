@@ -35,7 +35,7 @@
 
 (define-method (initialize (property <ics-property:period>))
   (next-method)
-  (slot-set! property 'ics-property-type 'PERIOD))
+  (slot-set! property 'type 'PERIOD))
 
 
 ;;; Printers.

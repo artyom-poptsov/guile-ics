@@ -34,7 +34,7 @@
 
 (define-method (initialize (ics-property <ics-property:cal-address>))
   (next-method)
-  (slot-set! ics-property 'ics-prperty-type 'CAL-ADDRESS))
+  (slot-set! ics-property 'type 'CAL-ADDRESS))
 
 (define-method (display (property <ics-property:cal-address>) (port <port>))
   (format port "#<ics-property:cal-address ~a: ~a ~a>"

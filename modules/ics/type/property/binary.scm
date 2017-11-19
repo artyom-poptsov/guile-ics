@@ -42,7 +42,7 @@
 
 (define-method (initialize (property <ics-property:binary>) initargs)
   (next-method)
-  (slot-set! property 'ics-property-type 'BINARY))
+  (slot-set! property 'type 'BINARY))
 
 
 ;;; Printers.

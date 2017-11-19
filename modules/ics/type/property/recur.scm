@@ -34,7 +34,7 @@
 
 (define-method (initialize (property <ics-property:recur>) initargs)
   (next-method)
-  (slot-set! property 'ics-property-type 'RECUR))
+  (slot-set! property 'type 'RECUR))
 
 
 ;;; Printers.

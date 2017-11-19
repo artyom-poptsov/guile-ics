@@ -34,7 +34,7 @@
 
 (define-method (initialize (property <ics-property:duration>))
   (next-method)
-  (slot-set! property 'ics-property-type 'DURATION))
+  (slot-set! property 'type 'DURATION))
 
 
 ;;; Printers.

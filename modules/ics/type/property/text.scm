@@ -34,7 +34,7 @@
 
 (define-method (initialize (property <ics-property:text>) initargs)
   (next-method)
-  (slot-set! property 'ics-property-type 'TEXT))
+  (slot-set! property 'type 'TEXT))
 
 
 ;;; Printers.

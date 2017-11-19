@@ -38,7 +38,7 @@
 
 (define-method (initialize (property <ics-property:date-time>))
   (next-method)
-  (slot-set! property 'ics-property-type 'DATE-TIME))
+  (slot-set! property 'type 'DATE-TIME))
 
 
 ;;; Printers.

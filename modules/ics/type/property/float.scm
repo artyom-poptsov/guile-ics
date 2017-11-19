@@ -34,7 +34,7 @@
 
 (define-method (initialize (property <ics-property:float>))
   (next-method)
-  (slot-set! property 'ics-property-type 'FLOAT))
+  (slot-set! property 'type 'FLOAT))
 
 
 ;;; Printers.

@@ -34,7 +34,7 @@
 
 (define-method (initialize (property <ics-property:integer>))
   (next-method)
-  (slot-set! property 'ics-property-type 'INTEGER))
+  (slot-set! property 'type 'INTEGER))
 
 
 ;;; Printers.

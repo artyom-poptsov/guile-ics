@@ -34,7 +34,7 @@
 
 (define-method (initialize (property <ics-property:time>) initargs)
   (next-method)
-  (slot-set! property 'ics-property-type 'TIME))
+  (slot-set! property 'type 'TIME))
 
 
 ;;; Printers.
