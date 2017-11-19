@@ -45,6 +45,24 @@
   (slot-set! property 'ics-property-type 'BINARY))
 
 
+;;; Printers.
+
+(define-method (display (property <ics-property:binary>) (port <port>))
+  (format port "#<ics-property:period ~a (ENCODING: ~a) ~a>"
+          (ics-property-name property)
+          (ics-property:binary-encoding property)
+          (object-address->string property)))
+
+(define-method (write (property <ics-property:binary>) (port <port>))
+  (display property port))
+
+(define-method (display (property <ics-property:binary>))
+  (display property (current-output-port)))
+
+(define-method (write (property <ics-property:binary>))
+  (display property (current-output-port)))
+
+
 ;;; Converters
 
 (define-method (ics-property->ics-property:binary
