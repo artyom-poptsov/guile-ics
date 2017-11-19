@@ -69,6 +69,8 @@
 
 (define-method (ics-property:binary=? (property1 <ics-property:binary>)
                                       (property2 <ics-property:binary>))
+  "Compare PROPERTY1 with PROPERTY2.  Return #t if the given
+properties are identical, #f otherwise."
   (and (string=? (ics-property-name property1)
                  (ics-property-name property2))
        (string=? (ics-property-format-type property1)
