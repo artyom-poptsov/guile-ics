@@ -26,7 +26,8 @@
   #:use-module (ics type property property)
   #:export     (<ics-property:boolean>
                 ics-property:boolean=?
-                ics-property->ics-property:boolean))
+                ics-property->ics-property:boolean
+                ics-property:boolean->ics-property))
 
 
 ;;; Class definition.
@@ -84,15 +85,15 @@ properties are identical, #f otherwise."
                (else (error "Unknown property value (expected BOOLEAN)"
                             value))))))
 
-;; (define-method (ics-data-boolean->ics-property
-;;                 (property <ics-data-boolean>))
-;;   (make <ics-property>
-;;     ;; Although the RFC states that boolean values are
-;;     ;; case-insensitive, we're using uppercase spelling
-;;     ;; for unification sake.
-;;     #:value (if (ics-data-value ics-data-boolean)
-;;                 "TRUE"
-;;                 "FALSE")
-;;     #:parameters `(("VALUE" . "BOOLEAN"))))
+(define-method (ics-property:boolean->ics-property
+                (property <ics-property:boolean>))
+  (make <ics-property>
+    ;; Although the RFC states that boolean values are
+    ;; case-insensitive, we're using uppercase spelling
+    ;; for unification sake.
+    #:value (if (ics-property-value property)
+                "TRUE"
+                "FALSE")
+    #:parameters `(("VALUE" . "BOOLEAN"))))
 
 ;;; boolean.scm ends here.
