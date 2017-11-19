@@ -41,6 +41,7 @@
   #:use-module (ics type property period)
   #:use-module (ics type property recur)
   #:use-module (ics type property text)
+  #:use-module (ics type property time)
   #:export (ics-property->typed-property))
 
 ;; This macro is taken from Guile-JSON.
@@ -63,36 +64,10 @@
                    (ics type property integer)
                    (ics type property period)
                    (ics type property recur)
-                   (ics type property text))
+                   (ics type property text)
+                   (ics type property time))
 
-
-;;; TIME (RFC5545, 3.3.1)
-;; TODO:
-
-;; (define-class <ics-property:time> (<ics-property>))
-
-;; (define-method (initialize (property <ics-property:time>))
-;;   (next-method)
-;;   (slot-set! property 'ics-property-type 'TIME))
-
-;; (define-method (ics-property->ics-property:time
-;;                 (property <ics-property>))
-;;   (make <ics-property:time>
-;;     #:value (ics-property-value property)))
-
-;;; TIME (RFC5545, 3.3.1)
-
-;; (define-class <ics-property:time> (<ics-property>))
-
-;; (define-method (initialize (property <ics-property:time>))
-;;   (next-method)
-;;   (slot-set! property 'ics-property-type 'TIME))
-
-;; (define-method (ics-property->ics-property:time
-;;                 (property <ics-property>))
-;;   (make <ics-property:time>
-;;     #:value (ics-property-value property)))
-
+
 ;;; Converters
 
 (define-macro (case* pred key . clauses)
