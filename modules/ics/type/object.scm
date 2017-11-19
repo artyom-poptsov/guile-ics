@@ -60,6 +60,14 @@
   (format port "#<ics-object ~a ~a>"  (ics-object-name ics-object)
           (number->string (object-address ics-object) 16)))
 
+(define-method (display (property <ics-object>))
+  (next-method)
+  (display property (current-output-port)))
+
+(define-method (write (property <ics-object>))
+  (next-method)
+  (display property (current-output-port)))
+
 
 ;;;
 
