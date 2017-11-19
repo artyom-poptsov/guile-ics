@@ -20,7 +20,8 @@
 include $(top_srcdir)/am/guilec
 
 SCM_TESTS = \
-	ics.scm
+	ics.scm		\
+	types.scm
 
 TESTS = ${SCM_TESTS}
 
