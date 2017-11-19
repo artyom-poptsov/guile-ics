@@ -39,6 +39,7 @@
   #:use-module (ics type property float)
   #:use-module (ics type property integer)
   #:use-module (ics type property period)
+  #:use-module (ics type property recur)
   #:export (ics-property->typed-property))
 
 ;; This macro is taken from Guile-JSON.
@@ -59,10 +60,11 @@
                    (ics type property duration)
                    (ics type property float)
                    (ics type property integer)
-                   (ics type property period))
+                   (ics type property period)
+                   (ics type property recur))
 
 
-;;; RECUR (RFC5545, 3.3.10)
+;;; 
 ;; TODO:
 
 ;; (define-class <ics-property:recur> (<ics-property>))
@@ -186,10 +188,11 @@
     (DURATION    . ,ics-property->ics-property:duration)
     (FLOAT       . ,ics-property->ics-property:float)
     (INTEGER     . ,ics-property->ics-property:integer)
-    (PERIOD      . ,ics-property->ics-property:period)))
+    (PERIOD      . ,ics-property->ics-property:period)
+    (RECUR       . ,ics-property->ics-property:recur)))
 
     ;; TODO:
-    ;; (RECUR       . ,ics-property->ics-property:recur)
+
     ;; (TEXT        . ,ics-property->ics-property:text)
     ;; (UTC-OFFSET  . ,ics-property->ics-property:utc-offset)
     ;; (URI         . ,ics-property->ics-property:uri)))

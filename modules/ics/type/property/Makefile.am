@@ -29,7 +29,8 @@ SOURCES = \
 	float.scm	\
 	integer.scm	\
 	period.scm	\
-	property.scm
+	property.scm	\
+	recur.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 moddir=$(guilesitedir)/ics
