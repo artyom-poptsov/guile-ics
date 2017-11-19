@@ -16,7 +16,7 @@
 
 ;;; Commentary:
 
-;; This module contains the definitin of a <ical-object> class.
+;; This module contains the definitin of a <ics-object> class.
 ;;
 ;; See the documentation in Texinfo format for details.
 
@@ -29,85 +29,85 @@
   #:use-module (srfi srfi-1)            ; find
   #:use-module (ics type property)
   #:use-module (ics type content)
-  #:export (<ical-object>
-            ical-object->ics
-            ical-object-name
-            ical-object-properties
-            ical-object-property-ref
-            ical-object-components))
+  #:export (<ics-object>
+            ics-object->ics
+            ics-object-name
+            ics-object-properties
+            ics-object-property-ref
+            ics-object-components))
 
 
 ;;;
 
-(define-class <ical-object> (<ical-content>)
+(define-class <ics-object> (<ics-content>)
   ;; list
-  (properties #:accessor ical-object-properties
+  (properties #:accessor ics-object-properties
               #:init-value '()
               #:init-keyword #:properties)
   ;; list
-  (components #:accessor ical-object-components
+  (components #:accessor ics-object-components
               #:init-value '()
               #:init-keyword #:components))
 
 
 ;;; Custom printers
 
-(define-method (display (ical-object <ical-object>) (port <port>))
-  (format port "#<ical-object ~a ~a>"  (ical-object-name ical-object)
-          (number->string (object-address ical-object) 16)))
+(define-method (display (ics-object <ics-object>) (port <port>))
+  (format port "#<ics-object ~a ~a>"  (ics-object-name ics-object)
+          (number->string (object-address ics-object) 16)))
 
-(define-method (write (ical-object <ical-object>) (port <port>))
-  (format port "#<ical-object ~a ~a>"  (ical-object-name ical-object)
-          (number->string (object-address ical-object) 16)))
-
-
-;;;
-
-(define ical-object-name ical-content-name)
+(define-method (write (ics-object <ics-object>) (port <port>))
+  (format port "#<ics-object ~a ~a>"  (ics-object-name ics-object)
+          (number->string (object-address ics-object) 16)))
 
 
 ;;;
 
-(define-method (ical-object-property-ref (ical-object <ical-object>)
+(define ics-object-name ics-content-name)
+
+
+;;;
+
+(define-method (ics-object-property-ref (ics-object <ics-object>)
                                          (name <string>))
   "Get an iCalendar property by a NAME, return the property object or
 #f if no property found."
-  (find (lambda (property) (equal? (ical-property-name property) name))
-        (ical-object-properties ical-object)))
+  (find (lambda (property) (equal? (ics-property-name property) name))
+        (ics-object-properties ics-object)))
 
 
-(define-method (ical-object->ics (obj <ical-object>)
+(define-method (ics-object->ics (obj <ics-object>)
                                  (port <port>))
   "Convert an ICAL-OBJECT to the iCalendar format and print the result
 to a specified PORT."
   (define (print-properties props)
     (for-each (lambda (e)
-                (format port "~a" (ical-property-name e))
+                (format port "~a" (ics-property-name e))
                 (for-each (lambda (property)
                             (format port ";~a=~a"
                                     (car property)
                                     (cdr property)))
-                          (ical-property-parameters e))
-                (let ((value (scm->ical-value (ical-property-value e))))
+                          (ics-property-parameters e))
+                (let ((value (scm->ics-value (ics-property-value e))))
                   (if (list? value)
-                      (ical-format port ":~a"
+                      (ics-format port ":~a"
                                    (string-join value ","))
-                      (ical-format port ":~a" value))))
+                      (ics-format port ":~a" value))))
               props))
   (define (print-components components)
     (for-each (lambda (object)
-                (let ((cname (ical-object-name object)))
-                  (ical-format port "BEGIN:~a" cname)
-                  (print-properties (ical-object-properties object))
-                  (print-components (ical-object-components object))
-                  (ical-format port "END:~a" cname)))
+                (let ((cname (ics-object-name object)))
+                  (ics-format port "BEGIN:~a" cname)
+                  (print-properties (ics-object-properties object))
+                  (print-components (ics-object-components object))
+                  (ics-format port "END:~a" cname)))
               components))
   (define (print-vcalendar)
-    (ical-write-line "BEGIN:VCALENDAR" port)
-    (print-properties (ical-object-properties obj))
-    (print-components (ical-object-components obj))
-    (ical-write-line "END:VCALENDAR" port))
+    (ics-write-line "BEGIN:VCALENDAR" port)
+    (print-properties (ics-object-properties obj))
+    (print-components (ics-object-components obj))
+    (ics-write-line "END:VCALENDAR" port))
 
   (print-vcalendar))
 
-;;; ical-object.scm ends here.
+;;; object.scm ends here.

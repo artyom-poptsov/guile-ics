@@ -1,4 +1,4 @@
-;;; ical-content.scm -- Common classes and procedures.
+;;; ics-content.scm -- Common classes and procedures.
 
 ;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
@@ -18,7 +18,7 @@
 
 ;;; Commentary:
 
-;; This module contains definition of <ical-content> class -- a common
+;; This module contains definition of <ics-content> class -- a common
 ;; class that represents generic iCalendar contents.
 ;;
 ;; See the Texinfo documentation for details.
@@ -29,18 +29,18 @@
 (define-module (ics type content)
   #:use-module (ice-9 regex)
   #:use-module (oop goops)
-  #:export (<ical-content>
-            ical-content-name
-            ical-write-line
-            ical-format
-            scm->ical-value))
+  #:export (<ics-content>
+            ics-content-name
+            ics-write-line
+            ics-format
+            scm->ics-value))
 
 
 ;;;
 
-(define-class <ical-content> ()
+(define-class <ics-content> ()
   ;; string
-  (name       #:accessor ical-content-name
+  (name       #:accessor ics-content-name
               #:init-value #f
               #:init-keyword #:name))
 
@@ -50,34 +50,34 @@
 (define-generic display)
 (define-generic write)
 
-(define-method (display (ical-content <ical-content>) (port <port>))
+(define-method (display (ics-content <ics-content>) (port <port>))
   (next-method)
-  (format port "#<ical-content ~a ~a>"  (ical-content-name ical-content)
-          (number->string (object-address ical-content) 16)))
+  (format port "#<ics-content ~a ~a>"  (ics-content-name ics-content)
+          (number->string (object-address ics-content) 16)))
 
-(define-method (write (ical-content <ical-content>) (port <port>))
+(define-method (write (ics-content <ics-content>) (port <port>))
   (next-method)
-  (display ical-content port))
+  (display ics-content port))
 
-(define-method (display (ical-content <ical-content>))
+(define-method (display (ics-content <ics-content>))
   (next-method)
-  (display ical-content (current-output-port)))
+  (display ics-content (current-output-port)))
 
-(define-method (write (ical-content <ical-content>))
+(define-method (write (ics-content <ics-content>))
   (next-method)
-  (display ical-content (current-output-port)))
+  (display ics-content (current-output-port)))
 
 
 ;;;
 
-(define* (ical-write-line obj #:optional (port (current-output-port)))
+(define* (ics-write-line obj #:optional (port (current-output-port)))
   "Display an OBJ to a PORT with CRLF line ending."
   (format port "~a\r\n" obj))
 
-(define (ical-format dest fmt . arg)
+(define (ics-format dest fmt . arg)
   "Write output specified by the FMT string to DEST with CRLF line
 ending."
-  (ical-write-line (apply format #f fmt arg) dest))
+  (ics-write-line (apply format #f fmt arg) dest))
 
 
 ;;;
@@ -90,11 +90,11 @@ ending."
                                                       'pre "\\" 0 'post)
                             'pre "\\n" 'post))
 
-(define (scm->ical-value value)
+(define (scm->ics-value value)
   "Convert a VALUE to iCalendar format.  VALUE can be either a list of
 strings or a string."
   (if (list? value)
       (string-join (map escape-chars value) ",")
       (escape-chars value)))
 
-;;; ical-content.scm ends here.
+;;; ics-content.scm ends here.

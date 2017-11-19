@@ -1,4 +1,4 @@
-;;; ics-stream.scm -- iCalendar streams
+;;; stream.scm -- iCalendar streams
 
 ;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
@@ -28,43 +28,43 @@
   #:use-module (ics fsm)
   #:use-module (ics type object)
   #:use-module (oop goops)
-  #:export (<ical-stream>
-            ical-stream-source
-            ical-stream-parser
-            ical-stream->scm-stream
-            ical-stream->scm))
+  #:export (<ics-stream>
+            ics-stream-source
+            ics-stream-parser
+            ics-stream->scm-stream
+            ics-stream->scm))
 
 
 ;;;
 
-(define-class <ical-stream> ()
+(define-class <ics-stream> ()
   ;; <port> || <string>
-  (source #:accessor   ical-stream-source
+  (source #:accessor   ics-stream-source
           #:init-value (current-input-port)
           #:init-keyword #:source))
 
 
 ;;;
 
-(define-method (display (ical-stream <ical-stream>) (port <port>))
-  (format port "#<ical-stream source: ~a ~a>"
-          (if (port? (ical-stream-source ical-stream))
+(define-method (display (ics-stream <ics-stream>) (port <port>))
+  (format port "#<ics-stream source: ~a ~a>"
+          (if (port? (ics-stream-source ics-stream))
               'port
               'string)
-          (number->string (object-address ical-content) 16)))
+          (number->string (object-address ics-content) 16)))
 
-(define-method (write (ical-stream <ical-stream>) (port <port>))
-  (display ical-stream port))
+(define-method (write (ics-stream <ics-stream>) (port <port>))
+  (display ics-stream port))
 
 
 ;;;
 
 (define (ics-read parser)
   "Read iCalendar data using a PARSER, return a new iCalendar object."
-  (fsm-read-ical-stream parser '()))
+  (fsm-read-ics-stream parser '()))
 
-(define-method (ical-stream-parser (ical-stream <ical-stream>))
-  (let ((source (ical-stream-source ical-stream)))
+(define-method (ics-stream-parser (ics-stream <ics-stream>))
+  (let ((source (ics-stream-source ics-stream)))
     (if (port? source)
         (make-parser source)
         (make-string-parser source))))
@@ -72,15 +72,15 @@
 
 ;;;
 
-(define-method (ical-stream->scm (ical-stream <ical-stream>))
+(define-method (ics-stream->scm (ics-stream <ics-stream>))
   "Convert an ICAL-STREAM to a list of iCalendar objects.  Return the
 list."
-  (ics-read (ical-stream-parser ical-stream)))
+  (ics-read (ics-stream-parser ics-stream)))
 
 
 ;;; SRFI streams
 
-(define (fsm-read-ical-stream-1 parser result)
+(define (fsm-read-ics-stream-1 parser result)
   "Read iCalendar object using PARSER.  Return iCalendar object or
 'stream-null' on EOF."
   (define (read-component-name)
@@ -88,34 +88,34 @@ list."
       (debug-fsm "fsm-read-component-name" "NAME: ~a~%" name)
       (if (ics-calendar-object? name)
           (begin
-            (debug-fsm "fsm-read-ical-stream" "RESULT: ~a~%" result)
-            (fsm-read-ical-object parser %ics-icalendar-object '() '()))
-          (fsm-read-ical-stream-1 parser result))))
-  (define (read-ical-stream buffer)
+            (debug-fsm "fsm-read-ics-stream" "RESULT: ~a~%" result)
+            (fsm-read-ics-object parser %ics-icalendar-object '() '()))
+          (fsm-read-ics-stream-1 parser result))))
+  (define (read-ics-stream buffer)
     (let ((ch (parser-read-char parser)))
       (if (eof-object? ch)
           stream-null
           (case ch
             ((#\:)
-             (debug-fsm "fsm-read-ical-stream" "BUFFER: ~a~%" buffer)
+             (debug-fsm "fsm-read-ics-stream" "BUFFER: ~a~%" buffer)
              (cond
               ((ics-token-begin? buffer)
                (read-component-name))
               (else
-               (debug-fsm-transition "fsm-read-ical-stream")
-               (fsm-read-ical-stream-1 parser result))))
+               (debug-fsm-transition "fsm-read-ics-stream")
+               (fsm-read-ics-stream-1 parser result))))
             (else
-             (read-ical-stream (string-append buffer (string ch))))))))
-  (debug-fsm-transition "fsm-read-ical-stream-1")
-  (read-ical-stream ""))
+             (read-ics-stream (string-append buffer (string ch))))))))
+  (debug-fsm-transition "fsm-read-ics-stream-1")
+  (read-ics-stream ""))
 
-(define-method (ical-stream->scm-stream (ical-stream <ical-stream>))
+(define-method (ics-stream->scm-stream (ics-stream <ics-stream>))
   "Convert an ICS stream to an SRFI-41 stream.  Return the stream."
-  (let ((parser (ical-stream-parser ical-stream)))
-    (stream-let loop ((ical-object (fsm-read-ical-stream-1 parser '())))
-                (if (stream-null? ical-object)
+  (let ((parser (ics-stream-parser ics-stream)))
+    (stream-let loop ((ics-object (fsm-read-ics-stream-1 parser '())))
+                (if (stream-null? ics-object)
                     stream-null
-                    (stream-cons ical-object
-                                 (loop (fsm-read-ical-stream-1 parser '())))))))
+                    (stream-cons ics-object
+                                 (loop (fsm-read-ics-stream-1 parser '())))))))
 
-;;; ical-stream.scm ends here.
+;;; stream.scm ends here.

@@ -29,9 +29,9 @@
   #:use-module (ics type object)
   #:use-module (ics type property)
   #:use-module (ics type content)
-  #:export (ical-object->org-mode))
+  #:export (ics-object->org-mode))
 
-(define* (ical-object->org-mode ical-object
+(define* (ics-object->org-mode ics-object
                                 #:optional (port (current-output-port)))
   "Convert an ICAL-OBJECT object to org-mode format and print the
 results to a PORT."
@@ -39,9 +39,9 @@ results to a PORT."
     (let ((i (make-string current-indent #\space)))
       (format port "~a:PROPERTIES:~%" i)
       (for-each (lambda (property)
-                  (let ((name  (ical-property-name property))
-                        (value (scm->ical-value (ical-property-value property)))
-                        (parameters (ical-property-parameters property)))
+                  (let ((name  (ics-property-name property))
+                        (value (scm->ics-value (ics-property-value property)))
+                        (parameters (ics-property-parameters property)))
                     (if (list? value)
                         (format port "~a:~a: ~a~%" i name
                                 (string-join value ","))
@@ -58,18 +58,18 @@ results to a PORT."
     (let ((i (make-string current-indent #\space))
           (s (make-string current-indent #\*)))
       (for-each (lambda (object)
-                  (let ((cname (ical-object-name object)))
+                  (let ((cname (ics-object-name object)))
                     (format port "~a ~a~%" s cname)
-                    (print-properties (ical-object-properties object)
+                    (print-properties (ics-object-properties object)
                                      (+ current-indent 1))
-                    (print-components (ical-object-components object)
+                    (print-components (ics-object-components object)
                                       (+ current-indent 1)
                                       (1+ level))))
                 components)))
   (define (print-vcalendar)
     (write-line "* VCALENDAR" port)
-    (print-properties (ical-object-properties ical-object) 2)
-    (print-components (ical-object-components ical-object) 2 1))
+    (print-properties (ics-object-properties ics-object) 2)
+    (print-components (ics-object-components ics-object) 2 1))
 
   (print-vcalendar))
 

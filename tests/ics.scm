@@ -49,9 +49,9 @@
        (not (ics-calendar-object? "BEGIN"))))
 
 
-(test-assert "make-ical-object"
-  (let ((obj (make <ical-object> #:name "VCALENDAR")))
-    (string=? (ical-object-name obj) "VCALENDAR")))
+(test-assert "make-ics-object"
+  (let ((obj (make <ics-object> #:name "VCALENDAR")))
+    (string=? (ics-object-name obj) "VCALENDAR")))
 
 
 ;;; Finite-State Machine Tests.
@@ -98,7 +98,7 @@
     (eof-object? (read-char (parser-port parser)))))
 
 
-(test-assert "fsm-read-ical-object, valid object"
+(test-assert "fsm-read-ics-object, valid object"
   (let ((parser (make-string-parser (string-append "VERSION:2.0\r\n"
                                                    "PRODID:-//hacksw/handcal//NONSGML v1.0//EN\r\n"
                                                    "BEGIN:VEVENT\r\n"
@@ -108,57 +108,57 @@
                                                    "DTEND:19970715T040000Z\r\n"
                                                    "SUMMARY:Bastille Day Party\r\n"
                                                    "END:VEVENT"))))
-    (let* ((obj (fsm-read-ical-object parser "VCALENDAR" '() '()))
-           (version (ical-object-property-ref obj "VERSION"))
-           (prodid  (ical-object-property-ref obj "PRODID"))
-           (components (ical-object-components obj)))
+    (let* ((obj (fsm-read-ics-object parser "VCALENDAR" '() '()))
+           (version (ics-object-property-ref obj "VERSION"))
+           (prodid  (ics-object-property-ref obj "PRODID"))
+           (components (ics-object-components obj)))
       (format (current-error-port) "components: ~s~%" components)
       (and
        ;; Check object properties
-       (and (and version (string=? (ical-property-value version) "2.0"))
-            (and prodid (string=? (ical-property-value prodid)
+       (and (and version (string=? (ics-property-value version) "2.0"))
+            (and prodid (string=? (ics-property-value prodid)
                                   "-//hacksw/handcal//NONSGML v1.0//EN")))
        ;; Check object components (sub-objects)
        (let* ((vevent  (car components))
-              (uid     (ical-object-property-ref vevent "UID"))
-              (dtstamp (ical-object-property-ref vevent "DTSTAMP"))
-              (dtstart (ical-object-property-ref vevent "DTSTART"))
-              (dtend   (ical-object-property-ref vevent "DTEND"))
-              (summary (ical-object-property-ref vevent "SUMMARY")))
+              (uid     (ics-object-property-ref vevent "UID"))
+              (dtstamp (ics-object-property-ref vevent "DTSTAMP"))
+              (dtstart (ics-object-property-ref vevent "DTSTART"))
+              (dtend   (ics-object-property-ref vevent "DTEND"))
+              (summary (ics-object-property-ref vevent "SUMMARY")))
          (format (current-error-port) "vevent: ~s (name: ~s)~%"
-                 vevent (ical-object-name vevent))
+                 vevent (ics-object-name vevent))
          (format (current-error-port) "  uid:     ~s~%" uid)
          (format (current-error-port) "  dtstamp: ~s~%" dtstamp)
          (format (current-error-port) "  dtstart: ~s~%" dtstart)
          (format (current-error-port) "  dtend:   ~s~%" dtend)
          (format (current-error-port) "  summary: ~s~%" summary)
-         (and (string=? (ical-object-name vevent)
+         (and (string=? (ics-object-name vevent)
                         "VEVENT")
-              (string=? (ical-property-value uid)
+              (string=? (ics-property-value uid)
                         "19970610T172345Z-AF23B2@example.com")
-              (string=? (ical-property-value dtstamp)
+              (string=? (ics-property-value dtstamp)
                         "19970610T172345Z")
-              (string=? (ical-property-value dtstart)
+              (string=? (ics-property-value dtstart)
                         "19970714T170000Z")
-              (string=? (ical-property-value dtend)
+              (string=? (ics-property-value dtend)
                         "19970715T040000Z")
-              (string=? (ical-property-value summary)
+              (string=? (ics-property-value summary)
                         "Bastille Day Party")))))))
 
 
-(test-assert "fsm-read-ical-stream, valid object"
+(test-assert "fsm-read-ics-stream, valid object"
   (let ((parser (make-string-parser (string-append "BEGIN:VCALENDAR\r\n"
                                                    "VERSION:2.0\r\n"
                                                    "BEGIN:VEVENT\r\n"
                                                    "END:VEVENT\r\n"
                                                    "END:VCALENDAR"))))
-    (let* ((vcalendar (car (fsm-read-ical-stream parser '())))
-           (vevent    (car (ical-object-components vcalendar))))
+    (let* ((vcalendar (car (fsm-read-ics-stream parser '())))
+           (vevent    (car (ics-object-components vcalendar))))
       (format (current-error-port) "object: ~s~%" vcalendar)
-      (and (string=? (ical-property-value (ical-object-property-ref vcalendar
+      (and (string=? (ics-property-value (ics-object-property-ref vcalendar
                                                                     "VERSION"))
                      "2.0")
-           (string=? (ical-object-name vevent) "VEVENT")))))
+           (string=? (ics-object-name vevent) "VEVENT")))))
 
 
 ;;; (ics)
@@ -173,13 +173,13 @@
 
 (test-assert "ics-string->scm"
   (let* ((vcalendar (car (ics-string->scm %ics-string)))
-         (version   (ical-object-property-ref vcalendar "VERSION")))
-    (and (string=? (ical-object-name vcalendar) "VCALENDAR")
-         (string=? (ical-property-name version)  "VERSION")
-         (string=? (ical-property-value version) "2.0")
-         (let ((vevent (car (ical-object-components vcalendar))))
-           (string=? (ical-object-name vevent) "VEVENT")
-           (null? (ical-object-components vevent))))))
+         (version   (ics-object-property-ref vcalendar "VERSION")))
+    (and (string=? (ics-object-name vcalendar) "VCALENDAR")
+         (string=? (ics-property-name version)  "VERSION")
+         (string=? (ics-property-value version) "2.0")
+         (let ((vevent (car (ics-object-components vcalendar))))
+           (string=? (ics-object-name vevent) "VEVENT")
+           (null? (ics-object-components vevent))))))
 
 ;; RFC 5545, 3.1.
 (test-assert "ics-string->scm, long content lines"
@@ -192,10 +192,10 @@
                            " Party\r\n"
                            "END:VEVENT\r\n"
                            "END:VCALENDAR\r\n"))))
-         (vevent  (car (ical-object-components vcalendar)))
-         (summary (ical-object-property-ref vevent "SUMMARY")))
-    (and (string=? (ical-property-name summary) "SUMMARY")
-         (let ((summary-value (ical-property-value summary)))
+         (vevent  (car (ics-object-components vcalendar)))
+         (summary (ics-object-property-ref vevent "SUMMARY")))
+    (and (string=? (ics-property-name summary) "SUMMARY")
+         (let ((summary-value (ics-property-value summary)))
            (and (= (length summary-value) 3)
                 (string=? (list-ref summary-value 0) "Bastille")
                 (string=? (list-ref summary-value 1) "Day")
@@ -224,8 +224,8 @@
                       " agement\r\n"
                       "END:VCALENDAR\r\n"))
          (object (car (ics-string->scm source-str)))
-         (description (ical-object-property-ref object "DESCRIPTION"))
-         (description-value (ical-property-value description)))
+         (description (ics-object-property-ref object "DESCRIPTION"))
+         (description-value (ics-property-value description)))
     (string=? description-value
               "Project XYZ Review Meeting will include the following agenda items: \
 (a) Market Overview, (b) Finances, (c) Project Management")))

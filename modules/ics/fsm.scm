@@ -40,8 +40,8 @@
             ;; FSM
             fsm-read-property
             fsm-skip-property
-            fsm-read-ical-object
-            fsm-read-ical-stream))
+            fsm-read-ics-object
+            fsm-read-ics-stream))
 
 
 ;;; Constants.
@@ -85,7 +85,7 @@ concatenation of the given string STR and char CH."
 ;;        :            : :             :                 :    :
 ;; START  :            : :             :  .--------------+    :
 ;; :      V            : V             V  V              :    :
-;; '->[fsm-read-ical-stream]---+----->[fsm-read-ical-object]->:
+;; '->[fsm-read-ics-stream]---+----->[fsm-read-ics-object]->:
 ;;        A            :       :                         A    :
 ;;        :            :       :       .-----------.     :    :
 ;;        :            :       :       V           :     :    :
@@ -176,23 +176,23 @@ concatenation of the given string STR and char CH."
     (unless (or (eof-object? ch) (equal? ch #\linefeed))
       (fsm-skip-property parser))))
 
-(define (fsm-read-ical-object parser object-name icalprops component)
+(define (fsm-read-ics-object parser object-name icalprops component)
   (define (read-component)
-    (debug-fsm "fsm-read-ical-object" "read-component~%")
+    (debug-fsm "fsm-read-ics-object" "read-component~%")
     (let* ((key (fsm-read-property parser))
-           (val (fsm-read-ical-object parser key '() '())))
-      (debug-fsm "fsm-read-ical-object" "read-component: key: ~a; val: ~a~%"
+           (val (fsm-read-ics-object parser key '() '())))
+      (debug-fsm "fsm-read-ics-object" "read-component: key: ~a; val: ~a~%"
                  key val)
-      (fsm-read-ical-object parser
+      (fsm-read-ics-object parser
                             object-name
                             icalprops
                             (cons val component))))
   (define (parse-name name)
     (map (lambda (e)
-           (debug-fsm "fsm-read-ical-object" "read-property: e: ~a~%"
+           (debug-fsm "fsm-read-ics-object" "read-property: e: ~a~%"
                       e)
            (let ((key&value (string-split e #\=)))
-             (debug-fsm "fsm-read-ical-object" "read-property: key&value: ~a~%"
+             (debug-fsm "fsm-read-ics-object" "read-property: key&value: ~a~%"
                         key&value)
              (if (> (length key&value) 1)
                  (cons (string->symbol (car key&value))
@@ -201,22 +201,22 @@ concatenation of the given string STR and char CH."
          (string-split name #\;)))
 
   (define (read-property name)
-    (debug-fsm "fsm-read-ical-object" "read-property: NAME: ~a~%"
+    (debug-fsm "fsm-read-ics-object" "read-property: NAME: ~a~%"
                name)
     (let* ((parsed (parse-name name))
-           (d      (debug-fsm "fsm-read-ical-object" "read-property: parsed: ~a~%"
+           (d      (debug-fsm "fsm-read-ics-object" "read-property: parsed: ~a~%"
                               parsed))
            (key (caar parsed))
            (val (fsm-read-property parser)))
-      (debug-fsm "fsm-read-ical-object" "read-property: key: ~a; val: ~a~%"
+      (debug-fsm "fsm-read-ics-object" "read-property: key: ~a; val: ~a~%"
                  key val)
-      (let ((ical-property (make <ical-property>
+      (let ((ics-property (make <ics-property>
                              #:name  key
                              #:value val
                              #:parameters (cdr parsed))))
-        (fsm-read-ical-object parser
+        (fsm-read-ics-object parser
                               object-name
-                              (cons ical-property icalprops)
+                              (cons ics-property icalprops)
                               component))))
 
   (define (read-object-in-quotes buffer)
@@ -232,7 +232,7 @@ concatenation of the given string STR and char CH."
   (define (read-object buffer)
     (let ((ch (parser-read-char parser)))
       (if (eof-object? ch)
-          (make <ical-object>
+          (make <ics-object>
             #:name       object-name
             #:properties icalprops
             #:components component)
@@ -245,50 +245,50 @@ concatenation of the given string STR and char CH."
                (read-component))
               ((ics-token-end? buffer)
                (fsm-skip-property parser)
-               (make <ical-object>
+               (make <ics-object>
                  #:name       object-name
                  #:components component
                  #:properties icalprops))
               (else
                (read-property buffer))))
             ((#\linefeed)
-             (fsm-read-ical-object parser object-name icalprops component))
+             (fsm-read-ics-object parser object-name icalprops component))
             (else
              (read-object (string-append-char buffer ch)))))))
-  (debug-fsm-transition "fsm-read-ical-object")
+  (debug-fsm-transition "fsm-read-ics-object")
   (read-object ""))
 
 
-(define (fsm-read-ical-stream parser result)
+(define (fsm-read-ics-stream parser result)
   (define (read-component-name)
     (let ((name (fsm-read-property parser)))
       (debug-fsm "fsm-read-component-name" "NAME: ~a~%" name)
       (if (ics-calendar-object? name)
           (begin
-            (debug-fsm "fsm-read-ical-stream" "RESULT: ~a~%" result)
-            (let ((result (cons (fsm-read-ical-object parser
+            (debug-fsm "fsm-read-ics-stream" "RESULT: ~a~%" result)
+            (let ((result (cons (fsm-read-ics-object parser
                                                       %ics-icalendar-object
                                                       '() '())
                                 result)))
-              (debug-fsm "fsm-read-ical-stream" "RESULT: ~a~%" result)
-              (fsm-read-ical-stream parser result)))
-          (fsm-read-ical-stream parser result))))
-  (define (read-ical-stream buffer)
+              (debug-fsm "fsm-read-ics-stream" "RESULT: ~a~%" result)
+              (fsm-read-ics-stream parser result)))
+          (fsm-read-ics-stream parser result))))
+  (define (read-ics-stream buffer)
     (let ((ch (parser-read-char parser)))
       (if (eof-object? ch)
           result
           (case ch
             ((#\:)
-             (debug-fsm "fsm-read-ical-stream" "BUFFER: ~a~%" buffer)
+             (debug-fsm "fsm-read-ics-stream" "BUFFER: ~a~%" buffer)
              (cond
               ((ics-token-begin? buffer)
                (read-component-name))
               (else
-               (debug-fsm-transition "fsm-read-ical-stream")
-               (fsm-read-ical-stream parser result))))
+               (debug-fsm-transition "fsm-read-ics-stream")
+               (fsm-read-ics-stream parser result))))
             (else
-             (read-ical-stream (string-append-char buffer ch)))))))
-  (debug-fsm-transition "fsm-read-ical-stream")
-  (read-ical-stream ""))
+             (read-ics-stream (string-append-char buffer ch)))))))
+  (debug-fsm-transition "fsm-read-ics-stream")
+  (read-ics-stream ""))
 
 ;;; fsm.scm ends here.
