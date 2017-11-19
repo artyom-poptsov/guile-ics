@@ -31,6 +31,7 @@
             ics-property-name
             non-standard-property-name?
             ics-property-type
+            ics-property-format-type
             ics-property-value
             ics-property-parameters
             ics-property-parameter-ref
@@ -103,7 +104,7 @@
                                             (name <symbol>))
   "Get a iCalendar property parameter by a NAME, return a property
 parameter value, or return #f if no parameter found."
-  (assoc-ref name (ics-property-parameters ics-property)))
+  (assoc-ref (ics-property-parameters ics-property) name))
 
 (define-method (ics-property->string (ics-property <ics-property>))
   "Convert an ICAL-PROPERTY to a iCalendar string, return the string."
