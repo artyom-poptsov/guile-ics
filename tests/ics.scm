@@ -241,6 +241,25 @@
              #:value       "AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAgIAAAICAgADAwMAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAAAAABNEMQAAAAAAAkQgAAAAAAJEREQgAAACECQ0QgEgAAQxQzM0E0AABERCRCREQAADRDJEJEQwAAAhA0QwEQAAAAAEREAAAAAAAAREQAAAAAAAAkQgAAAAAAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")))
     p))
 
+(test-assert "type: boolean: make"
+  (let ((p (make <ics-property:boolean>
+             #:name  "NON-SMOKING"
+             #:value #t)))
+    p))
+
+(test-assert "type: cal-address: make"
+  (let ((p (make <ics-property:cal-address>
+             #:name       "ORGANIZER"
+             #:value      "mailto:jsmith@example.com"
+             #:parameters '((CN . "John Smith")))))
+    p))
+
+(test-assert "type: date: make"
+  (let ((p (make <ics-property:date>
+             #:name "RDATE"
+             #:value (strptime "%Y%m%d" "19970714"))))
+    p))
+
 
 ;;;
 
