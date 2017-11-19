@@ -65,7 +65,7 @@
               #:init-keyword #:value)
   ;; alist
   (parameters #:accessor     ics-property-parameters
-              #:init-value   #f
+              #:init-value   '()
               #:init-keyword #:parameters))
 
 (define-method (initialize (property <ics-property>) initargs)
