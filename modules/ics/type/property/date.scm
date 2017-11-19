@@ -36,7 +36,8 @@
   (next-method)
   (slot-set! property 'ics-property-type 'DATE))
 
-;; Printers
+
+;;; Printers
 
 (define-method (display (property <ics-property:date>) (port <port>))
   (format port "#<ics-property:date ~a: ~a ~a>"
