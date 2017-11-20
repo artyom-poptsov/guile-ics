@@ -101,6 +101,15 @@
              #:value (strptime "%Y%m%d" "19970714"))))
     p))
 
+(test-assert "date: ics-property:date=?"
+  (let ((p1 (make <ics-property:date>
+              #:name "RDATE"
+              #:value (strptime "%Y%m%d" "19970714")))
+        (p2 (make <ics-property:date>
+              #:name "RDATE"
+              #:value (strptime "%Y%m%d" "19970714"))))
+    (ics-property:date=? p1 p2)))
+
 
 ;;;
 

@@ -25,6 +25,7 @@
   #:use-module (oop goops)
   #:use-module (ics type property property)
   #:export     (<ics-property:date>
+                ics-property:date=?
                 ics-property->ics-property:date))
 
 
@@ -53,6 +54,20 @@
 
 (define-method (write (property <ics-property:date>))
   (display property (current-output-port)))
+
+
+;;; Predicates.
+
+(define-method (ics-property:date=? (property1 <ics-property:date>)
+                                    (property2 <ics-property:date>))
+  "Compare PROPERTY1 with PROPERTY2.  Return #t if the given
+properties are identical, #f otherwise."
+  (and (string=? (ics-property-name property1)
+                 (ics-property-name property2))
+       (equal?   (ics-property-value property1)
+                 (ics-property-value property2))
+       (equal?   (ics-property-parameters property1)
+                 (ics-property-parameters property2))))
 
 
 ;;; Converters
