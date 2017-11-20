@@ -43,7 +43,7 @@
 (define-method (display (property <ics-property:date>) (port <port>))
   (format port "#<ics-property:date ~a: ~a ~a>"
           (ics-property-name property)
-          (ics-property-value property)
+          (strftime "%F" (car (ics-property-value property)))
           (object-address->string property)))
 
 (define-method (write (property <ics-property:date>) (port <port>))
