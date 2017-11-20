@@ -25,6 +25,7 @@
   #:use-module (oop goops)
   #:use-module (ics type property property)
   #:export (<ics-property:binary>
+            ics-property:binary?
             ics-property:binary=?
             ics-property->ics-property:binary
             ics-property:binary->ics-property
@@ -67,6 +68,9 @@
 
 
 ;;; Predicates.
+
+(define-method (ics-property:binary? x)
+  (is-a? x <ics-property:binary>))
 
 (define-method (ics-property:binary=? (property1 <ics-property:binary>)
                                       (property2 <ics-property:binary>))

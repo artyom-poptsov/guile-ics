@@ -54,6 +54,15 @@
          (equal? (ics-property-format-type b) "image/vnd.microsoft.icon")
          (string=? (ics-property-value b) "R05VIEd1aWxlCg=="))))
 
+(test-assert "binary: ics-property:binary?"
+  (let* ((p (make <ics-property>
+              #:name        "ATTACH"
+              #:value       "R05VIEd1aWxlCg=="
+              #:parameters '((ENCODING . "BASE64")
+                             (FMTTYPE  . "image/vnd.microsoft.icon"))))
+         (b (ics-property->ics-property:binary p)))
+    (ics-property:binary? b)))
+
 (test-assert "binary: ics-property:binary=?"
   (let* ((p (make <ics-property>
               #:name        "ATTACH"
