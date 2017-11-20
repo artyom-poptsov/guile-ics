@@ -76,7 +76,8 @@ properties are identical, #f otherwise."
                 (property <ics-property>))
   (let ((value (ics-property-value property)))
     (make <ics-property:date>
-      #:name  (ics-property-name property)
-      #:value (strptime "%Y%m%d" value))))
+      #:name       (ics-property-name property)
+      #:parameters (ics-property-parameters property)
+      #:value      (strptime "%Y%m%d" value))))
 
 ;;; date.scm ends here.
