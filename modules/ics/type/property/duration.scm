@@ -25,6 +25,7 @@
   #:use-module (oop goops)
   #:use-module (ics type property property)
   #:export     (<ics-property:duration>
+                ics-property:duration?
                 ics-property->ics-property:duration))
 
 
@@ -53,6 +54,14 @@
 
 (define-method (write (property <ics-property:duration>))
   (display property (current-output-port)))
+
+
+;;; Predicates.
+
+(define-method (ics-property:duration? x)
+  "Check if X is an instance of <ics-property:duration>, return #t if
+it is, #f otherwise."
+  (is-a? x <ics-property:duration>))
 
 
 ;;; Converters.

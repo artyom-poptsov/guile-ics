@@ -149,6 +149,20 @@
              #:value (localtime (current-time)))))
     (ics-property:date-time? p)))
 
+
+;;; DURATION
+
+(test-assert "duration: make"
+  (let ((p (make <ics-property:duration>
+             #:name  "DURATION"
+             #:value "P15DT5H0M20S")))
+    p))
+
+(test-assert "duration: ics-property:duration?"
+  (let ((p (make <ics-property:duration>
+             #:name  "DURATION"
+             #:value "P15DT5H0M20S")))
+    (ics-property:duration? p)))
 
 
 ;;;
