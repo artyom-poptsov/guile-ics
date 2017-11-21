@@ -132,6 +132,16 @@
               #:value (strptime "%Y%m%d" "19970714"))))
     (ics-property:date=? p1 p2)))
 
+(test-assert "date: list of values"
+  (let* ((p (make <ics-property>
+             #:name  "X-GNU-DATES"
+             #:value '("19970715" "19970716" "19970717")))
+         (d (ics-property->ics-property:date p))
+         (v (ics-property-value d)))
+    (and (list? v)
+         (= (length v) 3)
+         v)))
+
 
 ;;; DATE-TIME
 

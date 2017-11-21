@@ -74,10 +74,13 @@ properties are identical, #f otherwise."
 
 (define-method (ics-property->ics-property:date
                 (property <ics-property>))
-  (let ((value (ics-property-value property)))
+  (let ((date->tm (lambda (date) (car (strptime "%Y%m%d" date))))
+        (value (ics-property-value property)))
     (make <ics-property:date>
       #:name       (ics-property-name property)
       #:parameters (ics-property-parameters property)
-      #:value      (car (strptime "%Y%m%d" value)))))
+      #:value      (if (list? value)
+                       (map date->tm value)
+                       (date->tm value)))))
 
 ;;; date.scm ends here.
