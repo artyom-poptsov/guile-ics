@@ -25,6 +25,7 @@
   #:use-module (oop goops)
   #:use-module (ics type property property)
   #:export     (<ics-property:cal-address>
+                ics-property:cal-address?
                 ics-property->ics-property:cal-address))
 
 
@@ -67,6 +68,14 @@ properties are identical, #f otherwise."
                    (ics-property-format-type property2))
          (equal?   (ics-property-parameters property1)
                    (ics-property-parameters property2))))
+
+
+;;; Predicates.
+
+(define-method (ics-property:cal-address? x)
+  "Check if X is an instance of <ics-property:cal-address>, return #t if it
+is, #f otherwise."
+  (is-a? x <ics-property:cal-address>))
 
 
 ;;; Converters.

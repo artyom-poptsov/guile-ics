@@ -107,6 +107,13 @@
              #:parameters '((CN . "John Smith")))))
     p))
 
+(test-assert "cal-address: ics-property:cal-address?"
+  (let ((p (make <ics-property:cal-address>
+             #:name       "ORGANIZER"
+             #:value      "mailto:jsmith@example.com"
+             #:parameters '((CN . "John Smith")))))
+    (ics-property:cal-address? p)))
+
 
 ;;; DATE
 
