@@ -25,6 +25,7 @@
   #:use-module (oop goops)
   #:use-module (ics type property property)
   #:export     (<ics-property:boolean>
+                ics-property:boolean?
                 ics-property:boolean=?
                 ics-property->ics-property:boolean
                 ics-property:boolean->ics-property))
@@ -58,6 +59,11 @@
 
 
 ;;; Predicates.
+
+(define-method (ics-property:boolean? x)
+  "Check if X is an instance of <ics-property:boolean>, return #t if it
+is, #f otherwise."
+  (is-a? x <ics-property:boolean>))
 
 (define-method (ics-property:boolean=? (property1 <ics-property:boolean>)
                                        (property2 <ics-property:boolean>))
