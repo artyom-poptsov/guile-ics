@@ -25,6 +25,7 @@
   #:use-module (oop goops)
   #:use-module (ics type property property)
   #:export     (<ics-property:date-time>
+                ics-property:date-time?
                 ics-property:date-time-tzid
                 ics-property->ics-property:date-time))
 
@@ -57,6 +58,14 @@
 
 (define-method (write (property <ics-property:date-time>))
   (display property (current-output-port)))
+
+
+;;; Predicates.
+
+(define-method (ics-property:date-time? x)
+  "Check if X is an instance of <ics-property:date-time>, return #t if
+it is, #f otherwise."
+  (is-a? x <ics-property:date-time>))
 
 
 ;;; Converters.

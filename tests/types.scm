@@ -133,6 +133,24 @@
     (ics-property:date=? p1 p2)))
 
 
+;;; DATE-TIME
+
+(test-assert "date-time: make"
+  (let ((p (make <ics-property:date-time>
+             #:name "DTSTART"
+             #:tzid "America/New_York"
+             #:value (localtime (current-time)))))
+    p))
+
+(test-assert "date-time: ics-property:date-time?"
+  (let ((p (make <ics-property:date-time>
+             #:name "DTSTART"
+             #:tzid "America/New_York"
+             #:value (localtime (current-time)))))
+    (ics-property:date-time? p)))
+
+
+
 ;;;
 
 (test-end "types")
