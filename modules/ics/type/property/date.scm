@@ -43,7 +43,7 @@
 (define-method (display (property <ics-property:date>) (port <port>))
   (format port "#<ics-property:date ~a: ~a ~a>"
           (ics-property-name property)
-          (strftime "%F" (car (ics-property-value property)))
+          (strftime "%F" (ics-property-value property))
           (object-address->string property)))
 
 (define-method (write (property <ics-property:date>) (port <port>))
@@ -78,6 +78,6 @@ properties are identical, #f otherwise."
     (make <ics-property:date>
       #:name       (ics-property-name property)
       #:parameters (ics-property-parameters property)
-      #:value      (strptime "%Y%m%d" value))))
+      #:value      (car (strptime "%Y%m%d" value)))))
 
 ;;; date.scm ends here.
