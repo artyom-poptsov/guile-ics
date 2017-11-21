@@ -28,9 +28,9 @@
   #:use-module (ics type content)
   #:export (<ics-property>
             object-address->string
+            %ics-property-type
             ics-property-name
             non-standard-property-name?
-            ics-property-type
             ics-property-format-type
             ics-property-value
             ics-property-parameters
