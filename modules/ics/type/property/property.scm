@@ -83,21 +83,17 @@
 (define-generic write)
 
 (define-method (display (property <ics-property>) (port <port>))
-  (format port "#<ics-property name: ~a type: ~a ~a>"
+  (format port "#<ics-property name: ~a ~a>"
           (ics-property-name property)
-          (ics-property-type property)
           (object-address->string property)))
 
 (define-method (write (property <ics-property>) (port <port>))
-  (next-method)
   (display property port))
 
 (define-method (display (property <ics-property>))
-  (next-method)
   (display property (current-output-port)))
 
 (define-method (write (property <ics-property>))
-  (next-method)
   (display property (current-output-port)))
 
 
