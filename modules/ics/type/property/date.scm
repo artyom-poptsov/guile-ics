@@ -25,6 +25,7 @@
   #:use-module (oop goops)
   #:use-module (ics type property property)
   #:export     (<ics-property:date>
+                ics-property:date?
                 ics-property:date=?
                 ics-property->ics-property:date))
 
@@ -57,6 +58,11 @@
 
 
 ;;; Predicates.
+
+(define-method (ics-property:date? x)
+  "Check if X is an instance of <ics-property:date>, return #t if it
+is, #f otherwise."
+  (is-a? x <ics-property:date>))
 
 (define-method (ics-property:date=? (property1 <ics-property:date>)
                                     (property2 <ics-property:date>))
