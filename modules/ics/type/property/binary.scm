@@ -70,6 +70,8 @@
 ;;; Predicates.
 
 (define-method (ics-property:binary? x)
+  "Check if X is an instance of <ics-property:binary>, return #t if it
+is, #f otherwise."
   (is-a? x <ics-property:binary>))
 
 (define-method (ics-property:binary=? (property1 <ics-property:binary>)
