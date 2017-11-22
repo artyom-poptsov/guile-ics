@@ -44,7 +44,11 @@
 (define-method (display (property <ics-property:date>) (port <port>))
   (format port "#<ics-property:date ~a: ~a ~a>"
           (ics-property-name property)
-          (strftime "%F" (ics-property-value property))
+          (let ((value       (ics-property-value property))
+                (tm->iso8601 (lambda (tm) (strftime "%F" tm))))
+            (if (list? value)
+                (string-join (map tm->iso8601 value) ",")
+                (tm->iso8601 value)))
           (object-address->string property)))
 
 (define-method (write (property <ics-property:date>) (port <port>))
