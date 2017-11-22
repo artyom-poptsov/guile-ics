@@ -25,6 +25,7 @@
   #:use-module (oop goops)
   #:use-module (ics type property property)
   #:export     (<ics-property:float>
+                ics-property:float?
                 ics-property->ics-property:float))
 
 
@@ -40,10 +41,13 @@
 ;;; Printers.
 
 (define-method (display (property <ics-property:float>) (port <port>))
-  (format port "#<ics-property:float ~a: ~a ~a>"
-          (ics-property-name property)
-          (ics-property-value property)
-          (object-address->string property)))
+  (let ((value (ics-property-value property)))
+    (format port "#<ics-property:float ~a: ~a ~a>"
+            (ics-property-name property)
+            (if (list? value)
+                (string-join (map number->string value) ", ")
+                value)
+            (object-address->string property))))
 
 (define-method (write (property <ics-property:float>) (port <port>))
   (display property port))
@@ -55,12 +59,23 @@
   (display property (current-output-port)))
 
 
+;;; Predicates.
+
+(define-method (ics-property:float? x)
+  "Check if X is an instance of <ics-property:float>, return #t if
+it is, #f otherwise."
+  (is-a? x <ics-property:float>))
+
+
 ;;; Converters.
 
 (define-method (ics-property->ics-property:float
                 (property <ics-property>))
-  (make <ics-property:float>
-    #:name  (ics-property-name property)
-    #:value (string->number (ics-property-value property))))
+  (let ((value (ics-property-value property)))
+    (make <ics-property:float>
+      #:name  (ics-property-name property)
+      #:value (if (list? value)
+                  (map string->number value)
+                  (string->number value)))))
 
 ;;; float.scm ends here.

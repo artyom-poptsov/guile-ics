@@ -181,6 +181,21 @@
     (ics-property:duration? p)))
 
 
+;;; FLOAT
+
+(test-assert "flaot: make"
+  (let ((p (make <ics-property:float>
+             #:name  "X-GNU-PI"
+             #:value 3.14)))
+    p))
+
+(test-assert "flaot: ics-property:float?"
+  (let ((p (make <ics-property:float>
+             #:name  "X-GNU-PI"
+             #:value 3.14)))
+    (ics-property:float? p)))
+
+
 ;;;
 
 (test-end "types")
