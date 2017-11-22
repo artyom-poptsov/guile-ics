@@ -165,6 +165,16 @@
              #:value (localtime (current-time)))))
     (ics-property:date-time? p)))
 
+(test-assert "date-time: list of values"
+  (let* ((p (make <ics-property>
+             #:name  "X-GNU-DTIME"
+             #:value '("19970610T172345Z" "19970610T172346Z")))
+         (d (ics-property->ics-property:date-time p))
+         (v (ics-property-value d)))
+    (and (list? v)
+         (= (length v) 2)
+         v)))
+
 
 ;;; DURATION
 

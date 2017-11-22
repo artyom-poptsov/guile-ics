@@ -45,10 +45,14 @@
 ;;; Printers.
 
 (define-method (display (property <ics-property:date-time>) (port <port>))
-  (format port "#<ics-property:date-time ~a: ~a ~a>"
-          (ics-property-name property)
-          (strftime "%FT%TZ" (car (ics-property-value property)))
-          (object-address->string property)))
+  (let ((tm->iso8601 (lambda (tm) (strftime "%FT%TZ" tm)))
+        (value        (ics-property-value property)))
+    (format port "#<ics-property:date-time ~a: ~a ~a>"
+            (ics-property-name property)
+            (if (list? value)
+                (string-join (map tm->iso8601 value) ",")
+                (tm->iso8601 value))
+            (object-address->string property))))
 
 (define-method (write (property <ics-property:date-time>) (port <port>))
   (display property port))
@@ -72,8 +76,13 @@ it is, #f otherwise."
 
 (define-method (ics-property->ics-property:date-time
                 (property <ics-property>))
-  (make <ics-property:date-time>
-    #:name  (ics-property-name property)
-    #:value (strptime "%Y%m%dT%H%M%S%Z" (ics-property-value property))))
+  (let ((value (ics-property-value property))
+        (date-time->tm (lambda (date-time)
+                         (car (strptime "%Y%m%dT%H%M%S%Z" date-time)))))
+    (make <ics-property:date-time>
+      #:name  (ics-property-name property)
+      #:value (if (list? value)
+                  (map date-time->tm value)
+                  (date-time->tm value)))))
 
 ;;; date-time.scm ends here.
