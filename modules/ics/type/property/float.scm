@@ -26,7 +26,8 @@
   #:use-module (ics type property property)
   #:export     (<ics-property:float>
                 ics-property:float?
-                ics-property->ics-property:float))
+                ics-property->ics-property:float
+                ics-property:float->ics-property))
 
 
 ;;; Class definition.
@@ -77,5 +78,15 @@ it is, #f otherwise."
       #:value (if (list? value)
                   (map string->number value)
                   (string->number value)))))
+
+(define-method (ics-property:float->ics-property
+                (property <ics-property:float>))
+  (let ((value (ics-property-value property)))
+    (make <ics-property>
+      #:name       (ics-property-name property)
+      #:parameters (ics-property-parameters property)
+      #:value      (if (list? value)
+                       (map number->string value)
+                       (number->string value)))))
 
 ;;; float.scm ends here.
