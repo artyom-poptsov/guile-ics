@@ -27,6 +27,8 @@
   #:use-module (srfi srfi-1)
   #:use-module (ics type content)
   #:export (<ics-property>
+            ics-property?
+            ics-property=?
             object-address->string
             %ics-property-type
             ics-property-name
@@ -95,6 +97,29 @@
 
 (define-method (write (property <ics-property>))
   (display property (current-output-port)))
+
+
+;;; Predicates.
+
+(define-method (ics-property? x)
+  "Check if X is an instance of <ics-property>, return #t if it is, #f
+otherwise."
+  (is-a? x <ics-property>))
+
+(define-method (ics-property=? (property1 <ics-property>)
+                               (property2 <ics-property>))
+  "Compare PROPERTY1 with PROPERTY2.  Return #t if the given
+properties are identical, #f otherwise."
+  (and (string=? (ics-property-name property1)
+                 (ics-property-name property2))
+       (equal?   (ics-property-format-type property1)
+                 (ics-property-format-type property2))
+       (equal?   (%ics-property-type property1)
+                 (%ics-property-type property2))
+       (equal?   (ics-property-value property1)
+                 (ics-property-value property2))
+       (equal?   (ics-property-parameters property1)
+                 (ics-property-parameters property2))))
 
 
 ;;;

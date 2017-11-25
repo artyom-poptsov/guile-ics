@@ -196,14 +196,36 @@
 (test-assert "float: make"
   (let ((p (make <ics-property:float>
              #:name  "X-GNU-PI"
-             #:value 3.14)))
+             #:value "3.14")))
     p))
 
 (test-assert "float: ics-property:float?"
   (let ((p (make <ics-property:float>
              #:name  "X-GNU-PI"
-             #:value 3.14)))
+             #:value "3.14")))
     (ics-property:float? p)))
+
+(test-assert "float: ics-property->ics-property:float"
+  (let* ((p (make <ics-property:float>
+             #:name  "X-GNU-PI"
+             #:value "3.14"))
+         (f (ics-property->ics-property:float p)))
+    (= (ics-property-value f) 3.14)))
+
+(test-assert "float: ics-property->ics-property:float, value list"
+  (let* ((p (make <ics-property:float>
+             #:name  "X-GNU-FLOATS"
+             #:value '("3.14" "3.15")))
+         (f (ics-property->ics-property:float p)))
+    (equal? (ics-property-value f) '(3.14 3.15))))
+
+(test-assert "float: ics-property:float->ics-property"
+  (let* ((p      (make <ics-property:float>
+                   #:name  "X-GNU-FLOATS"
+                   #:value '("3.14" "3.15")))
+         (f      (ics-property->ics-property:float p))
+         (result (ics-property:float->ics-property f)))
+    (ics-property=? p result)))
 
 
 ;;;

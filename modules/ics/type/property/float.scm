@@ -26,6 +26,7 @@
   #:use-module (ics type property property)
   #:export     (<ics-property:float>
                 ics-property:float?
+                ics-property:float=?
                 ics-property->ics-property:float
                 ics-property:float->ics-property))
 
@@ -66,6 +67,17 @@
   "Check if X is an instance of <ics-property:float>, return #t if
 it is, #f otherwise."
   (is-a? x <ics-property:float>))
+
+(define-method (ics-property:float=? (property1 <ics-property:float>)
+                                     (property2 <ics-property:float>))
+    "Compare PROPERTY1 with PROPERTY2.  Return #t if the given
+properties are identical, #f otherwise."
+    (and (string=? (ics-property-name property1)
+                   (ics-property-name property2))
+         (equal?   (ics-property-parameters property1)
+                   (ics-property-parameters property2))
+         (equal?   (ics-property-value property1)
+                   (ics-property-value property2))))
 
 
 ;;; Converters.
