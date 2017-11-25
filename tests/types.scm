@@ -193,13 +193,13 @@
 
 ;;; FLOAT
 
-(test-assert "flaot: make"
+(test-assert "float: make"
   (let ((p (make <ics-property:float>
              #:name  "X-GNU-PI"
              #:value 3.14)))
     p))
 
-(test-assert "flaot: ics-property:float?"
+(test-assert "float: ics-property:float?"
   (let ((p (make <ics-property:float>
              #:name  "X-GNU-PI"
              #:value 3.14)))
