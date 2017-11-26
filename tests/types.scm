@@ -237,7 +237,7 @@
                    #:value '("3.14" "3.15")))
          (f      (ics-property->ics-property:float p))
          (result (ics-property:float->ics-property f)))
-    (ics-property=? p result)))
+    (equal? p result)))
 
 
 ;;;
