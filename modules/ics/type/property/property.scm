@@ -18,6 +18,8 @@
 
 ;;; Commentary:
 
+;; A generic property which type is not determined yet.
+
 
 ;;; Code:
 
@@ -28,6 +30,7 @@
   #:use-module (ics type content)
   #:export (<ics-property>
             ics-property?
+            %ics-property=?
             object-address->string
             %ics-property-type
             ics-property-name
@@ -105,8 +108,8 @@
 otherwise."
   (is-a? x <ics-property>))
 
-(define-method (equal? (property1 <ics-property>)
-                       (property2 <ics-property>))
+(define-method (%ics-property=? (property1 <ics-property>)
+                                (property2 <ics-property>))
   "Compare PROPERTY1 with PROPERTY2.  Return #t if the given
 properties are identical, #f otherwise."
   (and (string=? (ics-property-name property1)
@@ -119,6 +122,12 @@ properties are identical, #f otherwise."
                  (ics-property-value property2))
        (equal?   (ics-property-parameters property1)
                  (ics-property-parameters property2))))
+
+(define-method (equal? (property1 <ics-property>)
+                       (property2 <ics-property>))
+  "Compare PROPERTY1 with PROPERTY2.  Return #t if the given
+properties are identical, #f otherwise."
+  (%ics-property=? property1 property2))
 
 
 ;;;

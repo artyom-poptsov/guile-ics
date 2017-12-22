@@ -55,20 +55,6 @@
 (define-method (write (property <ics-property:cal-address>))
   (display property (current-output-port)))
 
-(define-method (ics-property:cal-address=?
-                (property1 <ics-property:cal-address>)
-                (property2 <ics-property:cal-address>))
-    "Compare PROPERTY1 with PROPERTY2.  Return #t if the given
-properties are identical, #f otherwise."
-    (and (string=? (ics-property-name property1)
-                   (ics-property-name property2))
-         (string=? (ics-property-value property1)
-                   (ics-property-value property2))
-         (string=? (ics-property-format-type property1)
-                   (ics-property-format-type property2))
-         (equal?   (ics-property-parameters property1)
-                   (ics-property-parameters property2))))
-
 
 ;;; Predicates.
 

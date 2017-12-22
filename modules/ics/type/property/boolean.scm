@@ -65,17 +65,6 @@
 is, #f otherwise."
   (is-a? x <ics-property:boolean>))
 
-(define-method (ics-property:boolean=? (property1 <ics-property:boolean>)
-                                       (property2 <ics-property:boolean>))
-    "Compare PROPERTY1 with PROPERTY2.  Return #t if the given
-properties are identical, #f otherwise."
-    (and (string=? (ics-property-name property1)
-                   (ics-property-name property2))
-         (equal?   (ics-property-parameters property1)
-                   (ics-property-parameters property2))
-         (equal?   (ics-property-value property1)
-                   (ics-property-value property2))))
-
 
 ;;; Converters.
 

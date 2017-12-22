@@ -63,7 +63,7 @@
          (b (ics-property->ics-property:binary p)))
     (ics-property:binary? b)))
 
-(test-assert "binary: ics-property:binary=?"
+(test-assert "binary: ics-property:binary, equal?"
   (let* ((p (make <ics-property>
               #:name        "ATTACH"
               #:value       "R05VIEd1aWxlCg=="
@@ -71,7 +71,7 @@
                              (FMTTYPE  . "image/vnd.microsoft.icon"))))
          (b1 (ics-property->ics-property:binary p))
          (b2 (ics-property->ics-property:binary p)))
-    (ics-property:binary=? b1 b2)))
+    (equal? b1 b2)))
 
 
 ;;; BOOLEAN
@@ -88,14 +88,14 @@
              #:value #t)))
     (ics-property:boolean? p)))
 
-(test-assert "boolean: ics-property:boolean=?"
+(test-assert "boolean: ics-property:boolean, equal?"
   (let ((p1 (make <ics-property:boolean>
               #:name "NON-SMOKING"
               #:value #t))
         (p2 (make <ics-property:boolean>
               #:name "NON-SMOKING"
               #:value #t)))
-    (ics-property:boolean=? p1 p2)))
+    (equal? p1 p2)))
 
 
 ;;; CAL-ADDRESS
