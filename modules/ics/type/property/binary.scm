@@ -34,9 +34,9 @@
 ;;; Class definition.
 
 (define-class <ics-property:binary> (<ics-property>)
-  ;; symbol
+  ;; string
   ;;
-  ;; Either 8BIT (RFC2045) or BASE64 (RFC4648).
+  ;; Either "8BIT" (RFC2045) or "BASE64" (RFC4648).
   (encoding
    #:accessor   ics-property:binary-encoding
    #:init-value #f
