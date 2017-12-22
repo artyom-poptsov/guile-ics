@@ -90,9 +90,8 @@ properties are identical, #f otherwise."
     #:name        (ics-property-name          property)
     #:parameters  (ics-property-parameters    property)
     #:format-type (ics-property-parameter-ref property 'FMTTYPE)
-    #:encoding    (string->symbol (ics-property-parameter-ref property
-                                                              'ENCODING))
-    #:value       (ics-property-value         property)))
+    #:encoding    (ics-property-parameter-ref property 'ENCODING))
+    #:value       (ics-property-value         property))
 
 (define-method (ics-property:binary->ics-property
                 (property <ics-property:binary>))
