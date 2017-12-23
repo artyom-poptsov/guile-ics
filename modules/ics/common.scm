@@ -30,7 +30,9 @@
             ics-error
 
             value-or-default
-            substitute unescape-chars))
+            substitute unescape-chars
+
+            case*))
 
 
 (define *debug?* #f)                    ; Is the debug mode enabled?

@@ -45,7 +45,8 @@
   #:use-module (ics type property time)
   #:use-module (ics type property uri)
   #:use-module (ics type property utc-offset)
-  #:export (ics-property->typed-property))
+  #:export (ics-property->typed-property
+            ics-property->string))
 
 ;; This macro is taken from Guile-JSON.
 (define-syntax re-export-modules
