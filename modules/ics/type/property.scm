@@ -46,6 +46,7 @@
   #:use-module (ics type property uri)
   #:use-module (ics type property utc-offset)
   #:export (ics-property-type
+            ics-property-name->type
             ics-property->typed-property
             ics-property->string))
 
@@ -76,6 +77,39 @@
 
 ;;; Converters
 
+(define-method (ics-property-name->type (name <string>))
+  "Get an RFC5545 type name by a property NAME; return the name as a
+symbol."
+  (case* string=? name
+    (("DSTART" "COMPLETED" "DTEND" "DATE" "DUE" "RECURRENCE-ID"
+      "EXDATE" "RDATE" "CREATED" "DTSTAMP" "LAST-MODIFIED")
+     'DATE-TIME)
+    (("GEO")
+     'FLOAT)
+    (("DURATION" "TRIGGER")
+     'DURATION)
+    (("FREEBUSY")
+     'PERIOD)
+    (("RRULE")
+     'RECUR)
+    (("CLASS" "COMMENT" "DESCRIPTION" "CATEGORIES" "LOCATION"
+      "RESOURCES" "STATUS" "SUMMARY" "TRANSP" "TZID" "TZNAME"
+      "CONTACT" "RELATED-TO" "UID" "ACTION" "REQUEST-STATUS"
+      "VERSION")
+     'TEXT)
+    (("TZOFFSETFROM" "TZOFFSETTO")
+     'UTC-OFFSET)
+    (("TZURL" "URL")
+     'URI)
+    (("ATTENDEE" "ORGANIZER")
+     'CAL-ADDRESS)
+    (("PERCENT-COMPLETE" "PRIORITY" "REPEAT" "SEQUENCE")
+     'INTEGER)
+    (else
+     ;; Non-standard properties and IANA properties are
+     ;; of type TEXT by default (see RFC5545, 3.8.8.)
+     'TEXT)))
+
 (define-method (ics-property-type (property <ics-property>))
   (or (%ics-property-type property)
       (let ((name  (ics-property-name property))
@@ -86,35 +120,7 @@
             ;; type.
             (string->symbol value)
 
-            (case* string=? name
-              (("DSTART" "COMPLETED" "DTEND" "DATE" "DUE" "RECURRENCE-ID"
-                "EXDATE" "RDATE" "CREATED" "DTSTAMP" "LAST-MODIFIED")
-               'DATE-TIME)
-              (("GEO")
-               'FLOAT)
-              (("DURATION" "TRIGGER")
-               'DURATION)
-              (("FREEBUSY")
-               'PERIOD)
-              (("RRULE")
-               'RECUR)
-              (("CLASS" "COMMENT" "DESCRIPTION" "CATEGORIES" "LOCATION"
-                "RESOURCES" "STATUS" "SUMMARY" "TRANSP" "TZID" "TZNAME"
-                "CONTACT" "RELATED-TO" "UID" "ACTION" "REQUEST-STATUS"
-                "VERSION")
-               'TEXT)
-              (("TZOFFSETFROM" "TZOFFSETTO")
-               'UTC-OFFSET)
-              (("TZURL" "URL")
-               'URI)
-              (("ATTENDEE" "ORGANIZER")
-               'CAL-ADDRESS)
-              (("PERCENT-COMPLETE" "PRIORITY" "REPEAT" "SEQUENCE")
-               'INTEGER)
-              (else
-               ;; Non-standard properties and IANA properties are
-               ;; of type TEXT by default (see RFC5545, 3.8.8.)
-               'TEXT))))))
+            (ics-property-name->type name)))))
 
 
 ;;;
