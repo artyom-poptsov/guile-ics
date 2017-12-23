@@ -87,7 +87,8 @@ it is, #f otherwise."
       #:name  (ics-property-name property)
       #:value (if (list? value)
                   (map date-time->tm value)
-                  (date-time->tm value)))))
+                  (date-time->tm value))
+      #:parameters (ics-property-parameters property))))
 
 (define-method (ics-property:date-time->ics-property
                 (property <ics-property:date-time>))
@@ -95,11 +96,9 @@ it is, #f otherwise."
         (value         (ics-property-value property)))
     (make <ics-property>
       #:name        (ics-property-name property)
-      #:type        #f
-      #:format-type (ics-property-format-type property)
       #:value       (if (list? value)
                         (map tm->date-time value)
                         (tm->date-time value))
-      #:parameters  (ics-property-parameters property)))
+      #:parameters  (ics-property-parameters property))))
 
 ;;; date-time.scm ends here.

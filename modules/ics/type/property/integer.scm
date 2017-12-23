@@ -61,6 +61,7 @@
                 (property <ics-property>))
   (make <ics-property:integer>
     #:name  (ics-property-name property)
-    #:value (string->number (ics-property-value property))))
+    #:value (string->number (ics-property-value property))
+    #:parameters (ics-property-parameters property)))
 
 ;;; integer.scm ends here.

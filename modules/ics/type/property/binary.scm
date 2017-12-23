@@ -33,14 +33,7 @@
 
 ;;; Class definition.
 
-(define-class <ics-property:binary> (<ics-property>)
-  ;; string
-  ;;
-  ;; Either "8BIT" (RFC2045) or "BASE64" (RFC4648).
-  (encoding
-   #:accessor   ics-property:binary-encoding
-   #:init-value #f
-   #:init-keyword #:encoding))
+(define-class <ics-property:binary> (<ics-property>))
 
 (define-method (initialize (property <ics-property:binary>) initargs)
   (next-method)
@@ -52,8 +45,8 @@
 (define-method (display (property <ics-property:binary>) (port <port>))
   (format port "#<ics-property:binary ~a ENCODING: ~a FORMAT-TYPE: ~a ~a>"
           (ics-property-name property)
-          (ics-property:binary-encoding property)
-          (ics-property-format-type property)
+          (ics-property-parameter-ref property 'ENCODING)
+          (ics-property-parameter-ref property 'FMTTYPE property)
           (object-address->string property)))
 
 (define-method (write (property <ics-property:binary>) (port <port>))
@@ -73,13 +66,13 @@
 is, #f otherwise."
   (is-a? x <ics-property:binary>))
 
-(define-method (equal? (property1 <ics-property:binary>)
-                       (property2 <ics-property:binary>))
-  "Compare PROPERTY1 with PROPERTY2.  Return #t if the given
-properties are identical, #f otherwise."
-  (and (%ics-property=? property1 property2)
-       (equal? (ics-property:binary-encoding property1)
-               (ics-property:binary-encoding property2))))
+;; (define-method (equal? (property1 <ics-property:binary>)
+;;                        (property2 <ics-property:binary>))
+;;   "Compare PROPERTY1 with PROPERTY2.  Return #t if the given
+;; properties are identical, #f otherwise."
+;;   (and (%ics-property=? property1 property2)
+;;        (equal? (ics-property:binary-encoding property1)
+;;                (ics-property:binary-encoding property2))))
 
 
 ;;; Converters
@@ -88,19 +81,14 @@ properties are identical, #f otherwise."
                 (property <ics-property>))
   (make <ics-property:binary>
     #:name        (ics-property-name          property)
-    #:parameters  (ics-property-parameters    property)
-    #:format-type (ics-property-parameter-ref property 'FMTTYPE)
-    #:encoding    (ics-property-parameter-ref property 'ENCODING)
-    #:value       (ics-property-value         property)))
+    #:value       (ics-property-value         property)
+    #:parameters  (ics-property-parameters    property)))
 
 (define-method (ics-property:binary->ics-property
                 (property <ics-property:binary>))
   (make <ics-property>
     #:name        (ics-property-name property)
-    #:type        #f
-    #:format-type #f
     #:value       (ics-property-value property)
-    #:parameters  `((FMTTYPE  . ,(ics-property-format-type property))
-                    (ENCODING . ,(ics-property:binary-encoding property)))))
+    #:parameters  (ics-property-parameters property)))
 
 ;;; binary.scm ends here.

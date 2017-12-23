@@ -61,6 +61,7 @@
                 (property <ics-property>))
   (make <ics-property:recur>
     #:name  (ics-property-name property)
-    #:value (ics-property-value property)))
+    #:value (ics-property-value property)
+    #:parameters (ics-property-parameters property)))
 
 ;;; recur.scm ends here.

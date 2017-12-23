@@ -80,10 +80,10 @@ is, #f otherwise."
         (value (ics-property-value property)))
     (make <ics-property:date>
       #:name       (ics-property-name property)
-      #:parameters (ics-property-parameters property)
       #:value      (if (list? value)
                        (map date->tm value)
-                       (date->tm value)))))
+                       (date->tm value))
+      #:parameters (ics-property-parameters property))))
 
 (define-method (ics-property:date->ics-property
                 (property <ics-property:date>))
@@ -91,8 +91,6 @@ is, #f otherwise."
         (value    (ics-property-value property)))
     (make <ics-property>
       #:name        (ics-property-name property)
-      #:type        #f
-      #:format-type (ics-property-format-type property)
       #:value       (if (list? value)
                         (map tm->date value)
                         (tm->date value))

@@ -52,17 +52,6 @@
    #:init-value   #f
    #:init-keyword #:type)
 
-  ;; string
-  ;;
-  ;; iCalendar type format as described in RFC5545, 3.2.8.
-  ;;
-  ;; List of registered format types can be found in
-  ;; <http://www.iana.org/assignments/media-types/>
-  (format-type
-   #:accessor     ics-property-format-type
-   #:init-value   #f
-   #:init-keyword #:format-type)
-
   (value      #:accessor     ics-property-value
               #:init-value   #f
               #:init-keyword #:value)
@@ -113,8 +102,6 @@ otherwise."
 properties are identical, #f otherwise."
   (and (string=? (ics-property-name property1)
                  (ics-property-name property2))
-       (equal?   (ics-property-format-type property1)
-                 (ics-property-format-type property2))
        (equal?   (%ics-property-type property1)
                  (%ics-property-type property2))
        (equal?   (ics-property-value property1)

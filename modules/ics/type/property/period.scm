@@ -63,6 +63,7 @@
                 (property <ics-property>))
   (make <ics-property:period>
     #:name  (ics-property-name property)
-    #:value (string-split (ics-property-value property) #\:)))
+    #:value (string-split (ics-property-value property) #\:)
+    #:parameters (ics-property-parameters property)))
 
 ;;; period.scm ends here.

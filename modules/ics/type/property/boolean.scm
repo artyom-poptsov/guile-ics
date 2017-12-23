@@ -77,7 +77,8 @@ is, #f otherwise."
                ((string-ci=? value "TRUE")  #t)
                ((string-ci=? value "FALSE") #f)
                (else (error "Unknown property value (expected BOOLEAN)"
-                            value))))))
+                            value)))
+      #:parameters (ics-property-parameters property))))
 
 (define-method (ics-property:boolean->ics-property
                 (property <ics-property:boolean>))
@@ -89,6 +90,6 @@ is, #f otherwise."
     #:value (if (ics-property-value property)
                 "TRUE"
                 "FALSE")
-    #:parameters `(("VALUE" . "BOOLEAN"))))
+    #:parameters (ics-property-parameters property)))
 
 ;;; boolean.scm ends here.

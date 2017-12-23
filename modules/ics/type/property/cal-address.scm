@@ -71,14 +71,13 @@ is, #f otherwise."
                 (property <ics-property>))
   (make <ics-property:cal-address>
     #:name  (ics-property-name property)
-    #:value (ics-property-value property)))
+    #:value (ics-property-value property)
+    #:parameters (ics-property-parameters property)))
 
 (define-method (ics-property:cal-address->ics-property
                 (property  <ics-property:cal-address>))
   (make <ics-property>
     #:name        (ics-property-name property)
-    #:type        #f
-    #:format-type (ics-property-format-type property)
     #:value       (ics-property-value property)
     #:parameters  (ics-property-parameters property)))
 

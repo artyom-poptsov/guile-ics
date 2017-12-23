@@ -77,16 +77,17 @@ it is, #f otherwise."
       #:name  (ics-property-name property)
       #:value (if (list? value)
                   (map string->number value)
-                  (string->number value)))))
+                  (string->number value))
+      #:parameters (ics-property-parameters property))))
 
 (define-method (ics-property:float->ics-property
                 (property <ics-property:float>))
   (let ((value (ics-property-value property)))
     (make <ics-property>
       #:name       (ics-property-name property)
-      #:parameters (ics-property-parameters property)
       #:value      (if (list? value)
                        (map number->string value)
-                       (number->string value)))))
+                       (number->string value))
+      #:parameters (ics-property-parameters property))))
 
 ;;; float.scm ends here.

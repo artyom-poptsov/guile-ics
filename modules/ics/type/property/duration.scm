@@ -69,7 +69,8 @@ it is, #f otherwise."
 (define-method (ics-property->ics-property:duration
                 (property <ics-property>))
   (make <ics-property:duration>
-    #:name  (ics-property-name property)
-    #:value (ics-property-value property)))
+    #:name       (ics-property-name property)
+    #:value      (ics-property-value property)
+    #:parameters (ics-property-parameters property)))
 
 ;;; duration.scm ends here.

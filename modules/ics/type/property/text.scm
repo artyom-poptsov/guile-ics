@@ -60,7 +60,8 @@
                 (property <ics-property>))
   (make <ics-property:text>
     #:name  (ics-property-name property)
-    #:value (ics-property-value property)))
+    #:value (ics-property-value property)
+    #:parameters (ics-property-parameters property)))
 
 
 ;;; text.scm ends here.

@@ -38,8 +38,8 @@
 (test-assert "binary: make"
   (let ((p (make <ics-property:binary>
              #:name "ATTACH"
-             #:format-type "image/vnd.microsoft.icon"
-             #:encoding    'BASE64
+             #:parameters  '((FMTTTYPE . "image/vnd.microsoft.icon")
+                             (ENCODING . "BASE64"))
              #:value       "AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAgIAAAICAgADAwMAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAAAAABNEMQAAAAAAAkQgAAAAAAJEREQgAAACECQ0QgEgAAQxQzM0E0AABERCRCREQAADRDJEJEQwAAAhA0QwEQAAAAAEREAAAAAAAAREQAAAAAAAAkQgAAAAAAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")))
     p))
 
@@ -50,8 +50,8 @@
               #:parameters '((ENCODING . "BASE64")
                              (FMTTYPE  . "image/vnd.microsoft.icon"))))
          (b (ics-property->ics-property:binary p)))
-    (and (equal? (ics-property:binary-encoding b) "BASE64")
-         (equal? (ics-property-format-type b) "image/vnd.microsoft.icon")
+    (and (equal? (ics-property-parameter-ref b 'ENCODING) "BASE64")
+         (equal? (ics-property-parameter-ref b 'FMTTYPE) "image/vnd.microsoft.icon")
          (string=? (ics-property-value b) "R05VIEd1aWxlCg=="))))
 
 (test-assert "binary: ics-property:binary?"
