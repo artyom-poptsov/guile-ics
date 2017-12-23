@@ -1,4 +1,4 @@
-;; Copyright (C) 2016 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2016, 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -14,35 +14,40 @@
 ;; along with the program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define-module (ics parser)
-  #:use-module (srfi srfi-1)
-  #:use-module (srfi srfi-9 gnu)
+  #:use-module (oop goops)
   #:use-module (srfi srfi-26)
-  #:use-module (ice-9 rdelim)
   #:export (<ics-parser> make-parser make-string-parser
-                         parser? parser-port
+                         ics-parser? parser-port
                          parser-read-char parser-unread-char))
 
 
 ;;;
 
-(define-immutable-record-type <ics-parser>
-  (make-parser port)
-  parser?
-  (port parser-port))
+(define-class <ics-parser> ()
+  (port #:accessor     parser-port
+        #:init-keyword #:port))
+
+(define-method (ics-parser? x)
+  (is-a? x <ics-parser>))
 
 
 ;;;
+
+(define (make-parser port)
+  (make <ics-parser> #:port port))
 
 (define (make-string-parser str)
-  (call-with-input-string str (cut make-parser <>)))
+  (call-with-input-string str
+    (lambda (port)
+      (make <ics-parser> #:port port))))
 
 
 ;;;
 
-(define (parser-read-char parser)
+(define-method (parser-read-char parser)
   (read-char (parser-port parser)))
 
-(define (parser-unread-char parser ch)
+(define-method (parser-unread-char parser ch)
   (unread-char ch (parser-port parser)))
 
 
