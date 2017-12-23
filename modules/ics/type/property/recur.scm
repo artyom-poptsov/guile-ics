@@ -74,7 +74,7 @@ it is, #f otherwise."
     #:parameters (ics-property-parameters property)))
 
 (define-method (ics-typed-property->ics-property
-                (property <ics-property:period>))
+                (property <ics-property:recur>))
   (make <ics-property>
     #:name  (ics-property-name property)
     #:value (ics-property-value property)
