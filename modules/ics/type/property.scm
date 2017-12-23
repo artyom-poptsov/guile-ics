@@ -155,6 +155,7 @@
     (CAL-ADDRESS . ,ics-property:cal-address->ics-property)
     (DATE        . ,ics-property:date->ics-property)
     (DATE-TIME   . ,ics-property:date-time->ics-property)
+    (DURATION    . ,ics-property:duration->ics-property)
     (FLOAT       . ,ics-property:float->ics-property)))
 
 (define-method (ics-property->typed-property (property <ics-property>))

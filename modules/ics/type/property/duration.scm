@@ -26,7 +26,8 @@
   #:use-module (ics type property property)
   #:export     (<ics-property:duration>
                 ics-property:duration?
-                ics-property->ics-property:duration))
+                ics-property->ics-property:duration
+                ics-property:duration->ics-property))
 
 
 ;;; Class definition.
@@ -69,6 +70,13 @@ it is, #f otherwise."
 (define-method (ics-property->ics-property:duration
                 (property <ics-property>))
   (make <ics-property:duration>
+    #:name       (ics-property-name property)
+    #:value      (ics-property-value property)
+    #:parameters (ics-property-parameters property)))
+
+(define-method (ics-property:duration->ics-property
+                (property <ics-property:duration>))
+  (make <ics-property>
     #:name       (ics-property-name property)
     #:value      (ics-property-value property)
     #:parameters (ics-property-parameters property)))
