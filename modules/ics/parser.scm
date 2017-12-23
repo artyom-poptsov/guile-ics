@@ -30,7 +30,7 @@
 
   ;; <boolean>
   (parse-types? #:accessor     parse-types?
-                #:init-keyword parse-types?
+                #:init-keyword #:parse-types?
                 #:init-value   #f))
 
 (define-method (ics-parser? x)
