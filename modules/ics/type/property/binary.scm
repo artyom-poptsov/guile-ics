@@ -38,6 +38,9 @@
   (next-method)
   (slot-set! property 'type 'BINARY))
 
+(define-method (ics-property:binary-encoding (property <ics-property:binary>))
+  (ics-property-parameter-ref property 'ENCODING))
+
 
 ;;; Printers.
 
