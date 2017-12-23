@@ -129,7 +129,7 @@
     (RECUR       . ,ics-property->ics-property:recur)
     (TEXT        . ,ics-property->ics-property:text)
     (URI         . ,ics-property->ics-property:uri)
-    (utc-offset  . ,ics-property->ics-property:utc-offset)))
+    (UTC-OFFSET  . ,ics-property->ics-property:utc-offset)))
 
 (define-method (ics-property->typed-property (property <ics-property>))
   (let ((type (%ics-property-type property)))
