@@ -66,14 +66,6 @@
 is, #f otherwise."
   (is-a? x <ics-property:binary>))
 
-;; (define-method (equal? (property1 <ics-property:binary>)
-;;                        (property2 <ics-property:binary>))
-;;   "Compare PROPERTY1 with PROPERTY2.  Return #t if the given
-;; properties are identical, #f otherwise."
-;;   (and (%ics-property=? property1 property2)
-;;        (equal? (ics-property:binary-encoding property1)
-;;                (ics-property:binary-encoding property2))))
-
 
 ;;; Converters
 
