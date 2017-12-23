@@ -43,7 +43,7 @@
 (define-method (display (property <ics-property:recur>) (port <port>))
   (format port "#<ics-property:recur ~a: ~a ~a>"
           (ics-property-name property)
-          (ics-property value property)
+          (ics-property-value property)
           (object-address->string property)))
 
 (define-method (write (property <ics-property:recur>) (port <port>))
