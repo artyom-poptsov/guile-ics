@@ -39,6 +39,7 @@
             ics-property-value
             ics-property-parameters
             ics-property-parameter-ref
+            ics-property-parameter-set!
             ics-typed-property->ics-property))
 
 
@@ -126,6 +127,12 @@ properties are identical, #f otherwise."
   "Get a iCalendar property parameter by a NAME, return a property
 parameter value, or return #f if no parameter found."
   (assoc-ref (ics-property-parameters ics-property) name))
+
+(define-method (ics-property-parameter-set! (property <ics-property>)
+                                            (name <symbol>)
+                                            value)
+  "Set an iCalendar PROPERTY parameter NAME to a VALUE."
+  (assoc-set! (ics-property-parameters property) name value))
 
 ;; RFC5545, 3.8.8.2: Non-Standard Properties.
 (define (non-standard-property-name? name)

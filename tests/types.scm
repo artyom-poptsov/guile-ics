@@ -33,6 +33,35 @@
 (test-begin "types")
 
 
+;;; Generic property
+
+(test-assert "property: make"
+  (let ((p (make <ics-property>
+             #:name        "ATTACH"
+              #:value      "R05VIEd1aWxlCg=="
+              #:parameters '((ENCODING . "BASE64")
+                             (FMTTYPE  . "image/vnd.microsoft.icon")))))
+    p))
+
+(test-assert "property: ics-property-parameter-ref"
+  (let ((p (make <ics-property>
+             #:name       "ATTACH"
+             #:value      "R05VIEd1aWxlCg=="
+             #:parameters '((ENCODING . "BASE64")
+                            (FMTTYPE  . "image/vnd.microsoft.icon")))))
+    (and (equal? (ics-property-parameter-ref p 'ENCODING) "BASE64")
+         (equal? (ics-property-parameter-ref p 'FMTTYPE)  "image/vnd.microsoft.icon"))))
+
+(test-assert "property: ics-property-parameter-set!"
+  (let ((p (make <ics-property>
+             #:name "ATTACH"
+              #:value       "R05VIEd1aWxlCg=="
+              #:parameters '((ENCODING . "BASE64")
+                             (FMTTYPE  . "image/vnd.microsoft.icon")))))
+    (ics-property-parameter-set! p 'FMTTYPE "audio/basic")
+    (equal? (ics-property-parameter-ref p 'FMTTYPE)  "audio/basic")))
+
+
 ;;; BINARY
 
 (test-assert "binary: make"
