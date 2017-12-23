@@ -141,12 +141,12 @@
     (INTEGER     . ,ics-property->ics-property:integer)
     (PERIOD      . ,ics-property->ics-property:period)
     (RECUR       . ,ics-property->ics-property:recur)
-    (TEXT        . ,ics-property->ics-property:text)))
+    (TEXT        . ,ics-property->ics-property:text)
+    (URI         . ,ics-property->ics-property:uri)))
 
     ;; TODO:
 
     ;; (UTC-OFFSET  . ,ics-property->ics-property:utc-offset)
-    ;; (URI         . ,ics-property->ics-property:uri)))
 
 (define-method (ics-property->typed-property (property <ics-property>))
   (let ((type (%ics-property-type property)))
