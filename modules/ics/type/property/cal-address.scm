@@ -73,7 +73,7 @@ is, #f otherwise."
     #:value (ics-property-value property)))
 
 (define-method (ics-data-cal-address->ics-property
-                (ics-property  <ics-property:cal-address>))
+                (property  <ics-property:cal-address>))
   (make <ics-property>
     #:name        (ics-property-name property)
     #:type        #f
