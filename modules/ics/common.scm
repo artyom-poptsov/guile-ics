@@ -91,4 +91,25 @@ it as a debug message.."
 (define (unescape-chars str char escape-char)
   (substitute str (string escape-char char) (string char)))
 
+
+;;;
+
+(define-macro (case* pred key . clauses)
+  `(cond
+    ,@(map
+       (lambda (clause)
+         (let ((datum (car clause))
+               (exp   (cadr clause)))
+           (cond
+            ((and (not (list? datum)) (not (eq? datum 'else)))
+             (error "Syntax error: expected a list" datum))
+            ((eq? datum 'else)
+             `(else ,exp))
+            ((= (length datum) 1)
+             `((,pred ,key ,(car datum)) ,exp))
+            (else
+             `((or ,@(map (lambda (o) `(,pred ,key ,o))
+                          datum)) ,exp)))))
+       clauses)))
+
 ;;; common.scm ends here

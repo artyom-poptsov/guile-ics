@@ -29,6 +29,7 @@
 (define-module (ics type property)
   #:use-module (oop goops)
   #:use-module (srfi srfi-1)
+  #:use-module (ics common)
   #:use-module (ics type property property)
   #:use-module (ics type property binary)
   #:use-module (ics type property boolean)
@@ -72,24 +73,6 @@
                    (ics type property utc-offset))
 
 ;;; Converters
-
-(define-macro (case* pred key . clauses)
-  `(cond
-    ,@(map
-       (lambda (clause)
-         (let ((datum (car clause))
-               (exp   (cadr clause)))
-           (cond
-            ((and (not (list? datum)) (not (eq? datum 'else)))
-             (error "Syntax error: expected a list" datum))
-            ((eq? datum 'else)
-             `(else ,exp))
-            ((= (length datum) 1)
-             `((,pred ,key ,(car datum)) ,exp))
-            (else
-             `((or ,@(map (lambda (o) `(,pred ,key ,o))
-                          datum)) ,exp)))))
-       clauses)))
 
 (define-method (ics-property-type (property <ics-property>))
   (or (%ics-property-type property)
