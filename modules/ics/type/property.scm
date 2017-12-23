@@ -172,4 +172,22 @@
              type))
     (converter property)))
 
+
+;;;
+
+(define-method (ics-property->string (ics-property <ics-property>))
+  "Convert an ICAL-PROPERTY to a iCalendar string, return the string."
+  (define (parameters->string parameters)
+    (string-join (map (lambda (parameter)
+                        (format #f "~a=~a" (car parameter)
+                                (cdr parameter)))
+                      parameters)
+                 ";"))
+  (let ((parameters (ics-property-parameters ics-property))
+        (name       (ics-property-name ics-property))
+        (value      (ics-property-value ics-property)))
+    (if parameters
+        (format #f "~a;~a:~a" name (parameters->string parameters) value)
+        (string-append name ":" value))))
+
 ;;; property.scm ends here.

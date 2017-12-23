@@ -38,8 +38,7 @@
             ics-property-format-type
             ics-property-value
             ics-property-parameters
-            ics-property-parameter-ref
-            ics-property->string))
+            ics-property-parameter-ref))
 
 
 ;;; Class definition.
@@ -139,21 +138,6 @@ properties are identical, #f otherwise."
   "Get a iCalendar property parameter by a NAME, return a property
 parameter value, or return #f if no parameter found."
   (assoc-ref (ics-property-parameters ics-property) name))
-
-(define-method (ics-property->string (ics-property <ics-property>))
-  "Convert an ICAL-PROPERTY to a iCalendar string, return the string."
-  (define (parameters->string parameters)
-    (string-join (map (lambda (parameter)
-                        (format #f "~a=~a" (car parameter)
-                                (cdr parameter)))
-                      parameters)
-                 ";"))
-  (let ((parameters (ics-property-parameters ics-property))
-        (name       (ics-property-name ics-property))
-        (value      (ics-property-value ics-property)))
-    (if parameters
-        (format #f "~a;~a:~a" name (parameters->string parameters) value)
-        (string-append name ":" value))))
 
 ;; RFC5545, 3.8.8.2: Non-Standard Properties.
 (define (non-standard-property-name? name)
