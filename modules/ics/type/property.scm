@@ -99,7 +99,8 @@
                'RECUR)
               (("CLASS" "COMMENT" "DESCRIPTION" "CATEGORIES" "LOCATION"
                 "RESOURCES" "STATUS" "SUMMARY" "TRANSP" "TZID" "TZNAME"
-                "CONTACT" "RELATED-TO" "UID" "ACTION" "REQUEST-STATUS")
+                "CONTACT" "RELATED-TO" "UID" "ACTION" "REQUEST-STATUS"
+                "VERSION")
                'TEXT)
               (("TZOFFSETFROM" "TZOFFSETTO")
                'UTC-OFFSET)
@@ -140,7 +141,7 @@
           (unless converter
             (error 'guile-ics-error
                    "Converter for the property type is not defined yet"
-                   type))
+                   type property))
           (converter property)))))
 
 
