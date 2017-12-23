@@ -42,6 +42,7 @@
   #:use-module (ics type property recur)
   #:use-module (ics type property text)
   #:use-module (ics type property time)
+  #:use-module (ics type property uri)
   #:export (ics-property->typed-property))
 
 ;; This macro is taken from Guile-JSON.
@@ -65,7 +66,8 @@
                    (ics type property period)
                    (ics type property recur)
                    (ics type property text)
-                   (ics type property time))
+                   (ics type property time)
+                   (ics type property uri))
 
 
 ;;; Converters
