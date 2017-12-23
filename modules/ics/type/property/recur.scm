@@ -73,4 +73,11 @@ it is, #f otherwise."
     #:value (ics-property-value property)
     #:parameters (ics-property-parameters property)))
 
+(define-method (ics-typed-property->ics-property
+                (property <ics-property:period>))
+  (make <ics-property>
+    #:name  (ics-property-name property)
+    #:value (ics-property-value property)
+    #:parameters (ics-property-parameters property)))
+
 ;;; recur.scm ends here.
