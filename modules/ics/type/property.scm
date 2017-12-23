@@ -157,7 +157,8 @@
     (DATE-TIME   . ,ics-property:date-time->ics-property)
     (DURATION    . ,ics-property:duration->ics-property)
     (FLOAT       . ,ics-property:float->ics-property)
-    (INTEGER     . ,ics-property:integer->ics-property)))
+    (INTEGER     . ,ics-property:integer->ics-property)
+    (PERIOD      . ,ics-property:period->ics-property)))
 
 (define-method (ics-property->typed-property (property <ics-property>))
   (let ((type (%ics-property-type property)))
