@@ -99,7 +99,8 @@ is intended for human to comprehent, not to a machine to parse."
     "Print iCalendar properties from a PROPS list using a
 CURRENT-INDENT for indentation."
     (for-each (lambda (e)
-                (let ((s (make-string current-indent #\space)))
+                (let ((s (make-string current-indent #\space))
+                      (e (ics-typed-property->ics-property e)))
                   (format port "~a~a" s (ics-property-name e))
                   (for-each (lambda (property)
                               (format port ";~a=~a"
