@@ -230,6 +230,25 @@
               "Project XYZ Review Meeting will include the following agenda items: \
 (a) Market Overview, (b) Finances, (c) Project Management")))
 
+(test-assert "ics-string->scm, typed"
+  (let* ((source-str (string-append
+                      "BEGIN:VCALENDAR\r\n"
+                      "DESCRIPTION;ALTREP=\"CID:part3.msg.970415T083000@example.com\":\r\n"
+                      " Project XYZ Review Meeting will include the following agenda\r\n"
+                      "  items: (a) Market Overview\\, (b) Finances\\, (c) Project Man\r\n"
+                      " agement\r\n"
+                      "END:VCALENDAR\r\n"))
+         (object (car (ics-string->scm source-str #:parse-types? #t)))
+         (description (ics-object-property-ref object "DESCRIPTION"))
+         (description-value (ics-property-value description))
+         (description-type  (ics-property-type  description)))
+    (and
+     (equal?   description-type 'TEXT)
+     (string=? description-value
+                   "Project XYZ Review Meeting will include the following agenda items: \
+(a) Market Overview, (b) Finances, (c) Project Management"))))
+
+
 
 ;;;
 
