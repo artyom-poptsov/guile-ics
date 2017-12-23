@@ -31,6 +31,7 @@
   #:export (<ics-stream>
             ics-stream-source
             ics-stream-parser
+            ics-stream-parse-types?
             ics-stream->scm-stream
             ics-stream->scm))
 
@@ -41,7 +42,12 @@
   ;; <port> || <string>
   (source #:accessor   ics-stream-source
           #:init-value (current-input-port)
-          #:init-keyword #:source))
+          #:init-keyword #:source)
+
+  ;; <boolean>
+  (parse-types? #:accessor ics-stream-parse-types?
+                #:init-keyword #:parse-types?
+                #:init-value   #f))
 
 
 ;;;
@@ -66,8 +72,14 @@
 (define-method (ics-stream-parser (ics-stream <ics-stream>))
   (let ((source (ics-stream-source ics-stream)))
     (if (port? source)
-        (make-parser source)
-        (make-string-parser source))))
+        (make <ics-parser>
+          #:port source
+          #:parse-types? (ics-stream-parse-types? ics-stream))
+        (call-with-input-string source
+          (lambda (port)
+            (make <ics-parser>
+              #:port port
+              #:parse-types? (ics-stream-parse-types? ics-stream)))))))
 
 
 ;;;

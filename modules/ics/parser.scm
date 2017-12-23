@@ -18,6 +18,7 @@
   #:use-module (srfi srfi-26)
   #:export (<ics-parser> make-parser make-string-parser
                          ics-parser? parser-port
+                         parse-types?
                          parser-read-char parser-unread-char))
 
 
@@ -25,7 +26,12 @@
 
 (define-class <ics-parser> ()
   (port #:accessor     parser-port
-        #:init-keyword #:port))
+        #:init-keyword #:port)
+
+  ;; <boolean>
+  (parse-types? #:accessor     parse-types?
+                #:init-keyword parse-types?
+                #:init-value   #f))
 
 (define-method (ics-parser? x)
   (is-a? x <ics-parser>))

@@ -210,14 +210,17 @@ concatenation of the given string STR and char CH."
            (val (fsm-read-property parser)))
       (debug-fsm "fsm-read-ics-object" "read-property: key: ~a; val: ~a~%"
                  key val)
-      (let ((ics-property (make <ics-property>
+      (let* ((ics-property (make <ics-property>
                              #:name  key
                              #:value val
-                             #:parameters (cdr parsed))))
+                             #:parameters (cdr parsed)))
+             (property (if (parse-types? parser)
+                           (ics-property->typed-property ics-property)
+                           ics-property)))
         (fsm-read-ics-object parser
-                              object-name
-                              (cons ics-property icalprops)
-                              component))))
+                             object-name
+                             (cons property icalprops)
+                             component))))
 
   (define (read-object-in-quotes buffer)
     (let ((ch (parser-read-char parser)))
