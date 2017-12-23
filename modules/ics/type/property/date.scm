@@ -23,10 +23,12 @@
 
 (define-module (ics type property date)
   #:use-module (oop goops)
+  #:use-module (srfi srfi-26)           ; cut
   #:use-module (ics type property property)
   #:export     (<ics-property:date>
                 ics-property:date?
-                ics-property->ics-property:date))
+                ics-property->ics-property:date
+                ics-property:date->ics-property))
 
 
 ;;; Class definition.
@@ -70,9 +72,11 @@ is, #f otherwise."
 
 ;;; Converters
 
+(define %date-fmt "%Y%m%d")
+
 (define-method (ics-property->ics-property:date
                 (property <ics-property>))
-  (let ((date->tm (lambda (date) (car (strptime "%Y%m%d" date))))
+  (let ((date->tm (lambda (date) (car (strptime %date-fmt date))))
         (value (ics-property-value property)))
     (make <ics-property:date>
       #:name       (ics-property-name property)
@@ -80,5 +84,18 @@ is, #f otherwise."
       #:value      (if (list? value)
                        (map date->tm value)
                        (date->tm value)))))
+
+(define-method (ics-property:date->ics-property
+                (property <ics-property:date>))
+  (let ((tm->date (cut strftime %date-fmt <>))
+        (value    (ics-property-value property)))
+    (make <ics-property>
+      #:name        (ics-property-name property)
+      #:type        #f
+      #:format-type (ics-property-format-type property)
+      #:value       (if (list? value)
+                        (map tm->date value)
+                        (tm->date value))
+      #:parameters  (ics-property-parameters property))))
 
 ;;; date.scm ends here.

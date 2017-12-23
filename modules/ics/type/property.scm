@@ -153,6 +153,7 @@
   `((BINARY      . ,ics-property:binary->ics-property)
     (BOOLEAN     . ,ics-property:boolean->ics-property)
     (CAL-ADDRESS . ,ics-property:cal-address->ics-property)
+    (DATE        . ,ics-property:date->ics-property)
     (FLOAT       . ,ics-property:float->ics-property)))
 
 (define-method (ics-property->typed-property (property <ics-property>))
