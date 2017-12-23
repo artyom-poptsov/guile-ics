@@ -59,7 +59,7 @@
 ;;; Predicates.
 
 (define-method (ics-property:integer? x)
-  "Check if X is an instance of <ics-property:float>, return #t if
+  "Check if X is an instance of <ics-property:integer>, return #t if
 it is, #f otherwise."
   (is-a? x <ics-property:integer>))
 
