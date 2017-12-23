@@ -51,7 +51,7 @@
           (if (port? (ics-stream-source ics-stream))
               'port
               'string)
-          (number->string (object-address ics-content) 16)))
+          (number->string (object-address ics-stream) 16)))
 
 (define-method (write (ics-stream <ics-stream>) (port <port>))
   (display ics-stream port))
