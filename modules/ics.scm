@@ -52,18 +52,26 @@
 
 ;;; iCalendar to Scheme converters.
 
-(define* (ics->scm #:optional (port (current-input-port)))
+(define* (ics->scm #:optional (port (current-input-port))
+                   #:key (parse-types? #f))
   "Parse input data from a PORT, return a list of iCalendar objects.
 If no port is specified, read the data from the current input port."
-  (ics-stream->scm (make <ics-stream> #:source port)))
+  (ics-stream->scm (make <ics-stream>
+                     #:source port
+                     #:parse-types? parse-types?)))
 
-(define (ics-string->scm str)
+(define* (ics-string->scm str #:key (parse-types? #f))
   "Parse iCalendar string STR, return a new iCalendar object."
-  (ics-stream->scm (make <ics-stream> #:source str)))
+  (ics-stream->scm (make <ics-stream>
+                     #:source str
+                     #:parse-types? parse-types?)))
 
-(define* (ics->stream #:optional (port (current-input-port)))
+(define* (ics->stream #:optional (port (current-input-port))
+                      #:key (parse-types? #f))
   "Convert an ICS stream to an SRFI-41 stream.  Return the stream."
-  (ics-stream->scm-stream (make <ics-stream> #:source port)))
+  (ics-stream->scm-stream (make <ics-stream>
+                            #:source port
+                            #:parse-types? parse-types?)))
 
 
 ;;; Scheme to iCalendar converters.
