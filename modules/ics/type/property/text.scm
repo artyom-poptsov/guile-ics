@@ -25,6 +25,7 @@
   #:use-module (oop goops)
   #:use-module (ics type property property)
   #:export     (<ics-property:text>
+                ics-property:text?
                 ics-property->ics-property:text))
 
 
@@ -52,6 +53,14 @@
 
 (define-method (write (property <ics-property:text>))
   (display property (current-output-port)))
+
+
+;;; Predicates.
+
+(define-method (ics-property:text? x)
+  "Check if X is an instance of <ics-property:text>, return #t if
+it is, #f otherwise."
+  (is-a? x <ics-property:text>))
 
 
 ;;; Converters
