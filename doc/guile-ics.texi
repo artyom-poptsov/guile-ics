@@ -169,12 +169,12 @@ using @code{ics->scm} procedure:
 The procedures below can be used to convert iCalendar streams to Scheme
 lists of iCalendar objects and vice versa.
 
-@section Guile-ICS classes
+@section Guile-ICS Main Classes
 
 @subsection <ical-content>
 
 A common class that represents generic iCalendar contents.  The class is
-defined in @code{(ics ical-content)} module.
+defined in @code{(ics type content)} module.
 
 @subsubsection Fields
 
@@ -200,7 +200,7 @@ component is an iCalendar object (that is, instances of
 @code{<ical-object>} class) on its own; that means that this data
 structure can be handled recusively.
 
-The class is defined in @code{(ics ical-object)} module.
+The class is defined in @code{(ics type object)} module.
 
 @subsubsection Fields
 
@@ -262,12 +262,15 @@ unify the way of handling iCalendar information, iCalendar property
 class is used for both iCalendar objects (as defined in RFC5545) and for
 components of iCalendar objects.
 
-The class is defined in @code{(ics ical-property)} module.
+The class is defined in @code{(ics type property property)} module.
 
 @subsubsection Fields
 
 @multitable @columnfractions .25 .25 .5
 @headitem Init Keyword @tab Type @tab Description
+@item #:type
+@tab <symbol> || #f
+@tab iCalendar type name as described in RFC5545, 3.2.20.
 @item #:value
 @tab <string>
 @tab iCalendar property value.
@@ -279,30 +282,64 @@ stored as an association list.
 
 @subsubsection Public Methods
 
-@deffn {method} ical-property-name ical-property
+@deffn {method} ics-property? x
+Check if @var{x} is an instance of @code{<ics-property>}, return
+@code{#t} if it is, @code{#f} otherwise.
+@end deffn
+
+@deffn {method} %ics-property-type ics-property
+Get the type of an @var{ics-property}.
+@end deffn
+
+@deffn {method} ics-property-name ical-property
 Return an @var{ical-property} name.
 @end deffn
 
-@deffn {method} ical-property-value ical-property
+@deffn {method} ics-property-value ical-property
 Return an @var{ical-property} value.
 @end deffn
 
-@deffn {method} ical-property-parameters ical-property
+@deffn {method} ics-property-parameters ical-property
 Return an @var{ical-property} parameters association list.
 @end deffn
 
-@deffn {method} ical-property-parameter-ref ical-property name
+@deffn {method} ics-property-parameter-ref ical-property name
 Return an @var{ical-property} value for a parameter with a given
 @var{name}.  Return @code{#f} if no parameter found.
 @end deffn
 
-@deffn {method} ical-property->string ical-property
-Convert an @var{ical-property} to a iCalendar string, return the string.
+@deffn {method} ics-property-parameter-set! ics-property name value
+Set an iCalendar @var{ics-property} parameter @var{name} to a
+@var{value}.
+@end deffn
+
+@deffn {method} ics-typed-property->ics-property ics-property
+A generic method.  Convert an @var{ics-property} to an untyped version.
+For @code{<ics-property>} this methods bascally does nothing and returns
+@var{ics-property} as is.
+@end deffn
+
+@subsubsection Miscellaneous Methods
+
+These procedures are defined in @code{(ics type property)}.
+
+@deffn {method} ics-property-type ics-property
+Determine the type of an @var{ics-property}, return the type as a
+symbol.
+@end deffn
+
+@deffn {method} ics-property->string ics-property
+Convert an @var{ics-property} to an iCalendar string, return the string.
+@end deffn
+
+@deffn {method} ics-property->typed-property ics-property
+Convert a generic @var{ics-property} to a typed version of itself;
+return a new typed property.
 @end deffn
 
 @subsection <ical-stream>
 
-The class is defined in @code{(ics ical-stream)} module.
+The class is defined in @code{(ics type stream)} module.
 
 @subsubsection Fields
 
@@ -333,6 +370,225 @@ Convert an @var{ical-stream} to a Scheme list of iCalendar objects
 Convert an @var{ical-stream} to a SRFI-41 stream.  Return the stream.
 @end deffn
 
+@section Guile-ICS Property Types
+
+@subsection <ics-property:binary>
+
+The class is defined in @code{(ics type property binary)} module.
+
+@subsubsection Public Methods
+
+@deffn {method} ics-property:binary? x
+Check if @var{x} is an instance of @code{<ics-property:binary>}, return
+@code{#t} if it is, @code{#f} otherwise.
+@end deffn
+
+@deffn {method} ics-property->ics-property:binary property
+Convert a @var{property} to a its typed version.
+@end deffn
+
+@deffn {method} ics-property:binary-encoding property
+Get binary encoding for a @var{property}.  The encoding value is either
+"8BIT" (RFC2045) or "BASE64" (RFC4648).
+@end deffn
+
+@subsection <ics-property:boolean>
+
+The class is defined in @code{(ics type property boolean)} module.
+
+@subsubsection Public Methods
+
+@deffn {method} ics-property:boolean? x
+Check if @var{x} is an instance of @code{<ics-property:boolean>}, return
+@code{#t} if it is, @code{#f} otherwise.
+@end deffn
+
+@deffn {method} ics-property->ics-property:boolean property
+Convert a @var{property} to a its typed version.
+@end deffn
+
+@subsection <ics-property:cal-address>
+
+The class is defined in @code{(ics type property cal-address)} module.
+
+@subsubsection Public Methods
+
+@deffn {method} ics-property:boolean? x
+Check if @var{x} is an instance of @code{<ics-property:cal-address>}, return
+@code{#t} if it is, @code{#f} otherwise.
+@end deffn
+
+@deffn {method} ics-property->ics-property:cal-address property
+Convert a @var{property} to a its typed version.
+@end deffn
+
+@subsection <ics-property:date>
+
+The class is defined in @code{(ics type property date)} module.
+
+@subsubsection Public Methods
+
+@deffn {method} ics-property:date? x
+Check if @var{x} is an instance of @code{<ics-property:date>}, return
+@code{#t} if it is, @code{#f} otherwise.
+@end deffn
+
+@deffn {method} ics-property->ics-property:date property
+Convert a @var{property} to a its typed version.
+@end deffn
+
+@subsection <ics-property:date-time>
+
+The class is defined in @code{(ics type property date-time)} module.
+
+@subsubsection Public Methods
+
+@deffn {method} ics-property:date-time? x
+Check if @var{x} is an instance of @code{<ics-property:date-time>}, return
+@code{#t} if it is, @code{#f} otherwise.
+@end deffn
+
+@deffn {method} ics-property->ics-property:date-time property
+Convert a @var{property} to a its typed version.
+@end deffn
+
+@subsection <ics-property:duration>
+
+The class is defined in @code{(ics type property duration)} module.
+
+@subsubsection Public Methods
+
+@deffn {method} ics-property:duration? x
+Check if @var{x} is an instance of @code{<ics-property:duration>}, return
+@code{#t} if it is, @code{#f} otherwise.
+@end deffn
+
+@deffn {method} ics-property->ics-property:duration property
+Convert a @var{property} to a its typed version.
+@end deffn
+
+@subsection <ics-property:float>
+
+The class is defined in @code{(ics type property float)} module.
+
+@subsubsection Public Methods
+
+@deffn {method} ics-property:float? x
+Check if @var{x} is an instance of @code{<ics-property:float>}, return
+@code{#t} if it is, @code{#f} otherwise.
+@end deffn
+
+@deffn {method} ics-property->ics-property:float property
+Convert a @var{property} to a its typed version.
+@end deffn
+
+@subsection <ics-property:integer>
+
+The class is defined in @code{(ics type property integer)} module.
+
+@subsubsection Public Methods
+
+@deffn {method} ics-property:integer? x
+Check if @var{x} is an instance of @code{<ics-property:integer>}, return
+@code{#t} if it is, @code{#f} otherwise.
+@end deffn
+
+@deffn {method} ics-property->ics-property:integer property
+Convert a @var{property} to a its typed version.
+@end deffn
+
+@subsection <ics-property:period>
+
+The class is defined in @code{(ics type property period)} module.
+
+@subsubsection Public Methods
+
+@deffn {method} ics-property:period? x
+Check if @var{x} is an instance of @code{<ics-property:period>}, return
+@code{#t} if it is, @code{#f} otherwise.
+@end deffn
+
+@deffn {method} ics-property->ics-property:period property
+Convert a @var{property} to a its typed version.
+@end deffn
+
+@subsection <ics-property:recur>
+
+The class is defined in @code{(ics type property recur)} module.
+
+@subsubsection Public Methods
+
+@deffn {method} ics-property:recur? x
+Check if @var{x} is an instance of @code{<ics-property:recur>}, return
+@code{#t} if it is, @code{#f} otherwise.
+@end deffn
+
+@deffn {method} ics-property->ics-property:recur property
+Convert a @var{property} to a its typed version.
+@end deffn
+
+@subsection <ics-property:text>
+
+The class is defined in @code{(ics type property text)} module.
+
+@subsubsection Public Methods
+
+@deffn {method} ics-property:text? x
+Check if @var{x} is an instance of @code{<ics-property:text>}, return
+@code{#t} if it is, @code{#f} otherwise.
+@end deffn
+
+@deffn {method} ics-property->ics-property:text property
+Convert a @var{property} to a its typed version.
+@end deffn
+
+@subsection <ics-property:time>
+
+The class is defined in @code{(ics type property time)} module.
+
+@subsubsection Public Methods
+
+@deffn {method} ics-property:time? x
+Check if @var{x} is an instance of @code{<ics-property:time>}, return
+@code{#t} if it is, @code{#f} otherwise.
+@end deffn
+
+@deffn {method} ics-property->ics-property:time property
+Convert a @var{property} to a its typed version.
+@end deffn
+
+@subsection <ics-property:uri>
+
+The class is defined in @code{(ics type property uri)} module.
+
+@subsubsection Public Methods
+
+@deffn {method} ics-property:uri? x
+Check if @var{x} is an instance of @code{<ics-property:uri>}, return
+@code{#t} if it is, @code{#f} otherwise.
+@end deffn
+
+@deffn {method} ics-property->ics-property:uri property
+Convert a @var{property} to a its typed version.
+@end deffn
+
+@subsection <ics-property:utc-offset>
+
+The class is defined in @code{(ics type property utc-offset)} module.
+
+
+@subsubsection Public Methods
+
+@deffn {method} ics-property:utc-offset? x
+Check if @var{x} is an instance of @code{<ics-property:utc-offset>}, return
+@code{#t} if it is, @code{#f} otherwise.
+@end deffn
+
+@deffn {method} ics-property->ics-property:utc-offset property
+Convert a @var{property} to a its typed version.
+@end deffn
+
+
 @section iCalendar to Scheme converters
 
 @deffn {Scheme Procedure} ics->scm [port=(current-input-port)]
