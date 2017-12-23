@@ -26,8 +26,7 @@
   #:use-module (ics type property property)
   #:export     (<ics-property:boolean>
                 ics-property:boolean?
-                ics-property->ics-property:boolean
-                ics-property:boolean->ics-property))
+                ics-property->ics-property:boolean))
 
 
 ;;; Class definition.
@@ -80,7 +79,7 @@ is, #f otherwise."
                             value)))
       #:parameters (ics-property-parameters property))))
 
-(define-method (ics-property:boolean->ics-property
+(define-method (ics-typed-property->ics-property
                 (property <ics-property:boolean>))
   (make <ics-property>
     #:name  (ics-property-name property)

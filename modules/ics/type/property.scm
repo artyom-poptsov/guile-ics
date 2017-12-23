@@ -42,8 +42,7 @@
   #:use-module (ics type property recur)
   #:use-module (ics type property text)
   #:use-module (ics type property time)
-  #:export (ics-property->typed-property
-            ics-typed-property->ics-property))
+  #:export (ics-property->typed-property))
 
 ;; This macro is taken from Guile-JSON.
 (define-syntax re-export-modules
@@ -149,17 +148,6 @@
     ;; (UTC-OFFSET  . ,ics-property->ics-property:utc-offset)
     ;; (URI         . ,ics-property->ics-property:uri)))
 
-(define %converters-to-untyped
-  `((BINARY      . ,ics-property:binary->ics-property)
-    (BOOLEAN     . ,ics-property:boolean->ics-property)
-    (CAL-ADDRESS . ,ics-property:cal-address->ics-property)
-    (DATE        . ,ics-property:date->ics-property)
-    (DATE-TIME   . ,ics-property:date-time->ics-property)
-    (DURATION    . ,ics-property:duration->ics-property)
-    (FLOAT       . ,ics-property:float->ics-property)
-    (INTEGER     . ,ics-property:integer->ics-property)
-    (PERIOD      . ,ics-property:period->ics-property)))
-
 (define-method (ics-property->typed-property (property <ics-property>))
   (let ((type (%ics-property-type property)))
     (if type
@@ -170,17 +158,6 @@
                    "Converter for the property type is not defined yet"
                    type))
           (converter property)))))
-
-(define-method (ics-typed-property->ics-property (property <ics-property>))
-  (let ((type (%ics-property-type property)))
-    (if type
-        (let ((converter (assoc-ref %converters-to-untyped type)))
-          (unless converter
-            (error 'guile-ics-error
-                   "Converter for the property type is not defined yet"
-                   type))
-          (converter property))
-        property)))
 
 
 ;;;

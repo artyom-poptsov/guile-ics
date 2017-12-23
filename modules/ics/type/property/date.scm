@@ -27,8 +27,7 @@
   #:use-module (ics type property property)
   #:export     (<ics-property:date>
                 ics-property:date?
-                ics-property->ics-property:date
-                ics-property:date->ics-property))
+                ics-property->ics-property:date))
 
 
 ;;; Class definition.
@@ -85,7 +84,7 @@ is, #f otherwise."
                        (date->tm value))
       #:parameters (ics-property-parameters property))))
 
-(define-method (ics-property:date->ics-property
+(define-method (ics-typed-property->ics-property
                 (property <ics-property:date>))
   (let ((tm->date (cut strftime %date-fmt <>))
         (value    (ics-property-value property)))

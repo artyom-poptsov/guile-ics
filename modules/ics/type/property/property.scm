@@ -38,7 +38,8 @@
             ics-property-format-type
             ics-property-value
             ics-property-parameters
-            ics-property-parameter-ref))
+            ics-property-parameter-ref
+            ics-typed-property->ics-property))
 
 
 ;;; Class definition.
@@ -129,5 +130,9 @@ parameter value, or return #f if no parameter found."
 ;; RFC5545, 3.8.8.2: Non-Standard Properties.
 (define (non-standard-property-name? name)
   (regexp-match? (string-match "X-.*" name)))
+
+(define-generic ics-typed-property->ics-property)
+(define-method (ics-typed-property->ics-property (property <ics-property>))
+  property)
 
 ;;; property.scm ends here.

@@ -25,8 +25,7 @@
   #:use-module (oop goops)
   #:use-module (ics type property property)
   #:export     (<ics-property:integer>
-                ics-property->ics-property:integer
-                ics-property:integer->ics-property))
+                ics-property->ics-property:integer))
 
 
 ;;; Class definition.
@@ -65,7 +64,7 @@
     #:value (string->number (ics-property-value property))
     #:parameters (ics-property-parameters property)))
 
-(define-method (ics-property:integer->ics-property
+(define-method (ics-typed-property->ics-property
                 (property <ics-property:integer>))
   (let ((value (ics-property-value property)))
     (make <ics-property>

@@ -27,7 +27,6 @@
   #:export (<ics-property:binary>
             ics-property:binary?
             ics-property->ics-property:binary
-            ics-property:binary->ics-property
             ics-property:binary-encoding))
 
 
@@ -76,7 +75,7 @@ is, #f otherwise."
     #:value       (ics-property-value         property)
     #:parameters  (ics-property-parameters    property)))
 
-(define-method (ics-property:binary->ics-property
+(define-method (ics-typed-property->ics-property
                 (property <ics-property:binary>))
   (make <ics-property>
     #:name        (ics-property-name property)

@@ -25,8 +25,7 @@
   #:use-module (oop goops)
   #:use-module (ics type property property)
   #:export     (<ics-property:period>
-                ics-property->ics-property:period
-                ics-property:period->ics-property))
+                ics-property->ics-property:period))
 
 
 
@@ -68,7 +67,7 @@
     #:value (string-split (ics-property-value property) #\:)
     #:parameters (ics-property-parameters property)))
 
-(define-method (ics-property:period->ics-property
+(define-method (ics-typed-property->ics-property
                 (property <ics-property:period>))
   (make <ics-property>
     #:name  (ics-property-name property)

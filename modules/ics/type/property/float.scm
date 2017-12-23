@@ -26,8 +26,7 @@
   #:use-module (ics type property property)
   #:export     (<ics-property:float>
                 ics-property:float?
-                ics-property->ics-property:float
-                ics-property:float->ics-property))
+                ics-property->ics-property:float))
 
 
 ;;; Class definition.
@@ -51,7 +50,15 @@
             (object-address->string property))))
 
 (define-method (write (property <ics-property:float>) (port <port>))
-  (display property port))
+  (next-method)
+(let ((value (ics-property-value property)))
+    (format port "#<ics-property:float ~a: ~a ~a>"
+            (ics-property-name property)
+            (if (list? value)
+                (string-join (map number->string value) ", ")
+                value)
+            (object-address->string property))))
+  ;; (display property port))
 
 (define-method (display (property <ics-property:float>))
   (display property (current-output-port)))
@@ -80,7 +87,7 @@ it is, #f otherwise."
                   (string->number value))
       #:parameters (ics-property-parameters property))))
 
-(define-method (ics-property:float->ics-property
+(define-method (ics-typed-property->ics-property
                 (property <ics-property:float>))
   (let ((value (ics-property-value property)))
     (make <ics-property>

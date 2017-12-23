@@ -231,12 +231,12 @@
          (f (ics-property->ics-property:float p)))
     (equal? (ics-property-value f) '(3.14 3.15))))
 
-(test-assert "float: ics-property:float->ics-property"
+(test-assert "float: ics-typed-property->ics-property"
   (let* ((p      (make <ics-property>
                    #:name  "X-GNU-FLOATS"
                    #:value '("3.14" "3.15")))
          (f      (ics-property->ics-property:float p))
-         (result (ics-property:float->ics-property f)))
+         (result (ics-typed-property->ics-property f)))
     (equal? p result)))
 
 
