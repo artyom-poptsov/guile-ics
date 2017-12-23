@@ -44,21 +44,24 @@
 
 ;;; Printers.
 
-(define-method (display (property <ics-property:binary>) (port <port>))
+(define (%display property port)
   (format port "#<ics-property:binary ~a ENCODING: ~a FORMAT-TYPE: ~a ~a>"
           (ics-property-name property)
           (ics-property-parameter-ref property 'ENCODING)
           (ics-property-parameter-ref property 'FMTTYPE)
           (object-address->string property)))
 
+(define-method (display (property <ics-property:binary>) (port <port>))
+  (%display property port))
+
 (define-method (write (property <ics-property:binary>) (port <port>))
-  (display property port))
+  (%display property port))
 
 (define-method (display (property <ics-property:binary>))
-  (display property (current-output-port)))
+  (%display property (current-output-port)))
 
 (define-method (write (property <ics-property:binary>))
-  (display property (current-output-port)))
+  (%display property (current-output-port)))
 
 
 ;;; Predicates.

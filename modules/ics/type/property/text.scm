@@ -40,19 +40,22 @@
 
 ;;; Printers.
 
-(define-method (display (property <ics-property:text>) (port <port>))
+(define (%display property port)
   (format port "#<ics-property:text ~a ~a>"
           (ics-property-name property)
           (object-address->string property)))
 
+(define-method (display (property <ics-property:text>) (port <port>))
+  (%display property port))
+
 (define-method (write (property <ics-property:text>) (port <port>))
-  (display property port))
+  (%display property port))
 
 (define-method (display (property <ics-property:text>))
-  (display property (current-output-port)))
+  (%display property (current-output-port)))
 
 (define-method (write (property <ics-property:text>))
-  (display property (current-output-port)))
+  (%display property (current-output-port)))
 
 
 ;;; Predicates.

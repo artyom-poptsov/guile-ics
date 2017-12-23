@@ -40,20 +40,23 @@
 
 ;;; Printers.
 
-(define-method (display (property <ics-property:utc-offset>) (port <port>))
+(define (%display property port)
   (format port "#<ics-property:utc-offset ~a: ~a ~a>"
           (ics-property-name property)
           (ics-property-value property)
           (object-address->string property)))
 
+(define-method (display (property <ics-property:utc-offset>) (port <port>))
+  (%display property port))
+
 (define-method (write (property <ics-property:utc-offset>) (port <port>))
-  (display property port))
+  (%display property port))
 
 (define-method (display (property <ics-property:utc-offset>))
-  (display property (current-output-port)))
+  (%display property (current-output-port)))
 
 (define-method (write (property <ics-property:utc-offset>))
-  (display property (current-output-port)))
+  (%display property (current-output-port)))
 
 
 ;;; Predicates.

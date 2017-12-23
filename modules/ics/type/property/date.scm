@@ -41,7 +41,7 @@
 
 ;;; Printers
 
-(define-method (display (property <ics-property:date>) (port <port>))
+(define (%display property port)
   (format port "#<ics-property:date ~a: ~a ~a>"
           (ics-property-name property)
           (let ((value       (ics-property-value property))
@@ -51,14 +51,17 @@
                 (tm->iso8601 value)))
           (object-address->string property)))
 
+(define-method (display (property <ics-property:date>) (port <port>))
+  (%display property port))
+
 (define-method (write (property <ics-property:date>) (port <port>))
-  (display property port))
+  (%display property port))
 
 (define-method (display (property <ics-property:date>))
-  (display property (current-output-port)))
+  (%display property (current-output-port)))
 
 (define-method (write (property <ics-property:date>))
-  (display property (current-output-port)))
+  (%display property (current-output-port)))
 
 
 ;;; Predicates.
