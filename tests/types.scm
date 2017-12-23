@@ -50,7 +50,7 @@
               #:parameters '((ENCODING . "BASE64")
                              (FMTTYPE  . "image/vnd.microsoft.icon"))))
          (b (ics-property->ics-property:binary p)))
-    (and (equal? (ics-property:binary-encoding b) 'BASE64)
+    (and (equal? (ics-property:binary-encoding b) "BASE64")
          (equal? (ics-property-format-type b) "image/vnd.microsoft.icon")
          (string=? (ics-property-value b) "R05VIEd1aWxlCg=="))))
 
@@ -129,14 +129,14 @@
              #:value (strptime "%Y%m%d" "19970714"))))
     (ics-property:date? p)))
 
-(test-assert "date: ics-property:date=?"
+(test-assert "date: ics-property:date, equal?"
   (let ((p1 (make <ics-property:date>
               #:name "RDATE"
               #:value (strptime "%Y%m%d" "19970714")))
         (p2 (make <ics-property:date>
               #:name "RDATE"
               #:value (strptime "%Y%m%d" "19970714"))))
-    (ics-property:date=? p1 p2)))
+    (equal? p1 p2)))
 
 (test-assert "date: list of values"
   (let* ((p (make <ics-property>
