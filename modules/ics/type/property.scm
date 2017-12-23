@@ -134,7 +134,7 @@
     (UTC-OFFSET  . ,ics-property->ics-property:utc-offset)))
 
 (define-method (ics-property->typed-property (property <ics-property>))
-  (let ((type (%ics-property-type property)))
+  (let ((type (ics-property-type property)))
     (if type
         property
         (let ((converter (assoc-ref %converters-to-typed type)))
