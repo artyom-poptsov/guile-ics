@@ -25,6 +25,7 @@
   #:use-module (oop goops)
   #:use-module (ics type property property)
   #:export     (<ics-property:recur>
+                ics-property:recur?
                 ics-property->ics-property:recur))
 
 
@@ -53,6 +54,14 @@
 
 (define-method (write (property <ics-property:recur>))
   (display property (current-output-port)))
+
+
+;;; Predicates.
+
+(define-method (ics-property:recur? x)
+  "Check if X is an instance of <ics-property:recur>, return #t if
+it is, #f otherwise."
+  (is-a? x <ics-property:recur>))
 
 
 ;;; Converters
