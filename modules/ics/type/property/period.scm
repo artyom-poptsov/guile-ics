@@ -25,6 +25,7 @@
   #:use-module (oop goops)
   #:use-module (ics type property property)
   #:export     (<ics-property:period>
+                ics-property:period?
                 ics-property->ics-property:period))
 
 
@@ -55,6 +56,14 @@
 
 (define-method (write (property <ics-property:period>))
   (display property (current-output-port)))
+
+
+;;; Predicates.
+
+(define-method (ics-property:period? x)
+  "Check if X is an instance of <ics-property:period>, return #t if
+it is, #f otherwise."
+  (is-a? x <ics-property:period>))
 
 
 ;;; Converters.
