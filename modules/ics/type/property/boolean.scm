@@ -26,7 +26,6 @@
   #:use-module (ics type property property)
   #:export     (<ics-property:boolean>
                 ics-property:boolean?
-                ics-property:boolean=?
                 ics-property->ics-property:boolean
                 ics-property:boolean->ics-property))
 
