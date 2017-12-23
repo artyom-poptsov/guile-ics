@@ -26,7 +26,8 @@
   #:use-module (ics type property property)
   #:export     (<ics-property:cal-address>
                 ics-property:cal-address?
-                ics-property->ics-property:cal-address))
+                ics-property->ics-property:cal-address
+                ics-property:cal-address->ics-property))
 
 
 ;;; Class definition.
@@ -72,7 +73,7 @@ is, #f otherwise."
     #:name  (ics-property-name property)
     #:value (ics-property-value property)))
 
-(define-method (ics-data-cal-address->ics-property
+(define-method (ics-property:cal-address->ics-property
                 (property  <ics-property:cal-address>))
   (make <ics-property>
     #:name        (ics-property-name property)
