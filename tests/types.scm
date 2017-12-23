@@ -149,7 +149,7 @@
 (test-assert "date: make"
   (let ((p (make <ics-property:date>
              #:name "RDATE"
-             #:value (strptime "%Y%m%d" "19970714"))))
+             #:value (car (strptime "%Y%m%d" "19970714")))))
     p))
 
 (test-assert "date: ics-property:date?"
