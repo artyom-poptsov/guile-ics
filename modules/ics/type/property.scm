@@ -155,22 +155,26 @@
     (FLOAT       . ,ics-property:float->ics-property)))
 
 (define-method (ics-property->typed-property (property <ics-property>))
-  (let* ((type (ics-property-type property))
-         (converter (assoc-ref %converters-to-typed type)))
-    (unless converter
-      (error 'guile-ics-error
-             "Converter for the property type is not defined yet"
-             type))
-    (converter property)))
+  (let ((type (ics-property-type property)))
+    (if type
+        property
+        (let ((converter (assoc-ref %converters-to-typed type)))
+          (unless converter
+            (error 'guile-ics-error
+                   "Converter for the property type is not defined yet"
+                   type))
+          (converter property)))))
 
 (define-method (ics-typed-property->ics-property (property <ics-property>))
-  (let* ((type      (ics-property-type property))
-         (converter (assoc-ref %converters-to-untyped type)))
-    (unless converter
-      (error 'guile-ics-error
-             "Converter for the property type is not defined yet"
-             type))
-    (converter property)))
+  (let ((type (ics-property-type property)))
+    (if type
+        (let ((converter (assoc-ref %converters-to-untyped type)))
+          (unless converter
+            (error 'guile-ics-error
+                   "Converter for the property type is not defined yet"
+                   type))
+          (converter property))
+        property)))
 
 
 ;;;
