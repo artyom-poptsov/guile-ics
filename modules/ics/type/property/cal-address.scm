@@ -72,9 +72,13 @@ is, #f otherwise."
     #:name  (ics-property-name property)
     #:value (ics-property-value property)))
 
-;; (define-method (ics-data-cal-address->ics-property
-;;                 (ics-property  <ics-data-cal-address>))
-;;   (make <ics-property>
-;;     #:value (ics-property-value ics-data-cal-address)))
+(define-method (ics-data-cal-address->ics-property
+                (ics-property  <ics-property:cal-address>))
+  (make <ics-property>
+    #:name        (ics-property-name property)
+    #:type        #f
+    #:format-type (ics-property-format-type property)
+    #:value       (ics-property-value property)
+    #:parameters  (ics-property-parameters property)))
 
 ;;; cal-address.scm ends here.
