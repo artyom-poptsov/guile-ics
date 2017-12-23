@@ -48,7 +48,7 @@
   (format port "#<ics-property:binary ~a ENCODING: ~a FORMAT-TYPE: ~a ~a>"
           (ics-property-name property)
           (ics-property-parameter-ref property 'ENCODING)
-          (ics-property-parameter-ref property 'FMTTYPE property)
+          (ics-property-parameter-ref property 'FMTTYPE)
           (object-address->string property)))
 
 (define-method (write (property <ics-property:binary>) (port <port>))
