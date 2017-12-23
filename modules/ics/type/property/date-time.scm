@@ -27,17 +27,13 @@
   #:use-module (ics type property property)
   #:export     (<ics-property:date-time>
                 ics-property:date-time?
-                ics-property:date-time-tzid
                 ics-property->ics-property:date-time
                 ics-property:date-time->ics-property))
 
 
 ;;; Class definition.
 
-(define-class <ics-property:date-time> (<ics-property>)
-  (tzid #:accessor ics-property:date-time-tzid
-        #:init-value #f
-        #:init-keyword #:tzid))
+(define-class <ics-property:date-time> (<ics-property>))
 
 (define-method (initialize (property <ics-property:date-time>))
   (next-method)
