@@ -43,6 +43,7 @@
   #:use-module (ics type property text)
   #:use-module (ics type property time)
   #:use-module (ics type property uri)
+  #:use-module (ics type property utc-offset)
   #:export (ics-property->typed-property))
 
 ;; This macro is taken from Guile-JSON.
@@ -67,8 +68,8 @@
                    (ics type property recur)
                    (ics type property text)
                    (ics type property time)
-                   (ics type property uri))
-
+                   (ics type property uri)
+                   (ics type property utc-offset))
 
 ;;; Converters
 
@@ -144,11 +145,8 @@
     (PERIOD      . ,ics-property->ics-property:period)
     (RECUR       . ,ics-property->ics-property:recur)
     (TEXT        . ,ics-property->ics-property:text)
-    (URI         . ,ics-property->ics-property:uri)))
-
-    ;; TODO:
-
-    ;; (UTC-OFFSET  . ,ics-property->ics-property:utc-offset)
+    (URI         . ,ics-property->ics-property:uri)
+    (utc-offset  . ,ics-property->ics-property:utc-offset)))
 
 (define-method (ics-property->typed-property (property <ics-property>))
   (let ((type (%ics-property-type property)))

@@ -33,7 +33,8 @@ SOURCES = \
 	recur.scm	\
 	text.scm	\
 	time.scm	\
-	uri.scm
+	uri.scm		\
+	utc-offset.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 moddir=$(guilesitedir)/ics/type/property/
