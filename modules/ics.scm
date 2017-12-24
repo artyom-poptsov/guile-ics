@@ -173,12 +173,13 @@ for indentation."
           (class-of property) (ics-property-name property))
   (display   ";;;   value:\n")
   (format #t ";;;     ~a~%" (ics-property-value property))
-  (display   ";;;   parameters:\n")
-  (for-each (lambda (parameter)
-              (format #t ";;;     ~50a ~20a~%"
-                      (car parameter)
-                      (cdr parameter)))
-            (ics-property-parameters property)))
+  (unless (null? (ics-property-parameters property))
+    (display   ";;;   parameters:\n")
+    (for-each (lambda (parameter)
+                (format #t ";;;     ~50a ~20a~%"
+                        (car parameter)
+                        (cdr parameter)))
+              (ics-property-parameters property))))
 
 (define-method (ics-describe (name <symbol>))
   (case name
