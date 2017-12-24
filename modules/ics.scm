@@ -47,7 +47,8 @@
             ics-pretty-print)
   #:re-export (ics-object-name
                ics-object-properties
-               ics-object-components))
+               ics-object-components
+               ics-debug-set!))
 
 
 ;;; iCalendar to Scheme converters.
