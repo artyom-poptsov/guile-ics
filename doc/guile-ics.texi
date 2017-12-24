@@ -601,11 +601,6 @@ Convert an iCalendar string @var{str} to a Scheme representation; return
 a list of iCalendar objects.
 @end deffn
 
-@deffn {Scheme Procedure} ics-pretty-print ical-object [port=(current-output-port)] [#:indent=2]
-Pretty-print an @var{ical-object} to a @var{port}.  Note that the output
-is intended for human to comprehent, not to a machine to parse.
-@end deffn
-
 @deffn {Scheme Procedure} scm->ics ical-object [port=(current-output-port)]
 Convert an @var{ical-object} to iCalendar format.  Print the output to a
 @var{port}.
@@ -644,6 +639,24 @@ objects to other formats.
 @deffn {Scheme Procedure} ical-object->org-mode ical-object [port=(current-output-port)]
 Convert an @var{ical-object} to org-mode format (@pxref{Top,,, org, Org
 Mode Manual}) and print the results to a @var{port}.
+@end deffn
+
+@section Miscellaneous Methods and Procedures
+
+Those methods are available from @code{(ics)} module.
+
+@deffn ics-describe x
+Describe iCalendar content in a human-readable form.  Return value is
+undefined.
+@end deffn
+
+@deffn {Scheme Procedure} ics-pretty-print ical-object [port=(current-output-port)] [#:indent=2] [#:show-types?=#f]
+Pretty-print an @var{ical-object} to a @var{port}.  Note that the output
+is intended for human to comprehent, not to a machine to parse.
+@end deffn
+
+@deffn ics-debug-set! enabled?
+Enable or disable debug mode for the library.
 @end deffn
 
 @section Examples
