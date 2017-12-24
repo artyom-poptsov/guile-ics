@@ -44,7 +44,8 @@
             ics->stream
             scm->ics
             scm->ics-string
-            ics-pretty-print)
+            ics-pretty-print
+            ics-describe)
   #:re-export (ics-object-name
                ics-object-properties
                ics-object-components
@@ -144,6 +145,54 @@ for indentation."
     (write-line "END: VCALENDAR" port))
 
   (print-vcalendar))
+
+
+;;;
+
+(define-generic ics-describe)
+(define-method (ics-describe (object <ics-object>))
+  (format #t ";;; ~54a ~a~%"
+          (class-of object) (ics-object-name object))
+  (display   ";;;   properties:\n")
+  (for-each (lambda (property)
+              (format #t ";;;     ~50a ~20a ~a~%"
+                      (class-of property)
+                      (ics-property-name property)
+                      (ics-property-type property)))
+            (ics-object-properties object))
+  (unless (null? (ics-object-components object))
+    (display   ";;;   components:\n")
+    (for-each (lambda (component)
+                (format #t ";;;     ~50a ~20a~%"
+                        (class-of component)
+                        (ics-object-name component)))
+              (ics-object-components object))))
+
+(define-method (ics-describe (name <symbol>))
+  (case name
+    ;; Types.
+    ((BINARY)
+     (display ";;; BINARY: Binary type (RFC5545, 3.3.1)\n"))
+    ((BOOLEAN)
+     (display ";;; BOOLEAN: Boolean type (RFC5545, 3.3.2)\n"))
+    ((CAL-ADDRESS)
+     (display ";;; CAL-ADDRESS: Calendar User Address type (RFC5545, 3.3.3)\n"))
+    ((DATE)
+     (display ";;; DATE: Date type (RFC5545, 3.3.4)\n"))
+    ((DATE-TIME)
+     (display ";;; DATE-TIME: Date-Time type (RFC5545, 3.3.5)\n"))
+    ((DURATION)
+     (display ";;; DURATION: Duration type (RFC5545, 3.3.6)\n"))
+    ((FLOAT)
+     (display ";;; FLOAT: Float type (RFC5545, 3.3.7)\n"))
+    ((INTEGER)     "RFC5545, 3.3.8")
+    ((PERIOD)      "RFC5545, 3.3.9")
+    ((RECUR)       "RFC5545, 3.3.10")
+    ((TEXT)
+     (display ";;; TEXT: Text type (RFC5545, 3.3.11)\n"))
+    ((TIME)        "RFC5545, 3.3.12")
+    ((URI)         "RFC5545, 3.3.13")
+    ((UTC-OFFSET)  "RFC5545, 3.3.14")))
 
 
 ;;; ics.scm ends here.
