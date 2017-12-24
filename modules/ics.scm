@@ -168,6 +168,18 @@ for indentation."
                         (ics-object-name component)))
               (ics-object-components object))))
 
+(define-method (ics-describe (property <ics-property>))
+  (format #t ";;; ~54a ~a~%"
+          (class-of property) (ics-property-name property))
+  (display   ";;;   value:\n")
+  (format #t ";;;     ~a~%" (ics-property-value property))
+  (display   ";;;   parameters:\n")
+  (for-each (lambda (parameter)
+              (format #t ";;;     ~50a ~20a~%"
+                      (car parameter)
+                      (cdr parameter)))
+            (ics-property-parameters property)))
+
 (define-method (ics-describe (name <symbol>))
   (case name
     ;; Types.
