@@ -44,7 +44,7 @@
 
 (define (debug fmt . args)
   (and *debug?*
-       (let ((fmt (string-append "DEBUG: " fmt)))
+       (let ((fmt (string-append ";;; DEBUG: " fmt)))
          (apply format #t fmt args))))
 
 (define (debug-fsm state fmt . args)
