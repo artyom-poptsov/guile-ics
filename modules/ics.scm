@@ -91,7 +91,7 @@ string."
 
 (define* (ics-pretty-print ics-object
                            #:optional (port (current-output-port))
-                           #:key (indent 2))
+                           #:key (indent 2) (show-types? #f))
   "Pretty-print an ICAL-OBJECT object to a PORT.  Note that the output
 is intended for human to comprehent, not to a machine to parse."
 
@@ -100,8 +100,11 @@ is intended for human to comprehent, not to a machine to parse."
 CURRENT-INDENT for indentation."
     (for-each (lambda (e)
                 (let ((s (make-string current-indent #\space))
+                      (type (ics-property-type e))
                       (e (ics-typed-property->ics-property e)))
-                  (format port "~a~a" s (ics-property-name e))
+                  (if show-types?
+                      (format port "~a~a (~a)" s (ics-property-name e) type)
+                      (format port "~a~a" s (ics-property-name e)))
                   (for-each (lambda (property)
                               (format port ";~a=~a"
                                       (car property)
