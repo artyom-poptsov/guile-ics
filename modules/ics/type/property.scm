@@ -81,7 +81,7 @@
   "Get an RFC5545 type name by a property NAME; return the name as a
 symbol."
   (case* string=? name
-    (("DSTART" "COMPLETED" "DTEND" "DATE" "DUE" "RECURRENCE-ID"
+    (("DTSTART" "COMPLETED" "DTEND" "DATE" "DUE" "RECURRENCE-ID"
       "EXDATE" "RDATE" "CREATED" "DTSTAMP" "LAST-MODIFIED")
      'DATE-TIME)
     (("GEO")
