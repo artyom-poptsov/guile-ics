@@ -32,7 +32,7 @@
 (use-modules (ice-9 popen)
              (ice-9 getopt-long)
              ((srfi srfi-1)
-              #:select (delete-duplicates))
+              #:select (delete-duplicates fold))
              (srfi srfi-41)             ; streams
              ;; Guile-ICS
              (ics)
@@ -46,7 +46,8 @@
 (define %option-spec
   '((help (single-char #\h) (value #f))
     (year (single-char #\y) (value #t))
-    (categories (single-char #\c) (value #f))))
+    (categories (single-char #\c) (value #f))
+    (speakers   (single-char #\s) (value #f))))
 
 ;;;
 
@@ -59,22 +60,49 @@
          (p       (open-input-pipe command)))
     (stream-for-each ics-object->org-mode (ics->stream p))))
 
-(define (print-categories year)
-  "Print FOSDEM schedule categories in org-mode format to stdout."
+
+;;;
+
+(define (map-uniq proc lst)
+  (delete-duplicates (map proc lst)))
+
+(define (query year property-name)
   (let* ((command (format #f "curl 'https://fosdem.org/~a/schedule/ical'"
                           year))
          (p       (open-input-pipe command))
          (ics-object (car (ics->scm p))))
-    (display "* CATEGORIES\n")
-    (for-each
-     (lambda (category)
-       (format #t "  - ~a~%" category))
-     (delete-duplicates
-      (map (lambda (component)
-             (let ((categories (ics-object-property-ref component
-                                                        "CATEGORIES")))
-               (ics-property-value categories)))
-           (ics-object-components ics-object))))))
+    (fold
+     (lambda (component prev)
+       (let ((property (ics-object-property-ref component property-name)))
+         (if property
+             (cons property prev)
+             prev)))
+     '()
+     (ics-object-components ics-object))))
+
+(define (query-properties-value year property-name)
+  (map-uniq ics-property-value (query year property-name)))
+
+(define (query-properties-param year property-name param-name)
+  (map-uniq (lambda (property)
+              (ics-property-parameter-ref property param-name))
+            (query year property-name)))
+
+(define (print-list name lst)
+  "Print a list LST with a NAME in the org-mode format."
+  (format #t "* ~a~%" name)
+  (for-each (lambda (elem) (format #t "  - ~a~%" elem)) lst))
+
+(define (print-categories year)
+  "Print FOSDEM schedule categories in org-mode format to stdout."
+  (print-list "CATEGORIES" (query-properties-value year "CATEGORIES")))
+
+(define (print-speakers year)
+  "Print FOSDEM schedule speakers in org-mode format to stdout."
+  (print-list "SPEAKERS" (query-properties-param year "ATTENDEE" 'CN)))
+
+
+;;;
 
 (define (current-year)
   "Get current year."
@@ -99,12 +127,15 @@ Options:
   (let* ((options      (getopt-long args %option-spec))
          (help-needed? (option-ref options 'help #f))
          (year         (option-ref options 'year (current-year)))
-         (categories?  (option-ref options 'categories #f)))
+         (categories?  (option-ref options 'categories #f))
+         (speakers?    (option-ref options 'speakers   #f)))
     (when help-needed?
       (print-help-and-exit))
     (cond
      (categories?
       (print-categories year))
+     (speakers?
+      (print-speakers year))
      (else
       (print-schedule year)))))
 
