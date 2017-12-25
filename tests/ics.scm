@@ -226,9 +226,11 @@
          (object (car (ics-string->scm source-str)))
          (description (ics-object-property-ref object "DESCRIPTION"))
          (description-value (ics-property-value description)))
-    (string=? description-value
-              "Project XYZ Review Meeting will include the following agenda items: \
-(a) Market Overview, (b) Finances, (c) Project Management")))
+    (and (string=? (ics-property-parameter-ref description 'ALTREP)
+                   "CID:part3.msg.970415T083000@example.com")
+         (string=? description-value
+                   "Project XYZ Review Meeting will include the following agenda items: \
+(a) Market Overview, (b) Finances, (c) Project Management"))))
 
 (test-assert "ics-string->scm, typed"
   (let* ((source-str (string-append
