@@ -58,7 +58,7 @@ Options:
     (to-org-mode                    (value #f))
     (pretty-print (single-char #\p) (value optional))))
 
-(set-debug! #f)
+(ics-debug-set! #f)
 
 
 ;;; Entry point.
