@@ -31,17 +31,22 @@
 
 (use-modules (ice-9 popen)
              (ice-9 getopt-long)
+             ((srfi srfi-1)
+              #:select (delete-duplicates))
              (srfi srfi-41)             ; streams
              ;; Guile-ICS
              (ics)
-             (ics conv))
+             (ics conv)
+             (ics type object)
+             (ics type property))
 
 ;;;
 
 
 (define %option-spec
   '((help (single-char #\h) (value #f))
-    (year (single-char #\y) (value #t))))
+    (year (single-char #\y) (value #t))
+    (categories (single-char #\c) (value #f))))
 
 ;;;
 
@@ -54,6 +59,23 @@
          (p       (open-input-pipe command)))
     (stream-for-each ics-object->org-mode (ics->stream p))))
 
+(define (print-categories year)
+  "Print FOSDEM schedule categories in org-mode format to stdout."
+  (let* ((command (format #f "curl 'https://fosdem.org/~a/schedule/ical'"
+                          year))
+         (p       (open-input-pipe command))
+         (ics-object (car (ics->scm p))))
+    (display "* CATEGORIES\n")
+    (for-each
+     (lambda (category)
+       (format #t "  - ~a~%" category))
+     (delete-duplicates
+      (map (lambda (component)
+             (let ((categories (ics-object-property-ref component
+                                                        "CATEGORIES")))
+               (ics-property-value categories)))
+           (ics-object-components ics-object))))))
+
 (define (current-year)
   "Get current year."
   (+ 1900 (tm:year (localtime (current-time)))))
@@ -65,6 +87,7 @@ Usage: fosdem [options]
 Options:
   --help, -h                 Print this message and exit.
   --year, -y <year>          Set year (current year is used by default.)
+  --categories, -c           Print talk categories.
 ")
   (exit 0))
 
@@ -75,10 +98,15 @@ Options:
   (setlocale LC_ALL "")
   (let* ((options      (getopt-long args %option-spec))
          (help-needed? (option-ref options 'help #f))
-         (year         (option-ref options 'year (current-year))))
+         (year         (option-ref options 'year (current-year)))
+         (categories?  (option-ref options 'categories #f)))
     (when help-needed?
       (print-help-and-exit))
-    (print-schedule year)))
+    (cond
+     (categories?
+      (print-categories year))
+     (else
+      (print-schedule year)))))
 
 ;;;
 
