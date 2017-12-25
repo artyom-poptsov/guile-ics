@@ -9,9 +9,9 @@ Guile-ICS is an iCalendar format ([[https://tools.ietf.org/html/rfc5545][RFC5545
    any later version.  Please see =COPYING= file for the terms of GNU General
    Public License.
 
-   The logo (=guile-ics.svg= and rasterised versions) is is
-   distributed under terms of [[https://creativecommons.org/licenses/by-sa/4.0/][Creative Commons Attribution-ShareAlike
-  4.0 International]] license.
+   The logo (=guile-ics.svg= and rasterised versions) is distributed
+   under terms of [[https://creativecommons.org/licenses/by-sa/4.0/][Creative Commons Attribution-ShareAlike 4.0
+   International]] license.
 
 * Requirements
    - [[https://www.gnu.org/software/guile/][GNU Guile]], version 2.0.9 or later
