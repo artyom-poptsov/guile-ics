@@ -287,7 +287,7 @@ Check if @var{x} is an instance of @code{<ics-property>}, return
 @code{#t} if it is, @code{#f} otherwise.
 @end deffn
 
-@deffn {method} %ics-property-type ics-property
+@deffn {method} ics-property-type ics-property
 Get the type of an @var{ics-property}.
 @end deffn
 
@@ -323,7 +323,7 @@ For @code{<ics-property>} this methods bascally does nothing and returns
 
 These procedures are defined in @code{(ics type property)}.
 
-@deffn {method} ics-property-type ics-property
+@deffn {Method} ics-property-determine-type ics-property
 Determine the type of an @var{ics-property}, return the type as a
 symbol.
 @end deffn

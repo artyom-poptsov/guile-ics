@@ -32,7 +32,7 @@
             ics-property?
             %ics-property=?
             object-address->string
-            %ics-property-type
+            ics-property-type
             ics-property-name
             non-standard-property-name?
             ics-property-format-type
@@ -50,7 +50,7 @@
   ;;
   ;; iCalendar type name as described in RFC5545, 3.2.20.
   (type
-   #:accessor     %ics-property-type
+   #:accessor     ics-property-type
    #:init-value   #f
    #:init-keyword #:type)
 
@@ -107,8 +107,8 @@ otherwise."
 properties are identical, #f otherwise."
   (and (string=? (ics-property-name property1)
                  (ics-property-name property2))
-       (equal?   (%ics-property-type property1)
-                 (%ics-property-type property2))
+       (equal?   (ics-property-type property1)
+                 (ics-property-type property2))
        (equal?   (ics-property-value property1)
                  (ics-property-value property2))
        (equal?   (ics-property-parameters property1)

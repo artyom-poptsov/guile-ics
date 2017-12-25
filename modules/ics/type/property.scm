@@ -45,7 +45,7 @@
   #:use-module (ics type property time)
   #:use-module (ics type property uri)
   #:use-module (ics type property utc-offset)
-  #:export (ics-property-type
+  #:export (ics-property-determine-type
             ics-property-name->type
             ics-property->typed-property
             ics-property->string))
@@ -110,8 +110,8 @@ symbol."
      ;; of type TEXT by default (see RFC5545, 3.8.8.)
      'TEXT)))
 
-(define-method (ics-property-type (property <ics-property>))
-  (or (%ics-property-type property)
+(define-method (ics-property-determine-type (property <ics-property>))
+  (or (ics-property-type property)
       (let ((name  (ics-property-name property))
             (value (ics-property-parameter-ref property 'VALUE)))
         (if value
@@ -141,10 +141,10 @@ symbol."
     (UTC-OFFSET  . ,ics-property->ics-property:utc-offset)))
 
 (define-method (ics-property->typed-property (property <ics-property>))
-  (let ((type (%ics-property-type property)))
+  (let ((type (ics-property-type property)))
     (if type
         property
-        (let* ((type      (ics-property-type property))
+        (let* ((type      (ics-property-determine-type property))
                (converter (assoc-ref %converters-to-typed type)))
           (unless converter
             (error 'guile-ics-error
