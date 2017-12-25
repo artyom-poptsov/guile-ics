@@ -1,16 +1,18 @@
-* Guile-ICS
-  iCalendar format ([[https://tools.ietf.org/html/rfc5545][RFC5545]]) parser for GNU Guile.
-** License
+[[./doc/guile-ics.png]]
+
+Guile-ICS is an iCalendar format ([[https://tools.ietf.org/html/rfc5545][RFC5545]]) parser for GNU Guile.
+
+* License
    Guile-ICS is free software: you can redistribute it and/or modify it under
    the terms of the GNU General Public License as published by the Free
    Software Foundation, either version 3 of the License, or (at your option)
    any later version.  Please see =COPYING= file for the terms of GNU General
    Public License.
 
-** Requirements
+* Requirements
    - [[https://www.gnu.org/software/guile/][GNU Guile]], version 2.0.9 or later
 
-** Usage
+* Usage
    Let's suppose you have a file named =example.ics= with the
    following content:
 #+BEGIN_EXAMPLE
@@ -96,4 +98,3 @@ Bastille Day Party
 #+END_EXAMPLE
 
    For more usage examples, see =examples= directory.
-
