@@ -52,7 +52,7 @@
   (let* ((command (format #f "curl 'https://fosdem.org/~a/schedule/ical'"
                           year))
          (p       (open-input-pipe command)))
-    (stream-for-each ical-object->org-mode (ics->stream p))))
+    (stream-for-each ics-object->org-mode (ics->stream p))))
 
 (define (current-year)
   "Get current year."
