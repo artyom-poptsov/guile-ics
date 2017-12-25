@@ -64,7 +64,12 @@
 ;;;
 
 (define (map-uniq proc lst)
-  (delete-duplicates (map proc lst)))
+  (fold (lambda (elem prev)
+          (if (assoc-ref prev elem)
+              (assoc-set! prev elem (+ (assoc-ref prev elem) 1))
+              (assoc-set! prev elem 1)))
+        '()
+        (map proc lst)))
 
 (define (query year property-name)
   (let* ((command (format #f "curl 'https://fosdem.org/~a/schedule/ical'"
@@ -95,11 +100,14 @@
 
 (define (print-categories year)
   "Print FOSDEM schedule categories in org-mode format to stdout."
-  (print-list "CATEGORIES" (query-properties-value year "CATEGORIES")))
+  (print-list "CATEGORIES"
+              (map (lambda (elem)
+                     (format #f "~a: ~a" (car elem) (cdr elem)))
+                   (query-properties-value year "CATEGORIES"))))
 
 (define (print-speakers year)
   "Print FOSDEM schedule speakers in org-mode format to stdout."
-  (print-list "SPEAKERS" (query-properties-param year "ATTENDEE" 'CN)))
+  (print-list "SPEAKERS" (map car (query-properties-param year "ATTENDEE" 'CN))))
 
 
 ;;;
