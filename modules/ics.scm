@@ -28,6 +28,7 @@
 (define-module (ics)
   #:use-module (ice-9 rdelim)
   #:use-module (ice-9 regex)
+  #:use-module (ice-9 format)
   #:use-module (srfi  srfi-26)
   #:use-module ((string transform)
                 #:select (escape-special-chars))
