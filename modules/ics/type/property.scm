@@ -99,7 +99,7 @@ symbol."
      'TEXT)
     (("TZOFFSETFROM" "TZOFFSETTO")
      'UTC-OFFSET)
-    (("TZURL" "URL")
+    (("ATTACH" "TZURL" "URL")
      'URI)
     (("ATTENDEE" "ORGANIZER")
      'CAL-ADDRESS)

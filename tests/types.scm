@@ -61,6 +61,13 @@
     (ics-property-parameter-set! p 'FMTTYPE "audio/basic")
     (equal? (ics-property-parameter-ref p 'FMTTYPE)  "audio/basic")))
 
+(test-assert "property: ics-property-determine-type, ATTACH"
+  (let ((p (make <ics-property>
+             #:name "ATTACH"
+             #:value "ftp://example.com/pub/reports/r-960812.ps"
+             #:parameters '((FMTTYPE . "application/postscript")))))
+    (equal? (ics-property-determine-type p) 'URI)))
+
 
 ;;; BINARY
 
