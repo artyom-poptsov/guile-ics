@@ -39,8 +39,8 @@
              (srfi srfi-41)             ; streams
              ;; Guile-ICS
              (ics)
-             (ics ical-object)
-             (ics ical-property))
+             (ics type object)
+             (ics type property))
 
 
 ;;;
@@ -51,16 +51,16 @@
   ;; not work with HTTPS.
   (let* ((command (format #f "curl --silent '~a'" url))
          (p       (open-input-pipe command)))
-    (let ((ical-object (car (ics->scm p))))
+    (let ((ics-object (car (ics->scm p))))
       (for-each (lambda (event)
-                  (let ((name  (ical-object-property-ref event "SUMMARY"))
-                        (start (ical-object-property-ref event "DTSTART"))
-                        (end   (ical-object-property-ref event "DTEND")))
+                  (let ((name  (ics-object-property-ref event "SUMMARY"))
+                        (start (ics-object-property-ref event "DTSTART"))
+                        (end   (ics-object-property-ref event "DTEND")))
                     (format #t "~a: ~a - ~a~%"
-                            (ical-property-value name)
-                            (ical-property-value start)
-                            (ical-property-value end))))
-                (ical-object-components ical-object)))))
+                            (ics-property-value name)
+                            (ics-property-value start)
+                            (ics-property-value end))))
+                (ics-object-components ics-object)))))
 
 
 ;;;
