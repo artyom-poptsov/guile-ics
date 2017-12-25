@@ -76,4 +76,11 @@ it is, #f otherwise."
     #:value (ics-property-value property)
     #:parameters (ics-property-parameters property)))
 
+(define-method (ics-typed-property->ics-property
+                (property <ics-property:uri>))
+  (make <ics-property>
+    #:name        (ics-property-name property)
+    #:value       (ics-property-value property)
+    #:parameters  (ics-property-parameters property)))
+
 ;;; time.scm ends here.

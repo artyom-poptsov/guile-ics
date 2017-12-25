@@ -75,5 +75,12 @@ it is, #f otherwise."
     #:value (ics-property-value property)
     #:parameters (ics-property-parameters property)))
 
+(define-method (ics-typed-property->ics-property
+                (property <ics-property:text>))
+  (make <ics-property>
+    #:name        (ics-property-name property)
+    #:value       (ics-property-value property)
+    #:parameters  (ics-property-parameters property)))
+
 
 ;;; text.scm ends here.
