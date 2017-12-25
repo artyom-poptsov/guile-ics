@@ -163,7 +163,7 @@ using @code{ics->scm} procedure:
 
 @lisp
 (ics->scm (open-input-file "example.ics"))
-@result{} (#<ical-object VCALENDAR 23cf630>)
+@result{} (#<ics-object VCALENDAR 23cf630>)
 @end lisp
 
 The procedures below can be used to convert iCalendar streams to Scheme
@@ -171,7 +171,7 @@ lists of iCalendar objects and vice versa.
 
 @section Guile-ICS Main Classes
 
-@subsection <ical-content>
+@subsection <ics-content>
 
 A common class that represents generic iCalendar contents.  The class is
 defined in @code{(ics type content)} module.
@@ -187,17 +187,33 @@ defined in @code{(ics type content)} module.
 
 @subsubsection Public Methods
 
-@deffn {method} ical-content-name ical-content
-Returns the name of a @var{ical-content} object.
+@deffn {Method} ics-content-name ics-content
+Returns the name of a @var{ics-content} object.
 @end deffn
 
-@subsection <ical-object>
+@subsubsection Miscellaneous Procedures
+
+@deffn {Scheme Procedure} ics-write-line obj [port=(current-output-port)]
+Display an @var{obj} to a @var{port} with CRLF line ending.
+@end deffn
+
+@deffn {Scheme Procedure} ics-format dest fmt . arg
+Write output specified by a @var{fmt} string to a destination @var{dest}
+with CRLF line ending.
+@end deffn
+
+@deffn {Scheme Procedure} scm->ics-value value
+Convert a @var{value} to iCalendar format string.  @var{value} can be
+either a list of strings or a string.
+@end deffn
+
+@subsection <ics-object>
 
 iCalendar object (see RFC5545, section 3) stores calendaring and
 scheduling information.  iCalendar object class consists of a sequence
 of calendar properties and one or more iCalendar component. Each
 component is an iCalendar object (that is, instances of
-@code{<ical-object>} class) on its own; that means that this data
+@code{<ics-object>} class) on its own; that means that this data
 structure can be handled recusively.
 
 The class is defined in @code{(ics type object)} module.
@@ -208,53 +224,37 @@ The class is defined in @code{(ics type object)} module.
 @headitem Init Keyword @tab Type @tab Description
 @item #:properties
 @tab <list>
-@tab iCalendar object properties (instances of @code{<ical-property>} class).
+@tab iCalendar object properties (instances of @code{<ics-property>} class).
 @item #:components
 @tab <list>
 @tab iCalendar components (see RFC5545, section 3.6.).
-Components are instances of @code{<ical-object>} class themselves.
+Components are instances of @code{<ics-object>} class themselves.
 @end multitable
 
 @subsubsection Public Methods
 
-@deffn {method} ical-object-name ical-object
-Return an @var{ical-object} name.
+@deffn {method} ics-object-name ics-object
+Return an @var{ics-object} name.
 @end deffn
 
-@deffn {method} ical-object-properties ical-object
-Return an @var{ical-object} properties list.
+@deffn {method} ics-object-properties ics-object
+Return an @var{ics-object} properties list.
 @end deffn
 
-@deffn {method} ical-object-property-ref ical-object name
-Return an @var{ical-object} property value by a @var{name}.
+@deffn {method} ics-object-property-ref ics-object name
+Return an @var{ics-object} property value by a @var{name}.
 @end deffn
 
-@deffn {method} ical-object-components ical-object
-Return an @var{ical-object} components list.
+@deffn {method} ics-object-components ics-object
+Return an @var{ics-object} components list.
 @end deffn
 
-@deffn {method} ical-object->ics ical-object port
-Convert an @var{ical-object} to a iCalendar format and print the result
+@deffn {method} ics-object->ics ics-object port
+Convert an @var{ics-object} to a iCalendar format and print the result
 to a specified @var{port}.
 @end deffn
 
-@subsubsection Miscellaneous Procedures
-
-@deffn {Scheme Procedure} ical-write-line obj [port=(current-output-port)]
-Display an @var{obj} to a @var{port} with CRLF line ending.
-@end deffn
-
-@deffn {Scheme Procedure} ical-format dest fmt arg ...
-Write output specified by the @var{fmt} string to a @var{dest} with CRLF
-line ending.
-@end deffn
-
-@deffn {Scheme Procedure} scm->ical-value value
-Convert a Scheme @var{value} (either a string or a list of strings) to a
-iCalendar representation.  Return a string.
-@end deffn
-
-@subsection <ical-property>
+@subsection <ics-property>
 
 A property is the definition of an individual attribute describing a
 calendar object (see RFC5545, section 3.5.)  Since Guile-ICS tries to
@@ -291,20 +291,20 @@ Check if @var{x} is an instance of @code{<ics-property>}, return
 Get the type of an @var{ics-property}.
 @end deffn
 
-@deffn {method} ics-property-name ical-property
-Return an @var{ical-property} name.
+@deffn {method} ics-property-name ics-property
+Return an @var{ics-property} name.
 @end deffn
 
-@deffn {method} ics-property-value ical-property
-Return an @var{ical-property} value.
+@deffn {method} ics-property-value ics-property
+Return an @var{ics-property} value.
 @end deffn
 
-@deffn {method} ics-property-parameters ical-property
-Return an @var{ical-property} parameters association list.
+@deffn {method} ics-property-parameters ics-property
+Return an @var{ics-property} parameters association list.
 @end deffn
 
-@deffn {method} ics-property-parameter-ref ical-property name
-Return an @var{ical-property} value for a parameter with a given
+@deffn {method} ics-property-parameter-ref ics-property name
+Return an @var{ics-property} value for a parameter with a given
 @var{name}.  Return @code{#f} if no parameter found.
 @end deffn
 
@@ -337,7 +337,7 @@ Convert a generic @var{ics-property} to a typed version of itself;
 return a new typed property.
 @end deffn
 
-@subsection <ical-stream>
+@subsection <ics-stream>
 
 The class is defined in @code{(ics type stream)} module.
 
@@ -348,26 +348,34 @@ The class is defined in @code{(ics type stream)} module.
 @item #:source
 @tab <port> || <string>
 @tab iCalendar data source.
+@item #:parse-types?
+@tab <boolean>
+@tab Should the parser parse the types?
 @end multitable
 
 @subsubsection Public Methods
 
-@deffn {method} ical-stream-source ical-stream
-Return a source of an @var{ical-stream}.
+@deffn {method} ics-stream-source ics-stream
+Return a source of an @var{ics-stream}.
 @end deffn
 
-@deffn {method} ical-stream-parser ical-stream
-Make a new iCalendar stream parser for an @var{ical-stream}, return a
+@deffn {method} ics-stream-parser ics-stream
+Make a new iCalendar stream parser for an @var{ics-stream}, return a
 new parser.
 @end deffn
 
-@deffn {method} ical-stream->scm ical-stream
-Convert an @var{ical-stream} to a Scheme list of iCalendar objects
-(@code{<ical-object>}).  Return the list.
+@deffn {Method} ics-stream-parse-types? ics-stream
+Return @code{#t} if the parser should parse the iCalendar types,
+@code{#f} otherwise.
 @end deffn
 
-@deffn {method} ical-stream->scm-stream ical-stream
-Convert an @var{ical-stream} to a SRFI-41 stream.  Return the stream.
+@deffn {method} ics-stream->scm ics-stream
+Convert an @var{ics-stream} to a Scheme list of iCalendar objects
+(@code{<ics-object>}).  Return the list.
+@end deffn
+
+@deffn {method} ics-stream->scm-stream ics-stream
+Convert an @var{ics-stream} to a SRFI-41 stream.  Return the stream.
 @end deffn
 
 @section Guile-ICS Property Types
@@ -576,7 +584,6 @@ Convert a @var{property} to a its typed version.
 
 The class is defined in @code{(ics type property utc-offset)} module.
 
-
 @subsubsection Public Methods
 
 @deffn {method} ics-property:utc-offset? x
@@ -601,13 +608,13 @@ Convert an iCalendar string @var{str} to a Scheme representation; return
 a list of iCalendar objects.
 @end deffn
 
-@deffn {Scheme Procedure} scm->ics ical-object [port=(current-output-port)]
-Convert an @var{ical-object} to iCalendar format.  Print the output to a
+@deffn {Scheme Procedure} scm->ics ics-object [port=(current-output-port)]
+Convert an @var{ics-object} to iCalendar format.  Print the output to a
 @var{port}.
 @end deffn
 
-@deffn {Scheme Procedure} scm->ics-string ical-object
-Convert an @var{ical-object} to an iCalendar format string; return the
+@deffn {Scheme Procedure} scm->ics-string ics-object
+Convert an @var{ics-object} to an iCalendar format string; return the
 string.
 @end deffn
 
@@ -624,8 +631,8 @@ Example:
              (ics))
 
 (let ((p (open-input-file "data.ics")))
-  (stream-for-each (lambda (ical-object)
-                     (pretty-print ical-object))
+  (stream-for-each (lambda (ics-object)
+                     (pretty-print ics-object))
                    (ics->stream p)))
 @end lisp
 
@@ -636,8 +643,8 @@ Example:
 @code{(ics conv)} module provides procedures for converting iCalendar
 objects to other formats.
 
-@deffn {Scheme Procedure} ical-object->org-mode ical-object [port=(current-output-port)]
-Convert an @var{ical-object} to org-mode format (@pxref{Top,,, org, Org
+@deffn {Scheme Procedure} ics-object->org-mode ics-object [port=(current-output-port)]
+Convert an @var{ics-object} to org-mode format (@pxref{Top,,, org, Org
 Mode Manual}) and print the results to a @var{port}.
 @end deffn
 
@@ -650,8 +657,8 @@ Describe iCalendar content in a human-readable form.  Return value is
 undefined.
 @end deffn
 
-@deffn {Scheme Procedure} ics-pretty-print ical-object [port=(current-output-port)] [#:indent=2] [#:show-types?=#f]
-Pretty-print an @var{ical-object} to a @var{port}.  Note that the output
+@deffn {Scheme Procedure} ics-pretty-print ics-object [port=(current-output-port)] [#:indent=2] [#:show-types?=#f]
+Pretty-print an @var{ics-object} to a @var{port}.  Note that the output
 is intended for human to comprehent, not to a machine to parse.
 @end deffn
 
