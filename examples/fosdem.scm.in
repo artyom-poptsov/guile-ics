@@ -107,7 +107,8 @@
 
 (define (print-speakers year)
   "Print FOSDEM schedule speakers in org-mode format to stdout."
-  (print-list "SPEAKERS" (map car (query-properties-param year "ATTENDEE" 'CN))))
+  (print-list "SPEAKERS" (map car (query-properties-param year "ATTENDEE"
+                                                          'CN))))
 
 
 ;;;
