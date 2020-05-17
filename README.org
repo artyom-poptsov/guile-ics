@@ -1,7 +1,7 @@
 [[./doc/guile-ics.png]]
 * Guile-ICS
 
-[[https://github.com/artyom-poptsov/guile-ics][https://github.com/artyom-poptsov/guile-ics/workflows/GNU%20Guile%202.2/badge.svg]]
+[[https://github.com/artyom-poptsov/guile-ics][https://github.com/artyom-poptsov/guile-ics/workflows/GNU%20Guile%202.2/badge.svg]] [[https://github.com/artyom-poptsov/guile-ics][https://github.com/artyom-poptsov/guile-ics/workflows/GNU%20Guile%203.0/badge.svg]]
 
 Guile-ICS is an iCalendar format ([[https://tools.ietf.org/html/rfc5545][RFC5545]]) parser for GNU Guile.
 
