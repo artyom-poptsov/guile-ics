@@ -1,106 +1,107 @@
 [[./doc/guile-ics.png]]
+* Guile-ICS
 
 [[https://github.com/artyom-poptsov/guile-ics][https://github.com/artyom-poptsov/guile-ics/workflows/GNU%20Guile%202.2/badge.svg]]
 
 Guile-ICS is an iCalendar format ([[https://tools.ietf.org/html/rfc5545][RFC5545]]) parser for GNU Guile.
 
-* License
-   Guile-ICS is free software: you can redistribute it and/or modify it under
-   the terms of the GNU General Public License as published by the Free
-   Software Foundation, either version 3 of the License, or (at your option)
-   any later version.  Please see =COPYING= file for the terms of GNU General
-   Public License.
+** License
+    Guile-ICS is free software: you can redistribute it and/or modify it under
+    the terms of the GNU General Public License as published by the Free
+    Software Foundation, either version 3 of the License, or (at your option)
+    any later version.  Please see =COPYING= file for the terms of GNU General
+    Public License.
 
-   The logo (=guile-ics.svg= and rasterised versions) is distributed
-   under terms of [[https://creativecommons.org/licenses/by-sa/4.0/][Creative Commons Attribution-ShareAlike 4.0
-   International]] license.
+    The logo (=guile-ics.svg= and rasterised versions) is distributed
+    under terms of [[https://creativecommons.org/licenses/by-sa/4.0/][Creative Commons Attribution-ShareAlike 4.0
+    International]] license.
 
-* Requirements
-   - [[https://www.gnu.org/software/guile/][GNU Guile]], version 2.0.9 or later
+** Requirements
+    - [[https://www.gnu.org/software/guile/][GNU Guile]], version 2.0.12 or later
 
-* Usage
-   Let's suppose you have a file named =example.ics= with the
-   following content:
-#+BEGIN_EXAMPLE
-BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//hacksw/handcal//NONSGML v1.0//EN
-BEGIN:VEVENT
-UID:19970610T172345Z-AF23B2@example.com
-DTSTAMP:19970610T172345Z
-DTSTART:19970714T170000Z
-DTEND:19970715T040000Z
-SUMMARY:Bastille Day Party
-END:VEVENT
-END:VCALENDAR
-#+END_EXAMPLE
+** Usage
+    Let's suppose you have a file named =example.ics= with the
+    following content:
+ #+BEGIN_EXAMPLE
+ BEGIN:VCALENDAR
+ VERSION:2.0
+ PRODID:-//hacksw/handcal//NONSGML v1.0//EN
+ BEGIN:VEVENT
+ UID:19970610T172345Z-AF23B2@example.com
+ DTSTAMP:19970610T172345Z
+ DTSTART:19970714T170000Z
+ DTEND:19970715T040000Z
+ SUMMARY:Bastille Day Party
+ END:VEVENT
+ END:VCALENDAR
+ #+END_EXAMPLE
 
-   The following example shows how to parse the file:
-#+BEGIN_EXAMPLE scheme
-(use-modules (ics))
+    The following example shows how to parse the file:
+ #+BEGIN_EXAMPLE scheme
+ (use-modules (ics))
 
-(let* ((port       (open-input-file "example.ics"))
-       (ics-object (car (ics->scm port))))
-  (ics-pretty-print ics-object #:show-types? #t))
-#+END_EXAMPLE
+ (let* ((port       (open-input-file "example.ics"))
+        (ics-object (car (ics->scm port))))
+   (ics-pretty-print ics-object #:show-types? #t))
+ #+END_EXAMPLE
 
-   The code produces the following output:
-#+BEGIN_EXAMPLE
-BEGIN: VCALENDAR
-  PRODID (TEXT): -//hacksw/handcal//NONSGML v1.0//EN
-  VERSION (TEXT): 2.0
-  BEGIN: VEVENT
-    SUMMARY (TEXT): Bastille Day Party
-    DTEND (DATE-TIME): 19970715T040000Z
-    DTSTART (DATE-TIME): 19970714T170000Z
-    DTSTAMP (DATE-TIME): 19970610T172345Z
-    UID (TEXT): 19970610T172345Z-AF23B2@example.com
-  END: VEVENT
-END: VCALENDAR
-#+END_EXAMPLE
+    The code produces the following output:
+ #+BEGIN_EXAMPLE
+ BEGIN: VCALENDAR
+   PRODID (TEXT): -//hacksw/handcal//NONSGML v1.0//EN
+   VERSION (TEXT): 2.0
+   BEGIN: VEVENT
+     SUMMARY (TEXT): Bastille Day Party
+     DTEND (DATE-TIME): 19970715T040000Z
+     DTSTART (DATE-TIME): 19970714T170000Z
+     DTSTAMP (DATE-TIME): 19970610T172345Z
+     UID (TEXT): 19970610T172345Z-AF23B2@example.com
+   END: VEVENT
+ END: VCALENDAR
+ #+END_EXAMPLE
 
-   Now let's take a look on the =ics-object= structure more closely:
-#+BEGIN_EXAMPLE scheme
-(use-modules (ics))
+    Now let's take a look on the =ics-object= structure more closely:
+ #+BEGIN_EXAMPLE scheme
+ (use-modules (ics))
 
-(let* ((port       (open-input-file "example.ics"))
-       (ics-object (car (ics->scm port))))
-  (ics-describe ics-object))
-#+END_EXAMPLE
+ (let* ((port       (open-input-file "example.ics"))
+        (ics-object (car (ics->scm port))))
+   (ics-describe ics-object))
+ #+END_EXAMPLE
 
-   After we run the code we will see the following:
-#+BEGIN_EXAMPLE
-;;; #<<class> <ics-object> ea4f30>                 VCALENDAR
-;;;   properties:
-;;;     #<<class> <ics-property> e573f0>           PRODID               TEXT
-;;;     #<<class> <ics-property> e573f0>           VERSION              TEXT
-;;;   components:
-;;;     #<<class> <ics-object> ea4f30>             VEVENT
-#+END_EXAMPLE
+    After we run the code we will see the following:
+ #+BEGIN_EXAMPLE
+ ;;; #<<class> <ics-object> ea4f30>                 VCALENDAR
+ ;;;   properties:
+ ;;;     #<<class> <ics-property> e573f0>           PRODID               TEXT
+ ;;;     #<<class> <ics-property> e573f0>           VERSION              TEXT
+ ;;;   components:
+ ;;;     #<<class> <ics-object> ea4f30>             VEVENT
+ #+END_EXAMPLE
 
-   As can be seen from the example, the =<ics-object>= with name
-   =VCALENDAR= has two properties of type =TEXT= (=PRODID=, and
-   =VERSION=) and has one an only =VEVENT= component.  The
-   =ics-describe= method may be handy in REPL mode to get information
-   about iCalendar objects.  Now let's get the value of =SUMMARY=
-   property that belongs to the =VEVENT= component:
-#+BEGIN_EXAMPLE scheme
-(use-modules (ics)
-             (ics type object)
-             (ics type property))
+    As can be seen from the example, the =<ics-object>= with name
+    =VCALENDAR= has two properties of type =TEXT= (=PRODID=, and
+    =VERSION=) and has one an only =VEVENT= component.  The
+    =ics-describe= method may be handy in REPL mode to get information
+    about iCalendar objects.  Now let's get the value of =SUMMARY=
+    property that belongs to the =VEVENT= component:
+ #+BEGIN_EXAMPLE scheme
+ (use-modules (ics)
+              (ics type object)
+              (ics type property))
 
-(let* ((port       (open-input-file "example.ics"))
-       (ics-object (car (ics->scm port)))
-       (vevent     (car (ics-object-components ics-object))))
-  (display
-   (ics-property-value (ics-object-property-ref vevent "SUMMARY")))
-  (newline))
+ (let* ((port       (open-input-file "example.ics"))
+        (ics-object (car (ics->scm port)))
+        (vevent     (car (ics-object-components ics-object))))
+   (display
+    (ics-property-value (ics-object-property-ref vevent "SUMMARY")))
+   (newline))
 
-#+END_EXAMPLE
+ #+END_EXAMPLE
 
-   When run, the example prints the following:
-#+BEGIN_EXAMPLE
-Bastille Day Party
-#+END_EXAMPLE
+    When run, the example prints the following:
+ #+BEGIN_EXAMPLE
+ Bastille Day Party
+ #+END_EXAMPLE
 
-   For more usage examples, see =examples= directory.
+    For more usage examples, see =examples= directory.
