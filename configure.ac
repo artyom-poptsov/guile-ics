@@ -3,7 +3,7 @@ dnl   Process this file with autoconf to produce configure.
 dnl
 
 define(GUILE_ICS_CONFIGURE_COPYRIGHT, [[
-Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+Copyright (C) 2017, 2020 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 
 This file is part of Guile-ICS.
 
@@ -65,7 +65,7 @@ AC_SUBST([guilesitedir])
 AC_CONFIG_FILES([Makefile tests/Makefile am/Makefile build-aux/Makefile])
 AC_CONFIG_FILES([modules/Makefile modules/ics/Makefile m4/Makefile])
 AC_CONFIG_FILES([modules/ics/type/Makefile modules/ics/type/property/Makefile])
-AC_CONFIG_FILES([modules/srfi/Makefile utils/Makefile doc/Makefile])
+AC_CONFIG_FILES([utils/Makefile doc/Makefile])
 AC_CONFIG_FILES([examples/Makefile])
 
 # Generate a Makefile, based on the results.

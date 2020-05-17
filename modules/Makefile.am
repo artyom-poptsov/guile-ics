@@ -18,8 +18,7 @@
 include $(top_srcdir)/am/guilec
 
 SUBDIRS = \
-	ics \
-	srfi
+	ics
 
 SOURCES = \
 	ics.scm
