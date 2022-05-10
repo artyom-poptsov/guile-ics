@@ -76,6 +76,9 @@ AC_CONFIG_FILES([
     utils/Makefile doc/Makefile
 ])
 
+dnl Manual pages.
+AM_MISSING_PROG([HELP2MAN], [help2man])
+
 AC_CONFIG_FILES([pre-inst-env:build-aux/pre-inst-env.in],
    [chmod +x pre-inst-env])
 

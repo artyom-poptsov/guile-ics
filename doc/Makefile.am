@@ -23,4 +23,25 @@ guile_ics_TEXINFOS = \
 	guile-ics.texi	\
 	fdl.texi
 
+dist_man1_MANS =		\
+	ics.1
+
+## Silent rules.
+AM_V_HELP2MAN = $(AM_V_HELP2MAN_$(V))
+AM_V_HELP2MAN_ = $(AM_V_HELP2MAN_$(AM_DEFAULT_VERBOSITY))
+AM_V_HELP2MAN_0 = @echo "  HELP2MAN" $@;
+##
+
+gen_man =							\
+	LANGUAGE= $(top_builddir)/pre-inst-env $(HELP2MAN)	\
+	$(HELP2MANFLAGS)
+
+HELP2MANFLAGS = --source=GNU --info-page=$(PACKAGE_TARNAME)
+
+ics.1: $(abs_top_builddir)/utils/ics
+	-$(AM_V_HELP2MAN)$(gen_man) --output="$@" "$<"
+
+CLEANFILES = \
+	ics.1
+
 ## Makefile.am ends here
