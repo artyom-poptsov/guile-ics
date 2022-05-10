@@ -3,7 +3,7 @@ dnl   Process this file with autoconf to produce configure.
 dnl
 
 define(GUILE_ICS_CONFIGURE_COPYRIGHT, [[
-Copyright (C) 2017, 2020 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+Copyright (C) 2017-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 
 This file is part of Guile-ICS.
 
@@ -28,7 +28,7 @@ AC_INIT([Guile-ICS], [0.2.0], [poptsov.artyom@gmail.com],
 AC_COPYRIGHT(GUILE_ICS_CONFIGURE_COPYRIGHT)
 
 AC_CONFIG_AUX_DIR([build-aux])
-AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_MACRO_DIR([build-aux/m4])
 
 AM_INIT_AUTOMAKE([gnu silent-rules -Wall -Wno-portability
                       color-tests])
@@ -51,7 +51,7 @@ m4_pattern_forbid([^GUILE_PROGS$])
 
 dnl Currently only Guile 2.0 is supported.  Use this macro so that
 dnl 'GUILE_EFFECTIVE_VERSION' is defined here.
-GUILE_PKG([2.0 2.2 3.0])
+GUILE_PKG([3.0 2.0 2.2])
 
 GUILE_PROGS
 GUILE_FLAGS
@@ -62,8 +62,13 @@ if test "x$guilesitedir" = "x"; then
 fi
 AC_SUBST([guilesitedir])
 
-AC_CONFIG_FILES([Makefile tests/Makefile am/Makefile build-aux/Makefile])
-AC_CONFIG_FILES([modules/Makefile modules/ics/Makefile m4/Makefile])
+AC_CONFIG_FILES([
+    Makefile
+    tests/Makefile
+    build-aux/am/Makefile
+    build-aux/Makefile
+    build-aux/m4/Makefile])
+AC_CONFIG_FILES([modules/Makefile modules/ics/Makefile])
 AC_CONFIG_FILES([modules/ics/type/Makefile modules/ics/type/property/Makefile])
 AC_CONFIG_FILES([utils/Makefile doc/Makefile])
 AC_CONFIG_FILES([examples/Makefile])

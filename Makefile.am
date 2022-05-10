@@ -17,9 +17,9 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Guile-ICS.  If not, see <http://www.gnu.org/licenses/>.
 
-ACLOCAL_AMFLAGS = -I m4 --install
+ACLOCAL_AMFLAGS = -I build-aux --install
 
-SUBDIRS = am build-aux modules tests m4 utils doc examples
+SUBDIRS = build-aux modules tests utils doc examples
 
 EXTRA_DIST =					\
 	build-aux/config.rpath			\
