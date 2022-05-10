@@ -59,9 +59,6 @@
                         #:recursive? #t
                         #:select? (git-predicate %source-dir)))
     (build-system gnu-build-system)
-    ;; XXX: Tests expect 'test-runner-current' to not return #f after
-    ;; 'test-end', which is no longer the case in Guile 3.0.7.
-    (arguments '(#:tests? #f))
     (native-inputs
      `(("autoconf" ,autoconf)
        ("automake" ,automake)
