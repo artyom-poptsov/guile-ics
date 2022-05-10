@@ -54,7 +54,7 @@
 (define-public guile-ics
   (package
     (name "guile-ics")
-    (version "0.2.0")
+    (version "git")
     (source (local-file %source-dir
                         #:recursive? #t
                         #:select? (git-predicate %source-dir)))
