@@ -76,6 +76,9 @@ AC_CONFIG_FILES([
     utils/Makefile doc/Makefile
 ])
 
+AC_CONFIG_FILES([pre-inst-env:build-aux/pre-inst-env.in],
+   [chmod +x pre-inst-env])
+
 # Generate a Makefile, based on the results.
 AC_OUTPUT
 

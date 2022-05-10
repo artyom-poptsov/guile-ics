@@ -25,6 +25,9 @@ EXTRA_DIST =					\
 	build-aux/config.rpath			\
 	build-aux/compile
 
+nodist_noinst_SCRIPTS =				\
+	pre-inst-env
+
 gen-ChangeLog:
 	if test -d .git; then				\
 	  $(top_srcdir)/build-aux/gitlog-to-changelog	\
