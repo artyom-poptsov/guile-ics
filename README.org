@@ -35,6 +35,12 @@ https://guix.gnu.org/en/packages/guile-ics-0.2.0/
 $ guix install guile-ics
 #+END_EXAMPLE
 
+To install the latest (unstable) version directly from the repository, run:
+#+BEGIN_EXAMPLE shell
+$ guix build -f ./guix.scm
+$ guix package -f ./guix.scm
+#+END_EXAMPLE
+
 *** Manual
 #+BEGIN_EXAMPLE shell
 $ git clone https://github.com/artyom-poptsov/guile-ics.git
