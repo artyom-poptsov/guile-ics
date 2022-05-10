@@ -21,7 +21,7 @@ You should have received a copy of the GNU General Public License
 along with Guile-ICS.  If not, see <http://www.gnu.org/licenses/>.
 ]])
 
-AC_INIT([Guile-ICS], [0.2.0], [poptsov.artyom@gmail.com],
+AC_INIT([Guile-ICS], [0.2.1], [poptsov.artyom@gmail.com],
                      [guile-ics],
                      [https://github.com/artyom-poptsov/guile-ics])
 
@@ -49,8 +49,6 @@ dnl These macros must be provided by guile.m4.
 m4_pattern_forbid([^GUILE_PKG$])
 m4_pattern_forbid([^GUILE_PROGS$])
 
-dnl Currently only Guile 2.0 is supported.  Use this macro so that
-dnl 'GUILE_EFFECTIVE_VERSION' is defined here.
 GUILE_PKG([3.0 2.0 2.2])
 
 GUILE_PROGS

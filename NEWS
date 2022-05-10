@@ -7,6 +7,21 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Changes in version 0.2.1 (2022-05-10)
+** Guile-ICS now uses SRFI-64 that comes with Guile
+** Guile-ICS now builds with Guile 3.0+
+** =(ics version)=: New module
+The module contains procedures that allow to get Guile-ICS version in various
+forms.
+** Add a GNU Guix recipe to the repository
+Now the project can be built and installed as follows:
+#+BEGIN_EXAMPLE shell
+guix build -f ./guix.scm
+guix package -f ./guix.scm
+#+END_EXAMPLE
+** =ics= command now handles =--version= option
+** Generate a man-page from =ics= output.
+
 * Changes in version 0.2.0 (2017-12-25)
 ** The library is mostly re-written with GOOPS
    Now most of the API is object-oriented.
