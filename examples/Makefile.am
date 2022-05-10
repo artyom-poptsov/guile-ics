@@ -1,4 +1,4 @@
-## Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2017-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-ICS.
 ##
@@ -29,7 +29,8 @@ substitute = sed -e 's,[@]GUILE[@],$(GUILE),g'
 SUFFIXES = .in
 
 .in:
-	$(substitute) "$^" > "$@.tmp" && 	\
+	@echo "  GEN      $@"
+	@$(substitute) "$^" > "$@.tmp" && 	\
 	chmod +x "$@.tmp" &&			\
 	mv "$@.tmp" "$@"
 

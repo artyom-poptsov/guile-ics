@@ -1,6 +1,6 @@
 ## Config file for GNU Automake.
 ##
-## Copyright (C) 2016 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2016-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-ICS.
 ##
@@ -19,7 +19,7 @@
 
 AUTOMAKE_OPTIONS = gnu
 
-am_frags = guilec
+am_frags = guilec guile.am
 
 EXTRA_DIST = $(am_frags)
 
