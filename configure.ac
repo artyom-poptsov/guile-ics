@@ -64,14 +64,17 @@ AC_SUBST([guilesitedir])
 
 AC_CONFIG_FILES([
     Makefile
-    tests/Makefile
-    build-aux/am/Makefile
     build-aux/Makefile
-    build-aux/m4/Makefile])
-AC_CONFIG_FILES([modules/Makefile modules/ics/Makefile])
-AC_CONFIG_FILES([modules/ics/type/Makefile modules/ics/type/property/Makefile])
-AC_CONFIG_FILES([utils/Makefile doc/Makefile])
-AC_CONFIG_FILES([examples/Makefile])
+    build-aux/am/Makefile
+    build-aux/m4/Makefile
+    examples/Makefile
+    modules/Makefile
+    modules/ics/Makefile
+    modules/ics/type/Makefile
+    modules/ics/type/property/Makefile
+    tests/Makefile
+    utils/Makefile doc/Makefile
+])
 
 # Generate a Makefile, based on the results.
 AC_OUTPUT
@@ -85,3 +88,5 @@ if test "$guilesitedir" != "$GUILE_SITE"; then
    [Otherwise, you will have to adjust the `GUILE_LOAD_PATH' environment]
    [variable.])
 fi
+
+dnl configure.ac ends here.
