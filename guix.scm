@@ -62,6 +62,7 @@
     (native-inputs
      `(("autoconf" ,autoconf)
        ("automake" ,automake)
+       ("help2man" ,help2man)
        ("texinfo" ,texinfo)
        ;; Gettext brings 'AC_LIB_LINKFLAGS_FROM_LIBS'.
        ("gettext" ,gettext-minimal)
