@@ -706,6 +706,42 @@ Read iCalendar stream using a @var{parser}, return a list of
 @code{<ical-object>} instances.
 @end deffn
 
+@section Version
+
+@code{(ics version)} contains procedures that allow to acquire
+information about the Guile-ICS version in the
+@url{https://semver.org/, Semantic Versioning format}.
+
+Guile-ICS version consists of three parts: MAJOR.MINOR.PATCH
+
+The procedures below allow to get any of the version part or the version as a
+whole.
+
+@cindex Versioning
+@deffn {Scheme Procedure} ics-version
+Return the Guile-ICS version as a list of the following form:
+@example lisp
+'(MAJOR MINOR PATCH)
+@end example
+
+@end deffn
+
+@deffn {Scheme Procedure} ics-version/string
+Get the raw Guile-ICS version as a string.
+@end deffn
+
+@deffn {Scheme Procedure} ics-version/major
+Get the ``MAJOR'' part of the Guile-ICS version.
+@end deffn
+
+@deffn {Scheme Procedure} ics-version/minor
+Get the ``MINOR'' part of the Guile-ICS version.
+@end deffn
+
+@deffn {Scheme Procedure} ics-version/patch
+Get the ``PATCH'' part of the Guile-ICS version.
+@end deffn
+
 @node Tools
 @chapter Tools
 
