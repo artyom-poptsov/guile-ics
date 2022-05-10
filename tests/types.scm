@@ -30,7 +30,10 @@
              (ics type object)
              (ics type property))
 
-(test-begin "types")
+
+(define %test-suite-name "types")
+
+(test-begin %test-suite-name)
 
 
 ;;; Generic property
@@ -276,10 +279,10 @@
     (equal? p result)))
 
 
-;;;
+(define exit-status (test-runner-fail-count (test-runner-current)))
 
-(test-end "types")
+(test-end %test-suite-name)
 
-(exit (= (test-runner-fail-count (test-runner-current)) 0))
+(exit exit-status)
 
 ;;; types.scm ends here.

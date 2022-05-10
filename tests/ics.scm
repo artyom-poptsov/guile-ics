@@ -31,7 +31,10 @@
              (ics type object)
              (ics type property))
 
-(test-begin "ics")
+
+(define %test-suite-name "ics")
+
+(test-begin %test-suite-name)
 
 
 ;;; Finite-State Machine tests.
@@ -112,7 +115,7 @@
            (version (ics-object-property-ref obj "VERSION"))
            (prodid  (ics-object-property-ref obj "PRODID"))
            (components (ics-object-components obj)))
-      (format (current-error-port) "components: ~s~%" components)
+      ;; (format (current-error-port) "components: ~s~%" components)
       (and
        ;; Check object properties
        (and (and version (string=? (ics-property-value version) "2.0"))
@@ -125,13 +128,13 @@
               (dtstart (ics-object-property-ref vevent "DTSTART"))
               (dtend   (ics-object-property-ref vevent "DTEND"))
               (summary (ics-object-property-ref vevent "SUMMARY")))
-         (format (current-error-port) "vevent: ~s (name: ~s)~%"
-                 vevent (ics-object-name vevent))
-         (format (current-error-port) "  uid:     ~s~%" uid)
-         (format (current-error-port) "  dtstamp: ~s~%" dtstamp)
-         (format (current-error-port) "  dtstart: ~s~%" dtstart)
-         (format (current-error-port) "  dtend:   ~s~%" dtend)
-         (format (current-error-port) "  summary: ~s~%" summary)
+         ;; (format (current-error-port) "vevent: ~s (name: ~s)~%"
+         ;;         vevent (ics-object-name vevent))
+         ;; (format (current-error-port) "  uid:     ~s~%" uid)
+         ;; (format (current-error-port) "  dtstamp: ~s~%" dtstamp)
+         ;; (format (current-error-port) "  dtstart: ~s~%" dtstart)
+         ;; (format (current-error-port) "  dtend:   ~s~%" dtend)
+         ;; (format (current-error-port) "  summary: ~s~%" summary)
          (and (string=? (ics-object-name vevent)
                         "VEVENT")
               (string=? (ics-property-value uid)
@@ -154,7 +157,7 @@
                                                    "END:VCALENDAR"))))
     (let* ((vcalendar (car (fsm-read-ics-stream parser '())))
            (vevent    (car (ics-object-components vcalendar))))
-      (format (current-error-port) "object: ~s~%" vcalendar)
+      ;; (format (current-error-port) "object: ~s~%" vcalendar)
       (and (string=? (ics-property-value (ics-object-property-ref vcalendar
                                                                     "VERSION"))
                      "2.0")
@@ -250,12 +253,11 @@
                    "Project XYZ Review Meeting will include the following agenda items: \
 (a) Market Overview, (b) Finances, (c) Project Management"))))
 
-
 
-;;;
+(define exit-status (test-runner-fail-count (test-runner-current)))
 
-(test-end "ics")
+(test-end %test-suite-name)
 
-(exit (= (test-runner-fail-count (test-runner-current)) 0))
+(exit exit-status)
 
 ;;; ics.scm ends here.
