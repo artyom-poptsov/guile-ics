@@ -19,6 +19,32 @@ Guile-ICS is an iCalendar format ([[https://tools.ietf.org/html/rfc5545][RFC5545
 ** Requirements
     - [[https://www.gnu.org/software/guile/][GNU Guile]], version 2.0.12 or later
 
+*** Build-time dependencies
+- GNU Guile development files (something with =dev= suffix, e.g.
+  =guile-3.0-dev= on Ubuntu GNU/Linux)
+- texinfo
+- make
+- automake
+- autoconf
+
+** Installation
+*** GNU Guix
+https://guix.gnu.org/en/packages/guile-ics-0.2.0/
+
+#+BEGIN_EXAMPLE shell
+$ guix install guile-ics
+#+END_EXAMPLE
+
+*** Manual
+#+BEGIN_EXAMPLE shell
+$ git clone https://github.com/artyom-poptsov/guile-ics.git
+$ cd guile-ics
+$ autoreconf -vif
+$ ./configure
+$ make -j$(nproc)
+$ sudo make install
+#+END_EXAMPLE
+
 ** Usage
     Let's suppose you have a file named =example.ics= with the
     following content:
