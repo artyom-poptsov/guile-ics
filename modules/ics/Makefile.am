@@ -17,15 +17,30 @@
 
 include $(top_srcdir)/build-aux/am/guile.am
 
-SUBDIRS = type
+SUBDIRS = type .
 
 SOURCES = \
+	version.scm	\
 	common.scm	\
 	fsm.scm		\
 	parser.scm	\
 	conv.scm
 
+EXTRA_DIST += \
+	version.scm.in
+
 moddir=$(prefix)/share/guile/site/$(GUILE_EFFECTIVE_VERSION)/ics/
 godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ics/
+
+SUFFIXES = .in
+
+substitute = sed -e 's,[@]VERSION[@],$(PACKAGE_VERSION),g'
+
+version.scm: version.scm.in
+	@echo "  GEN      $@"
+	@$(substitute) "$^" > "$@"
+
+CLEANFILES += \
+	version.scm
 
 ## Makefile.am ends here.
