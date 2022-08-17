@@ -45,6 +45,26 @@ AC_ARG_WITH([guilesitedir],
              esac],
              [guilesitedir=""])
 
+
+dnl ----------------------------------------------------------------------
+dnl Guile-SMC standalone mode.
+AC_ARG_ENABLE(
+  [standalonemode],
+  [AS_HELP_STRING(
+    [--enable-standalonemode],
+    [Use the standalone mode for the Guile state machine compiler (Guile-SMC)])])
+
+AS_IF(
+  [test "x$enable_standalonemode" = "xyes"],
+  [AC_MSG_NOTICE([Guile-SMC standalone mode enabled])
+  AC_DEFINE(SMC_STANDALONE_MODE, 1, [Guile-SMC standalone mode enabled])],
+  [AC_DEFINE(SMC_STANDALONE_MODE, 0, [Guile-SMC standalone mode disabled])]
+)
+
+AM_CONDITIONAL([ENABLE_SMC_STANDALONE_MODE], [test "x$enable_standalonemode" = "xyes"])
+dnl ----------------------------------------------------------------------
+
+
 dnl These macros must be provided by guile.m4.
 m4_pattern_forbid([^GUILE_PKG$])
 m4_pattern_forbid([^GUILE_PROGS$])
@@ -67,6 +87,7 @@ AC_CONFIG_FILES([
     build-aux/m4/Makefile
     examples/Makefile
     modules/Makefile
+    modules/ics/fsm/Makefile
     modules/ics/Makefile
     modules/ics/type/Makefile
     modules/ics/type/property/Makefile

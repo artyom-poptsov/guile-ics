@@ -17,7 +17,7 @@
 
 include $(top_srcdir)/build-aux/am/guile.am
 
-SUBDIRS = type .
+SUBDIRS = type fsm .
 
 SOURCES = \
 	version.scm	\
