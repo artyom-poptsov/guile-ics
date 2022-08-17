@@ -1,0 +1,79 @@
+@startuml
+title RFC5545 Content Line parser.
+
+' ---------------------------------------------------------------------------
+' Content Line ABNF:
+'   contentline   = name *(";" param ) ":" value CRLF
+'
+' <https://datatracker.ietf.org/doc/html/rfc5545#section-3.1>
+
+[*] --> lookup_name
+
+' ---------------------------------------------------------------------------
+' name          = iana-token / x-name
+' iana-token    = 1*(ALPHA / DIGIT / "-")
+'   ; iCalendar identifier registered with IANA
+'
+' x-name        = "X-" [vendorid "-"] 1*(ALPHA / DIGIT / "-")
+'   ; Reserved for experimental use.
+' vendorid      = 3*(ALPHA / DIGIT)
+'   ; Vendor identification
+
+lookup_name: Skip empty space.
+lookup_name --> read_name: content-line:valid-name-character? -> action:store
+lookup_name ->  lookup_name
+
+read_name: Read content line name.
+read_name --> read_param_name: guard:semicolon? -> content-line:create
+read_name --> read_value:      guard:colon? -> content-line:create
+read_name --> read_name:       content-line:valid-name-character? -> action:store
+read_name --> [*]:             guard:#t -> content-line:error-invalid-name
+
+' ---------------------------------------------------------------------------
+' param         = param-name "=" param-value *("," param-value)
+' param-name    = iana-token / x-name
+
+read_param_name: Read parameter.
+read_param_name --> read_param_value: guard:equals-sign? -> content-line:store-param-name
+read_param_name --> [*]:              guard:eof-object? -> content-line:error-param-eof
+read_param_name ->  read_param_name:  guard:#t -> action:store
+
+' ---------------------------------------------------------------------------
+' param-value   = paramtext / quoted-string
+' paramtext     = *SAFE-CHAR
+' quoted-string = DQUOTE *QSAFE-CHAR DQUOTE
+' SAFE-CHAR     = WSP / %x21 / %x23-2B / %x2D-39 / %x3C-7E
+'                   / NON-US-ASCII
+' QSAFE-CHAR    = WSP / %x21 / %x23-7E / NON-US-ASCII
+'   ; Any character except CONTROL and DQUOTE
+
+read_param_value --> read_param_name:  guard:semicolon? -> content-line:store-param-value
+read_param_value --> read_value:       guard:colon? -> content-line:store-param-value
+read_param_value ->  read_param_value: content-line:safe-char? -> action:store
+
+' ---------------------------------------------------------------------------
+' VALUE-CHAR    = WSP / %x21-7E / NON-US-ASCII
+'   ; Any textual characters
+' NON-US-ASCII  = UTF8-2 / UTF8-3 / UTF8-4
+'   ; UTF8-2, UTF8-3, and UTF8-4 are defined in [RFC3629]
+'
+' CONTROL       = %x00-08 / %x0A-1F / %x7F
+'   ; All the controls except HTAB
+
+read_value: Read content line value.
+read_value --> read_line_feed: guard:cr?
+read_value ->  read_value:     content-line:value-char? -> action:store
+read_value --> [*]:            guard:#t -> content-line:error-invalid-content-line
+
+read_line_feed ->  check_for_multiline_text: guard:lf?
+read_line_feed --> [*]: guard:#t -> content-line:error-invalid-content-line
+
+check_for_multiline_text -> [*]: guard:eof-object? -> content-line:store-value
+check_for_multiline_text -> read_value: guard:space?
+check_for_multiline_text -> [*]: guard:#t -> content-line:store-value/unget-char
+
+@enduml
+
+' Local Variables:
+' Mode: plantuml
+' End:
