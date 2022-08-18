@@ -12,6 +12,16 @@
             content-line-value
             content-line-value-set!
 
+            ;; Content line types.
+            content-line-name=?
+            content-line-value=?
+            content-line-vcalendar?
+            content-line-vcalendar-begin?
+            content-line-vcalendar-end?
+            content-line-vevent?
+            content-line-vevent-begin?
+            content-line-vevent-end?
+
             <content-line-context>
             content-line-context?
             content-line-context-buffer
@@ -178,6 +188,40 @@
 
 (define (content-line:error-invalid-content-line ctx ch)
   (error "Invalid content line" ctx ch))
+
+
+;; Content line predicates.
+
+(define-method (content-line-name=? (content-line <content-line>)
+                                    (name         <string>))
+  (string=? (content-line-name content-line) name))
+
+(define-method (content-line-value=? (content-line <content-line>)
+                                     (value        <string>))
+  (string=? (content-line-value content-line) value))
+
+
+(define-method (content-line-vcalendar? (content-line <content-line>))
+  (content-line-name=? content-line "VCALENDAR"))
+
+(define-method (content-line-vcalendar-begin? (content-line <content-line>))
+  (and (content-line-vcalendar? content-line)
+       (content-line-value=? content-line "BEGIN")))
+
+(define-method (content-line-vcalendar-end? (content-line <content-line>))
+  (and (content-line-vcalendar? content-line)
+       (content-line-value=? content-line "END")))
+
+(define-method (content-line-vevent? (content-line <content-line>))
+  (content-line-name=? content-line "VEVENT"))
+
+(define-method (content-line-vevent-begin? (content-line <content-line>))
+  (and (content-line-vevent? content-line)
+       (content-line-value=? content-line "BEGIN")))
+
+(define-method (content-line-vevent-end? (content-line <content-line>))
+  (and (content-line-vevent? content-line)
+       (content-line-value=? content-line "END")))
 
 ;;; content-line-parser-context.scm ends here.
 
