@@ -20,6 +20,7 @@ title RFC5545 Content Line parser.
 '   ; Vendor identification
 
 lookup_name: Skip empty space.
+lookup_name --> [*]: guard:eof-object?
 lookup_name --> read_name: content-line:valid-name-character? -> action:store
 lookup_name ->  lookup_name
 

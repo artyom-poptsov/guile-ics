@@ -24,6 +24,7 @@
 
             <content-line-context>
             content-line-context?
+            content-line-context-eof?
             content-line-context-buffer
             content-line-context-buffer-set!
             content-line-context-result
@@ -91,6 +92,9 @@
 
 (define (content-line-context? x)
   (is-a? x <content-line-context>))
+
+(define-method (content-line-context-eof? (context <content-line-context>))
+  (equal? (content-line-context-result context) #f))
 
 
 (define-method (content-line-parameter-set! (content-line <content-line>)

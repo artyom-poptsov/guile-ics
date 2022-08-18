@@ -114,6 +114,27 @@
         (content-line-value (content-line-context-result ctx))))))
 
 
+(test-equal "content-line-context-eof?: #t"
+  #t
+  (with-input-from-string
+      ""
+    (lambda ()
+      (let ((ctx (fsm-run! (make <content-line-parser>)
+                           (make <content-line-context>
+                             #:port (current-input-port)))))
+        (content-line-context-eof? ctx)))))
+
+(test-equal "content-line-context-eof?: #f"
+  #f
+  (with-input-from-string
+      "VCALENDAR:BEGIN\r\n"
+    (lambda ()
+      (let ((ctx (fsm-run! (make <content-line-parser>)
+                           (make <content-line-context>
+                             #:port (current-input-port)))))
+        (content-line-context-eof? ctx)))))
+
+
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
 (test-end %test-suite-name)
