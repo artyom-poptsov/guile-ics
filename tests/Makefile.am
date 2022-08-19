@@ -23,6 +23,7 @@ SCM_TESTS = \
 	content-line-context.scm \
 	content-line-parser.scm \
 	stream-context.scm \
+	stream-parser.scm \
 	ics.scm		\
 	types.scm
 
