@@ -1,0 +1,62 @@
+@startuml
+[*] --> lookup_object
+
+lookup_object: Search the ICS object start.
+lookup_object:
+lookup_object: event-source: stream:read
+lookup_object --> [*]:         stream:eof-object?
+lookup_object --> read_object: stream:vcalendar-begin? -> stream:create-object
+lookup_object --> lookup_object_error_corrupt_stream
+
+lookup_object_error_corrupt_stream: The ICalendar stream has unexpected content.
+lookup_object_error_corrupt_stream:
+lookup_object_error_corrupt_stream: event-source: stream:dummy-event-source
+lookup_object_error_corrupt_stream: exit-action:  stream:error
+lookup_object_error_corrupt_stream --> [*]
+
+read_object: Read an ICalendar object from the stream.
+read_object: <https://datatracker.ietf.org/doc/html/rfc5545#section-3.4>
+read_object:
+read_object: event-source: stream:read
+read_object --> read_object_error_eof:  stream:eof-object?
+read_object --> lookup_object:          stream:vcalendar-end? -> stream:append-object
+read_object --> read_vevent:            stream:vevent-begin?
+read_object --> append_object_property
+
+read_object_error_eof: Unexpected EOF was read during VCALENDAR parsing.
+read_object_error_eof:
+read_object_error_eof: exit-action: stream:error-unexpected-eof-in-object
+read_object_error_eof -> [*]
+
+append_object_property: Append an ICalendar object property
+append_object_property: to the current object.
+append_object_property:
+append_object_property: event-source: stream:dummy-event-source
+append_object_property: entry-action: stream:append-property
+append_object_property -> read_object
+
+read_vevent: Read a VEVENT.
+read_vevent:
+read_vevent: event-source: stream:read
+read_vevent --> read_vevent_error_eof:  stream:eof-object?
+read_vevent --> read_object:            stream:end-vevent?
+read_vevent --> append_vevent_property: stream:ics-property?
+read_vevent -> read_vevent
+
+read_vevent_error_eof: Unexpected EOF was read during VEVENT parsing.
+read_vevent_error_eof:
+read_vevent_error_eof: event-source: stream:dummy-event-source
+read_vevent_error_eof: exit-action:  stream:error-unexpected-eof-in-vevent
+read_vevent_error_eof --> [*]
+
+append_vevent_property: Append a property to the current VEvent.
+append_vevent_property:
+append_vevent_property: event-source: stream:dummy-event-source
+append_vevent_property: entry-action: stream:append-property
+append_vevent_property --> read_vevent
+
+@enduml
+
+' Local Variables:
+' Mode: plantuml
+' End:

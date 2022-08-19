@@ -22,6 +22,7 @@ include $(top_srcdir)/build-aux/am/guilec
 SCM_TESTS = \
 	content-line-parser-context.scm \
 	content-line-parser.scm \
+	stream-context.scm \
 	ics.scm		\
 	types.scm
 

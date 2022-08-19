@@ -21,12 +21,14 @@ include $(top_srcdir)/build-aux/am/guile.am
 
 SOURCES = \
 	content-line-parser-context.scm	\
-	content-line-parser.scm
+	content-line-parser.scm	\
+	stream-context.scm
 
 EXTRA_DIST += \
 	content-line-parser-context.scm
 	content-line-parser.scm \
-	content-line-parser.puml
+	content-line-parser.puml	\
+	stream-parser.puml
 
 moddir=$(prefix)/share/guile/site/$(GUILE_EFFECTIVE_VERSION)/ics/fsm/
 godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ics/fsm/
