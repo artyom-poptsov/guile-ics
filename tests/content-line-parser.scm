@@ -24,7 +24,7 @@
 (use-modules (srfi srfi-64)
              (oop goops)
              (ics fsm context)
-             (ics fsm content-line-parser-context)
+             (ics fsm content-line-context)
              (ics fsm content-line-parser))
 
 

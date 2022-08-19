@@ -6,7 +6,7 @@
   #:use-module (ics type property)
   #:use-module (ics parser)
   #:use-module (ics fsm context)
-  #:use-module (ics fsm content-line-parser-context)
+  #:use-module (ics fsm content-line-context)
   #:use-module (ics fsm content-line-parser)
   #:use-module (ics type object)
   #:export (<stream-context>

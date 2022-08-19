@@ -20,12 +20,12 @@
 include $(top_srcdir)/build-aux/am/guile.am
 
 SOURCES = \
-	content-line-parser-context.scm	\
+	content-line-context.scm	\
 	content-line-parser.scm	\
 	stream-context.scm
 
 EXTRA_DIST += \
-	content-line-parser-context.scm
+	content-line-context.scm
 	content-line-parser.scm \
 	content-line-parser.puml	\
 	stream-parser.puml
@@ -42,7 +42,7 @@ GUILE_SMC_CONTENT_LINE_PARSER_ARGS = \
 	-L $(top_srcdir)/modules \
 	--fsm-name content-line-parser \
 	--fsm-module "(ics fsm content-line-parser)" \
-	-U "((ics fsm context) (ics fsm content-line-parser-context))" \
+	-U "((ics fsm context) (ics fsm content-line-context))" \
 	--validate
 
 if ENABLE_SMC_STANDALONE_MODE

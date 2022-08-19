@@ -25,7 +25,7 @@
              (oop goops)
              (ics type object)
              (ics fsm context)
-             (ics fsm content-line-parser-context)
+             (ics fsm content-line-context)
              (ics fsm stream-context))
 
 

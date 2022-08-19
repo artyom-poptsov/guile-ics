@@ -24,10 +24,10 @@
 (use-modules (srfi srfi-64)
              (oop goops)
              (ics fsm context)
-             (ics fsm content-line-parser-context))
+             (ics fsm content-line-context))
 
 
-(define %test-suite-name "content-line-parser-context")
+(define %test-suite-name "content-line-context")
 
 (test-begin %test-suite-name)
 

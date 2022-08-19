@@ -1,4 +1,4 @@
-(define-module (ics fsm content-line-parser-context)
+(define-module (ics fsm content-line-context)
   #:use-module (oop goops)
   #:use-module (ice-9 textual-ports)
   #:use-module (ics fsm context)
@@ -227,5 +227,5 @@
   (and (content-line-vevent? content-line)
        (content-line-value=? content-line "END")))
 
-;;; content-line-parser-context.scm ends here.
+;;; content-line-context.scm ends here.
 
