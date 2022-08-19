@@ -39,9 +39,8 @@ read_vevent: Read a VEVENT.
 read_vevent:
 read_vevent: event-source: stream:read
 read_vevent --> read_vevent_error_eof:  stream:eof-object?
-read_vevent --> read_object:            stream:end-vevent?
-read_vevent --> append_vevent_property: stream:ics-property?
-read_vevent -> read_vevent
+read_vevent --> read_object:            stream:vevent-end?
+read_vevent --> append_vevent_property
 
 read_vevent_error_eof: Unexpected EOF was read during VEVENT parsing.
 read_vevent_error_eof:
