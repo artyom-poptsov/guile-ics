@@ -168,45 +168,35 @@
 
 (test-assert "content-line-name=?"
   (content-line-name=? (make <content-line>
-                         #:name "VCALENDAR"
-                         #:value "BEGIN")
-                       "VCALENDAR"))
+                         #:name "BEGIN"
+                         #:value "VCALENDAR")
+                       "BEGIN"))
 
 (test-assert "content-line-value=?"
   (content-line-value=? (make <content-line>
-                          #:name "VCALENDAR"
-                         #:value "BEGIN")
-                       "BEGIN"))
-
-(test-assert "content-line-vcalendar?"
-  (content-line-vcalendar? (make <content-line>
-                             #:name "VCALENDAR"
-                             #:value "BEGIN")))
+                          #:name "BEGIN"
+                          #:value "VCALENDAR")
+                       "VCALENDAR"))
 
 (test-assert "content-line-vcalendar-begin?"
   (content-line-vcalendar-begin? (make <content-line>
-                                   #:name "VCALENDAR"
-                                   #:value "BEGIN")))
+                                   #:name "BEGIN"
+                                   #:value "VCALENDAR")))
 
 (test-assert "content-line-vcalendar-end?"
   (content-line-vcalendar-end? (make <content-line>
-                                   #:name "VCALENDAR"
-                                   #:value "END")))
-
-(test-assert "content-line-vevent?"
-  (content-line-vevent? (make <content-line>
-                          #:name "VEVENT"
-                          #:value "BEGIN")))
+                                   #:name "END"
+                                   #:value "VCALENDAR")))
 
 (test-assert "content-line-vevent-begin?"
   (content-line-vevent-begin? (make <content-line>
-                                #:name "VEVENT"
-                                #:value "BEGIN")))
+                                #:name "BEGIN"
+                                #:value "VEVENT")))
 
 (test-assert "content-line-vevent-end?"
   (content-line-vevent-end? (make <content-line>
-                              #:name "VEVENT"
-                              #:value "END")))
+                              #:name "END"
+                              #:value "VEVENT")))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
