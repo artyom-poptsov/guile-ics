@@ -1,4 +1,4 @@
-;; Copyright (C) 2016, 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2016-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -30,11 +30,14 @@
   #:use-module (ics type property)
   #:use-module (ics type content)
   #:export (<ics-object>
+            ics-object?
             ics-object->ics
             ics-object-name
             ics-object-properties
+            ics-object-properties-set!
             ics-object-property-ref
-            ics-object-components))
+            ics-object-components
+            ics-object-components-set!))
 
 
 ;;;
@@ -42,12 +45,18 @@
 (define-class <ics-object> (<ics-content>)
   ;; list
   (properties #:accessor ics-object-properties
+              #:setter   ics-object-properties-set!
               #:init-value '()
               #:init-keyword #:properties)
   ;; list
   (components #:accessor ics-object-components
+              #:setter   ics-object-components-set!
               #:init-value '()
               #:init-keyword #:components))
+
+(define (ics-object? x)
+  "Check if X is an <ics-object> instance."
+  (is-a? x <ics-object>))
 
 
 ;;; Custom printers
