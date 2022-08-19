@@ -93,19 +93,19 @@
 
 (define (stream:vcalendar-begin? ctx content-line-ctx)
   (content-line-vcalendar-begin?
-   (content-line-parser-context-result content-line-ctx)))
+   (content-line-context-result content-line-ctx)))
 
 (define (stream:vcalendar-end? ctx content-line-ctx)
   (content-line-vcalendar-end?
-   (content-line-parser-context-result content-line-ctx)))
+   (content-line-context-result content-line-ctx)))
 
 (define (stream:vevent-begin? ctx content-line-ctx)
   (content-line-vevent-begin?
-   (content-line-parser-context-result content-line-ctx)))
+   (content-line-context-result content-line-ctx)))
 
 (define (stream:vevent-end? ctx content-line-ctx)
   (content-line-vevent-end?
-   (content-line-parser-context-result content-line-ctx)))
+   (content-line-context-result content-line-ctx)))
 
 
 ;;; Actions
