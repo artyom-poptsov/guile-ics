@@ -38,7 +38,8 @@
 
             ;; FSM error handling.
             stream:error
-            stream:error-unexpected-eof-in-object))
+            stream:error-unexpected-eof-in-object
+            stream:error-unexpected-eof-in-vevent))
 
 
 (define-class <stream-context> (<context>)
@@ -143,6 +144,11 @@
 
 (define (stream:error-unexpected-eof-in-object ctx content-line-parser-ctx)
   (error "Unexpected EOF in ICalendar object"
+         ctx
+         content-line-parser-ctx))
+
+(define (stream:error-unexpected-eof-in-vevent ctx content-line-parser-ctx)
+  (error "Unexpected EOF in VEvent component"
          ctx
          content-line-parser-ctx))
 
