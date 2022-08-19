@@ -22,7 +22,8 @@ include $(top_srcdir)/build-aux/am/guile.am
 SOURCES = \
 	content-line-context.scm	\
 	content-line-parser.scm	\
-	stream-context.scm
+	stream-context.scm	\
+	stream-parser.scm
 
 EXTRA_DIST += \
 	content-line-context.scm
@@ -45,10 +46,19 @@ GUILE_SMC_CONTENT_LINE_PARSER_ARGS = \
 	-U "((ics fsm context) (ics fsm content-line-context))" \
 	--validate
 
+GUILE_SMC_STREAM_PARSER_ARGS = \
+	-L $(top_srcdir)/modules \
+	--fsm-name stream-parser \
+	--fsm-module "(ics fsm stream-parser)" \
+	-U "((ics fsm context) (ics fsm stream-context))" \
+	--validate
+
 if ENABLE_SMC_STANDALONE_MODE
 GUILE_SMC_CONTEXT_ARGS += \
 	--standalone
 GUILE_SMC_CONTENT_LINE_PARSER_ARGS += \
+	--target=guile-standalone
+GUILE_SMC_STREAM_PARSER_ARGS += \
 	--target=guile-standalone
 endif
 
@@ -59,5 +69,9 @@ context.scm:
 content-line-parser.scm: context.scm content-line-parser.puml
 	@echo "  SMC      $@"
 	@smc compile $(GUILE_SMC_CONTENT_LINE_PARSER_ARGS) content-line-parser.puml > $@
+
+stream-parser.scm: context.scm stream-context.scm
+	@echo "  SMC      $@"
+	@smc compile $(GUILE_SMC_STREAM_PARSER_ARGS) stream-parser.puml > $@
 
 ### Makefile.am ends here.
