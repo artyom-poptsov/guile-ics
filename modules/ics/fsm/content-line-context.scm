@@ -15,10 +15,8 @@
             ;; Content line types.
             content-line-name=?
             content-line-value=?
-            content-line-vcalendar?
             content-line-vcalendar-begin?
             content-line-vcalendar-end?
-            content-line-vevent?
             content-line-vevent-begin?
             content-line-vevent-end?
 
@@ -204,28 +202,21 @@
                                      (value        <string>))
   (string=? (content-line-value content-line) value))
 
-
-(define-method (content-line-vcalendar? (content-line <content-line>))
-  (content-line-name=? content-line "VCALENDAR"))
-
 (define-method (content-line-vcalendar-begin? (content-line <content-line>))
-  (and (content-line-vcalendar? content-line)
-       (content-line-value=? content-line "BEGIN")))
+  (and (content-line-name=? content-line "BEGIN")
+       (content-line-value=? content-line "VCALENDAR")))
 
 (define-method (content-line-vcalendar-end? (content-line <content-line>))
-  (and (content-line-vcalendar? content-line)
-       (content-line-value=? content-line "END")))
-
-(define-method (content-line-vevent? (content-line <content-line>))
-  (content-line-name=? content-line "VEVENT"))
+  (and (content-line-name=? content-line "END")
+       (content-line-value=? content-line "VCALENDAR")))
 
 (define-method (content-line-vevent-begin? (content-line <content-line>))
-  (and (content-line-vevent? content-line)
-       (content-line-value=? content-line "BEGIN")))
+  (and (content-line-name=? content-line "BEGIN")
+       (content-line-value=? content-line "VEVENT")))
 
 (define-method (content-line-vevent-end? (content-line <content-line>))
-  (and (content-line-vevent? content-line)
-       (content-line-value=? content-line "END")))
+  (and (content-line-name=? content-line "END")
+       (content-line-value=? content-line "VEVENT")))
 
 ;;; content-line-context.scm ends here.
 
