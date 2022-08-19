@@ -89,7 +89,7 @@
 ;;; Guards.
 
 (define (stream:eof-object? ctx content-line-ctx)
-  (content-line-context-eof? content-line-parser-ctx))
+  (content-line-context-eof? content-line-ctx))
 
 (define (stream:vcalendar-begin? ctx content-line-ctx)
   (content-line-vcalendar-begin?
