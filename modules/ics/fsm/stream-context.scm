@@ -18,6 +18,7 @@
             stream-context-objects
             stream-context-objects-set!
             stream-context-objects-count
+            stream-context-parse-types?
 
             ;; FSM event sources.
             stream:read
@@ -43,6 +44,15 @@
 
 
 (define-class <stream-context> (<context>)
+  ;; When this parameter is set the FSM will try to parse types for each ICS
+  ;; property.
+  ;;
+  ;; <boolean>
+  (parse-types?
+   #:init-value   #f
+   #:init-keyword #:parse-types?
+   #:getter       stream-context-parse-types?)
+
   ;; <port>
   (port
    #:init-thunk   (lambda () (current-input-port))
@@ -128,6 +138,9 @@
                      #:name       (content-line-name content-line)
                      #:value      (content-line-value content-line)
                      #:parameters (content-line-parameters content-line)))
+         (property (if (stream-context-parse-types? ctx)
+                       (ics-property->typed-property property)
+                       property))
          (current-object (stream-context-current-object ctx))
          (current-object-properties (ics-object-properties current-object)))
     (ics-object-properties-set! current-object
