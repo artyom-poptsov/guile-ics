@@ -66,6 +66,7 @@
             content-line:store-value/unget-char
             content-line:store-param-name
             content-line:store-param-value
+            content-line:store-param-value/list
             content-line:error-invalid-name
             content-line:error-param-eof
             content-line:error-invalid-content-line
@@ -137,7 +138,7 @@ EOF.)"
 
 (define-method (content-line-parameter-set! (content-line <content-line>)
                                             (name         <string>)
-                                            (value        <string>))
+                                            (value        <top>))
   "Set a CONTENT-LINE parameter."
   (let ((parameters (content-line-parameters content-line)))
     (content-line-parameters-set! content-line (acons name value parameters))))
@@ -214,6 +215,23 @@ EOF.)"
     (when param-current
       (error "Duplicated parameter" param-name param-value))
     (content-line-parameter-set! content-line param-name param-value)
+    (context-buffer-clear! ctx)
+    ctx))
+
+(define (content-line:store-param-value/list ctx ch)
+  "Append a value to the list of parameter values for the parameter that is being
+read."
+  (let* ((content-line  (content-line-context-result ctx))
+         (param-name    (content-line-context-buffer ctx))
+         (param-value   (context-buffer->string ctx))
+         (param-current (content-line-parameter content-line param-name)))
+    (if param-current
+        (content-line-parameter-set! content-line
+                                     param-name
+                                     (append param-current (list param-value)))
+        (content-line-parameter-set! content-line
+                                     param-name
+                                     (list param-value)))
     (context-buffer-clear! ctx)
     ctx))
 

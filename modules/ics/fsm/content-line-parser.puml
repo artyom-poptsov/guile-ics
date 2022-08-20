@@ -48,9 +48,20 @@ read_param_name ->  read_param_name:  guard:#t -> action:store
 ' QSAFE-CHAR    = WSP / %x21 / %x23-7E / NON-US-ASCII
 '   ; Any character except CONTROL and DQUOTE
 
-read_param_value --> read_param_name:  guard:semicolon? -> content-line:store-param-value
-read_param_value --> read_value:       guard:colon? -> content-line:store-param-value
-read_param_value ->  read_param_value: content-line:safe-char? -> action:store
+read_param_value --> read_param_name:       guard:semicolon? -> content-line:store-param-value
+read_param_value --> read_value:            guard:colon? -> content-line:store-param-value
+read_param_value --> read_param_value_list: guard:comma? -> content-line:store-param-value/list
+read_param_value ->  read_param_value:      content-line:safe-char? -> action:store
+
+' ---------------------------------------------------------------------------
+' List and Field Separators:
+' <https://datatracker.ietf.org/doc/html/rfc5545#section-3.1.1>
+
+read_param_value_list: Read and append parameter list value.
+read_param_value_list --> read_param_name:       guard:semicolon? -> content-line:store-param-value/list
+read_param_value_list --> read_value:            guard:colon? -> content-line:store-param-value/list
+read_param_value_list --> read_param_value_list: guard:comma? -> content-line:store-param-value/list
+read_param_value_list ->  read_param_value_list: content-line:safe-char? -> action:store
 
 ' ---------------------------------------------------------------------------
 ' VALUE-CHAR    = WSP / %x21-7E / NON-US-ASCII
