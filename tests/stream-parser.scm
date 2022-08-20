@@ -22,6 +22,7 @@
 
 (use-modules (srfi srfi-64)
              (oop goops)
+             (ics type object)
              (ics fsm context)
              (ics fsm content-line-context)
              (ics fsm content-line-parser)
@@ -47,7 +48,7 @@
              (ctx (fsm-run! fsm (make <stream-context>))))
         (stream-context-current-object ctx)))))
 
-(test-assert "correct input: output test: objects check"
+(test-assert "correct input: output test: objects basic check"
   (with-input-from-string
       (string-append "BEGIN:VCALENDAR\r\n"
                      "VERSION:2.0\r\n"
@@ -57,8 +58,39 @@
     (lambda ()
       (let* ((fsm (make <stream-parser>
                     #:debug-mode? #t))
-             (ctx (fsm-run! fsm (make <stream-context>))))
-        (stream-context-objects ctx)))))
+             (ctx (fsm-run! fsm (make <stream-context>)))
+             (objects (stream-context-objects ctx)))
+        objects))))
+
+(test-equal "correct input: output test: objects count check"
+  1
+  (with-input-from-string
+      (string-append "BEGIN:VCALENDAR\r\n"
+                     "VERSION:2.0\r\n"
+                     "BEGIN:VEVENT\r\n"
+                     "END:VEVENT\r\n"
+                     "END:VCALENDAR\r\n")
+    (lambda ()
+      (let* ((fsm (make <stream-parser>
+                    #:debug-mode? #t))
+             (ctx (fsm-run! fsm (make <stream-context>)))
+             (objects (stream-context-objects ctx)))
+        (length objects)))))
+
+(test-equal "correct input: output test: object name check"
+  "VCALENDAR"
+  (with-input-from-string
+      (string-append "BEGIN:VCALENDAR\r\n"
+                     "VERSION:2.0\r\n"
+                     "BEGIN:VEVENT\r\n"
+                     "END:VEVENT\r\n"
+                     "END:VCALENDAR\r\n")
+    (lambda ()
+      (let* ((fsm (make <stream-parser>
+                    #:debug-mode? #t))
+             (ctx (fsm-run! fsm (make <stream-context>)))
+             (objects (stream-context-objects ctx)))
+        (ics-object-name (car objects))))))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
