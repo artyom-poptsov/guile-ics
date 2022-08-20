@@ -1,3 +1,29 @@
+;;; content-line-context.scm -- Context for the content line reader.
+
+;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;;
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; The program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with the program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+;;; Commentary:
+
+;; This module contains the iCalendar content line parser context, as well as
+;; the required guards, actions and other procedures.
+
+
+;;; Code:
+
 (define-module (ics fsm content-line-context)
   #:use-module (oop goops)
   #:use-module (ice-9 textual-ports)
@@ -51,12 +77,16 @@
 ;; Classes.
 
 (define-class <content-line> ()
+  ;; The name of the content line.
+  ;;
   ;; <string> | #f
   (name
    #:init-value   #f
    #:init-keyword #:name
    #:getter       content-line-name)
 
+  ;; The associative list of parameters.
+  ;;
   ;; <alist>
   (parameters
    #:init-value   '()
@@ -64,6 +94,8 @@
    #:getter       content-line-parameters
    #:setter       content-line-parameters-set!)
 
+  ;; The value of the content line.
+  ;;
   ;; <string> | #f
   (value
    #:init-value   #f
@@ -72,15 +104,20 @@
    #:setter       content-line-value-set!))
 
 (define (content-line? x)
+  "Check if X is a <content-line> instance."
   (is-a? x <content-line>))
 
 (define-class <content-line-context> (<char-context>)
+  ;; The buffer to store the string that is being read.
+  ;;
   ;; <string> | #f
   (string-buffer
    #:init-value   #f
    #:getter       content-line-context-buffer
    #:setter       content-line-context-buffer-set!)
 
+  ;; The result of the parser's work.  When no data is read the slot contains #f.
+  ;;
   ;; <content-line> | #f
   (result
    #:init-value   #f
@@ -89,9 +126,12 @@
    #:setter       content-line-context-result-set!))
 
 (define (content-line-context? x)
+  "Check if X is a <content-line-context> instance."
   (is-a? x <content-line-context>))
 
 (define-method (content-line-context-eof? (context <content-line-context>))
+  "Check if a CONTEXT contains no result (that is, the iCalendar stream ended with
+EOF.)"
   (equal? (content-line-context-result context) #f))
 
 
@@ -175,6 +215,8 @@
     ctx))
 
 (define (content-line:store-value/unget-char ctx ch)
+  "Return a character CH to the iCalendar stream port from the context CTX.  Return
+the context."
   (content-line:store-value ctx ch)
   (unget-char (char-context-port ctx) ch)
   ctx)
@@ -219,4 +261,3 @@
        (content-line-value=? content-line "VEVENT")))
 
 ;;; content-line-context.scm ends here.
-
