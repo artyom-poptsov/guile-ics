@@ -197,8 +197,18 @@ EOF.)"
   ctx)
 
 (define (content-line:store-value ctx ch)
-  (let ((content-line (content-line-context-result ctx)))
-    (content-line-value-set! content-line (context-buffer->string ctx))
+  (let* ((content-line  (content-line-context-result ctx))
+         (current-value (content-line-value content-line))
+         (new-value     (context-buffer->string ctx)))
+    (if current-value
+        (if (list? current-value)
+            (content-line-value-set! content-line
+                                     (append current-value
+                                             (list new-value)))
+            (content-line-value-set! content-line
+                                     (append (list current-value)
+                                             (list new-value))))
+        (content-line-value-set! content-line new-value))
     (context-buffer-clear! ctx)
     ctx))
 
