@@ -165,7 +165,7 @@ CONTEXT.  Return the context."
 CONTENT-LINE-CTX. The new object is stored in the current object slot inside
 <stream-context> CTX.  Return the context."
   (let* ((content-line (content-line-context-result content-line-ctx))
-         (name         (content-line-name content-line)))
+         (name         (content-line-value content-line)))
     (stream-context-current-object-set! ctx (make <ics-object>
                                               #:name name)))
   ctx)
