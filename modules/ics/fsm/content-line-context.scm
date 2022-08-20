@@ -207,10 +207,13 @@ EOF.)"
   ctx)
 
 (define (content-line:store-param-value ctx ch)
-  (let ((content-line (content-line-context-result ctx)))
-    (content-line-parameter-set! content-line
-                                 (content-line-context-buffer ctx)
-                                 (context-buffer->string ctx))
+  (let* ((content-line  (content-line-context-result ctx))
+         (param-name    (content-line-context-buffer ctx))
+         (param-value   (context-buffer->string ctx))
+         (param-current (content-line-parameter content-line param-name)))
+    (when param-current
+      (error "Duplicated parameter" param-name param-value))
+    (content-line-parameter-set! content-line param-name param-value)
     (context-buffer-clear! ctx)
     ctx))
 
