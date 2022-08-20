@@ -134,6 +134,27 @@
                              #:port (current-input-port)))))
         (content-line-context-eof? ctx)))))
 
+(test-equal "correct property: list of values"
+  '("a" "b" "c")
+  (with-input-from-string
+      "NAME:a,b,c\r\n"
+    (lambda ()
+      (let ((ctx (fsm-run! (make <content-line-parser>)
+                           (make <content-line-context>
+                             #:port (current-input-port)))))
+        (content-line-value (content-line-context-result ctx))))))
+
+(test-equal "correct property: parameter with a list of values"
+  '("a" "b" "c")
+  (with-input-from-string
+      "NAME;PARAM=a,b,c:VALUE\r\n"
+    (lambda ()
+      (let ((ctx (fsm-run! (make <content-line-parser>)
+                           (make <content-line-context>
+                             #:port (current-input-port)))))
+        (content-line-parameter (content-line-context-result ctx)
+                                "PARAM")))))
+
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
