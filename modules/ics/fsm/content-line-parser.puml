@@ -48,13 +48,13 @@ read_param_name ->  read_param_name:  guard:#t -> action:store
 ' QSAFE-CHAR    = WSP / %x21 / %x23-7E / NON-US-ASCII
 '   ; Any character except CONTROL and DQUOTE
 
-read_param_value --> read_param_name:        guard:semicolon? -> content-line:store-param-value
-read_param_value --> read_param_value_comma: guard:reverse-solidus? -> action:no-op
-read_param_value --> read_value:             guard:colon? -> content-line:store-param-value
-read_param_value --> read_param_value_list:  guard:comma? -> content-line:store-param-value/list
-read_param_value ->  read_param_value:       content-line:safe-char? -> action:store
+read_param_value --> read_param_name:          guard:semicolon? -> content-line:store-param-value
+read_param_value --> read_param_value_escaped: guard:reverse-solidus?
+read_param_value --> read_value:               guard:colon? -> content-line:store-param-value
+read_param_value --> read_param_value_list:    guard:comma? -> content-line:store-param-value/list
+read_param_value ->  read_param_value:         content-line:safe-char? -> action:store
 
-read_param_value_comma --> read_param_value: guard:#t -> action:store
+read_param_value_escaped --> read_param_value: guard:#t -> action:store
 
 ' ---------------------------------------------------------------------------
 ' List and Field Separators:
@@ -76,13 +76,13 @@ read_param_value_list ->  read_param_value_list: content-line:safe-char? -> acti
 '   ; All the controls except HTAB
 
 read_value: Read content line value.
-read_value --> read_line_feed:   guard:cr?
-read_value --> read_value_comma: guard:reverse-solidus? -> action:no-op
-read_value --> read_value:       guard:comma? -> content-line:store-value
-read_value ->  read_value:       content-line:value-char? -> action:store
-read_value --> [*]:              guard:#t -> content-line:error-invalid-content-line
+read_value --> read_line_feed:     guard:cr?
+read_value --> read_value_escaped: guard:reverse-solidus?
+read_value --> read_value:         guard:comma? -> content-line:store-value
+read_value ->  read_value:         content-line:value-char? -> action:store
+read_value --> [*]:                guard:#t -> content-line:error-invalid-content-line
 
-read_value_comma --> read_value: guard:#t -> action:store
+read_value_escaped --> read_value: guard:#t -> action:store
 
 read_line_feed ->  check_for_multiline_text: guard:lf?
 read_line_feed --> [*]: guard:#t -> content-line:error-invalid-content-line
