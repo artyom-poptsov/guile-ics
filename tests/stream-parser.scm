@@ -158,6 +158,18 @@
         (ics-property-value (ics-object-property-ref (car objects)
                                                      "VERSION"))))))
 
+(test-equal "RFC5545 complex object 1: Check VEVENT properties count"
+  9
+  (with-input-from-string
+      %rfc5545-complex-object-1
+    (lambda ()
+      (let* ((fsm (make <stream-parser>
+                    #:debug-mode? #t))
+             (ctx (fsm-run! fsm (make <stream-context>)))
+             (object    (car (stream-context-objects ctx)))
+             (component (car (ics-object-components object))))
+        (length (ics-object-properties component))))))
+
 (test-assert "RFC5545 complex object 1: Check VEVENT: DTSTART"
   (with-input-from-string
       %rfc5545-complex-object-1
