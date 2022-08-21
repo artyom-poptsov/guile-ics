@@ -144,6 +144,16 @@
                              #:port (current-input-port)))))
         (content-line-value (content-line-context-result ctx))))))
 
+(test-equal "correct property: list of values with escaped comma"
+  '("a" "b,c")
+  (with-input-from-string
+      "NAME:a,b\\,c\r\n"
+    (lambda ()
+      (let ((ctx (fsm-run! (make <content-line-parser>)
+                           (make <content-line-context>
+                             #:port (current-input-port)))))
+        (content-line-value (content-line-context-result ctx))))))
+
 (test-equal "correct property: parameter with a list of values"
   '("a" "b" "c")
   (with-input-from-string
