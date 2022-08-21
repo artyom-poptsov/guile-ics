@@ -89,7 +89,7 @@
                                          (name <string>))
   "Get an iCalendar property by a NAME, return the property object or
 #f if no property found."
-  (find (lambda (property) (equal? (ics-property-name property) name))
+  (find (lambda (property) (string=? (ics-property-name property) name))
         (ics-object-properties ics-object)))
 
 
