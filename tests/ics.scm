@@ -1,6 +1,6 @@
 ;;; ics.scm -- Tests for ICS parser.
 
-;; Copyright (C) 2016, 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2016-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 (use-modules (srfi srfi-64)
              (oop goops)
              (ice-9 rdelim)
+             (ice-9 streams)
              (ics)
              (ics common)
              (ics parser)
@@ -252,6 +253,44 @@
      (string=? description-value
                    "Project XYZ Review Meeting will include the following agenda items: \
 (a) Market Overview, (b) Finances, (c) Project Management"))))
+
+
+;;; iCalendar streams -> ICE-9 streams converter tests.
+
+(test-assert "ics->stream"
+  (with-input-from-string
+      (string-append
+       "BEGIN:VCALENDAR\r\n"
+       "DESCRIPTION;ALTREP=\"CID:part3.msg.970415T083000@example.com\":\r\n"
+       " Project XYZ Review Meeting will include the following agenda\r\n"
+       "  items: (a) Market Overview\\, (b) Finances\\, (c) Project Man\r\n"
+       " agement\r\n"
+       "END:VCALENDAR\r\n")
+    (lambda ()
+      (ics->stream))))
+
+(test-assert "ics->stream: 1st object"
+  (with-input-from-string
+      (string-append
+       "BEGIN:VCALENDAR\r\n"
+       "DESCRIPTION:Object description\r\n"
+       "END:VCALENDAR\r\n")
+    (lambda ()
+      (stream-car (ics->stream)))))
+
+(test-equal "ics->stream: 2nd object"
+  "The second object"
+  (with-input-from-string
+      (string-append
+       "BEGIN:VCALENDAR\r\n"
+       "DESCRIPTION:The first object\r\n"
+       "END:VCALENDAR\r\n"
+       "BEGIN:VCALENDAR\r\n"
+       "DESCRIPTION:The second object\r\n"
+       "END:VCALENDAR\r\n")
+    (lambda ()
+      (let ((obj (stream-car (stream-cdr (ics->stream)))))
+        (ics-property-value (ics-object-property-ref obj "DESCRIPTION"))))))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
