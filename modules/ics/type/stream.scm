@@ -1,6 +1,6 @@
 ;;; stream.scm -- iCalendar streams
 
-;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2017-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@
   #:use-module (ics common)
   #:use-module (ics parser)
   #:use-module (ics fsm)
+  #:use-module (ics fsm stream-context)
+  #:use-module (ics fsm stream-parser)
   #:use-module (ics type object)
   #:use-module (oop goops)
   #:export (<ics-stream>
@@ -92,42 +94,25 @@ list."
 
 ;;; SRFI streams
 
-(define (fsm-read-ics-stream-1 parser result)
+(define (fsm-read-ics-stream-1 port)
   "Read iCalendar object using PARSER.  Return iCalendar object or
 'stream-null' on EOF."
-  (define (read-component-name)
-    (let ((name (fsm-read-property parser)))
-      (debug-fsm "fsm-read-component-name" "NAME: ~a~%" name)
-      (if (ics-calendar-object? name)
-          (begin
-            (debug-fsm "fsm-read-ics-stream" "RESULT: ~a~%" result)
-            (fsm-read-ics-object parser %ics-icalendar-object '() '()))
-          (fsm-read-ics-stream-1 parser result))))
-  (define (read-ics-stream buffer)
-    (let ((ch (parser-read-char parser)))
-      (if (eof-object? ch)
-          stream-null
-          (case ch
-            ((#\:)
-             (debug-fsm "fsm-read-ics-stream" "BUFFER: ~a~%" buffer)
-             (cond
-              ((ics-token-begin? buffer)
-               (read-component-name))
-              (else
-               (debug-fsm-transition "fsm-read-ics-stream")
-               (fsm-read-ics-stream-1 parser result))))
-            (else
-             (read-ics-stream (string-append buffer (string ch))))))))
-  (debug-fsm-transition "fsm-read-ics-stream-1")
-  (read-ics-stream ""))
+  (let* ((fsm (make <stream-parser>))
+         (ctx (fsm-run! fsm (make <stream-context>
+                              #:lazy? #t
+                              #:port  port))))
+          (car (stream-context-objects ctx))))
 
 (define-method (ics-stream->scm-stream (ics-stream <ics-stream>))
   "Convert an ICS stream to an SRFI-41 stream.  Return the stream."
-  (let ((parser (ics-stream-parser ics-stream)))
-    (stream-let loop ((ics-object (fsm-read-ics-stream-1 parser '())))
+  (let* ((source (ics-stream-source ics-stream))
+         (port   (if (port? source)
+                     source
+                     (open-input-string source))))
+    (stream-let loop ((ics-object (fsm-read-ics-stream-1 port)))
                 (if (stream-null? ics-object)
                     stream-null
                     (stream-cons ics-object
-                                 (loop (fsm-read-ics-stream-1 parser '())))))))
+                                 (loop (fsm-read-ics-stream-1 port)))))))
 
 ;;; stream.scm ends here.
