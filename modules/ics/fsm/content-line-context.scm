@@ -60,6 +60,7 @@
             content-line:qsafe-char?
             content-line:value-char?
             content-line:control?
+            content-line:store-escaped
             content-line:create
             content-line:store-name
             content-line:store-value
@@ -188,6 +189,13 @@ EOF.)"
 
 (define (context-buffer->string ctx)
   (list->string (reverse (context-buffer ctx))))
+
+(define (content-line:store-escaped ctx ch)
+  (case ch
+    ((#\n #\N)
+     (action:store ctx #\newline))
+    (else
+     (action:store ctx ch))))
 
 (define (content-line:create ctx ch)
   (content-line-context-result-set! ctx

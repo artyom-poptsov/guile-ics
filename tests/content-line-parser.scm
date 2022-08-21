@@ -176,6 +176,28 @@
                              #:port (current-input-port)))))
         (content-line-value (content-line-context-result ctx))))))
 
+(test-equal "value: URI"
+  "http://example.com/my-report.txt"
+  (with-input-from-string
+      "URI:http://example.com/my-report.txt\r\n"
+    (lambda ()
+      (let ((ctx (fsm-run! (make <content-line-parser>
+                             #:debug-mode? #t)
+                           (make <content-line-context>
+                             #:port (current-input-port)))))
+        (content-line-value (content-line-context-result ctx))))))
+
+(test-equal "value: multi-line"
+  "Project XYZ Final Review\nConference Room - 3B\nCome Prepared."
+  (with-input-from-string
+      "TITLE:Project XYZ Final Review\\nConference Room - 3B\\nCome Prepared.\r\n"
+    (lambda ()
+      (let ((ctx (fsm-run! (make <content-line-parser>
+                             #:debug-mode? #t)
+                           (make <content-line-context>
+                             #:port (current-input-port)))))
+        (content-line-value (content-line-context-result ctx))))))
+
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
