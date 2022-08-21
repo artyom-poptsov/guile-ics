@@ -45,6 +45,7 @@
             stream-context-objects-set!
             stream-context-objects-count
             stream-context-parse-types?
+            stream-context-lazy?
 
             ;; FSM event sources.
             stream:read
@@ -57,6 +58,7 @@
             stream:vcalendar-end?
             stream:vevent-begin?
             stream:vevent-end?
+            stream:lazy?
 
             ;; FSM actions.
             stream:create-object
@@ -81,6 +83,19 @@
    #:init-value   #f
    #:init-keyword #:parse-types?
    #:getter       stream-context-parse-types?)
+
+  ;; When set to #f the parser reads all iCalendar objects from the specified
+  ;; port.
+  ;;
+  ;; When set to #t the parser reads only the first object from the port.  The
+  ;; port will not be closed afterwards so the next call of the FSM on the port
+  ;; will return the next object.
+  ;;
+  ;; <boolean>
+  (lazy?
+   #:init-value   #f
+   #:init-keyword #:lazy?
+   #:getter       stream-context-lazy?)
 
   ;; The port from which iCalendar stream of objects is read.
   ;;
@@ -144,6 +159,9 @@ CONTEXT.  Return the context."
 
 
 ;;; Guards.
+
+(define (stream:lazy? ctx content-line-ctx)
+  (stream-context-lazy? ctx))
 
 (define (stream:eof-object? ctx content-line-ctx)
   "Check if CONTENT-LINE-CTX contains EOF."

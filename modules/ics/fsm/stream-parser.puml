@@ -19,9 +19,17 @@ read_object: <https://datatracker.ietf.org/doc/html/rfc5545#section-3.4>
 read_object:
 read_object: event-source: stream:read
 read_object --> read_object_error_eof:  stream:eof-object?
-read_object --> lookup_object:          stream:vcalendar-end? -> stream:append-object
+read_object --> check_laziness:         stream:vcalendar-end? -> stream:append-object
 read_object --> read_vevent:            stream:vevent-begin? -> stream:create-component
 read_object --> read_object:            guard:#t -> stream:append-property
+
+check_laziness: Check if the FSM in the lazy mode.
+check_laziness: When it in the lazy mode then the FSM stops
+check_laziness: after reading a single iCalendar object.
+check_laziness:
+check_laziness: event-source: stream:dummy-event-source
+check_laziness --> [*]: stream:lazy?
+check_laziness --> lookup_object
 
 read_object_error_eof: Unexpected EOF was read during VCALENDAR parsing.
 read_object_error_eof:
