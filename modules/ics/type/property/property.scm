@@ -1,6 +1,6 @@
 ;;; property.scm -- iCalendar generic property type.
 
-;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2017-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -72,9 +72,6 @@
 
 
 ;;; Printers.
-
-(define-generic display)
-(define-generic write)
 
 (define (%display property port)
   (format port "#<ics-property name: ~a ~a>"
