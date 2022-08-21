@@ -62,6 +62,9 @@
             stream:create-object
             stream:append-object
             stream:append-property
+            stream:create-component
+            stream:append-component-property
+            stream:append-component
 
             ;; FSM error handling.
             stream:error
@@ -95,6 +98,15 @@
    #:init-keyword #:current-object
    #:getter       stream-context-current-object
    #:setter       stream-context-current-object-set!)
+
+  ;; Current iCalendar object component.
+  ;;
+  ;; <ics-object> | #f
+  (current-component
+   #:init-value   #f
+   #:init-keyword #:current-component
+   #:getter       stream-context-current-component
+   #:setter       stream-context-current-component-set!)
 
   ;; The list of iCalendar objects from the current stream.
   ;;
@@ -192,6 +204,39 @@ CTX. Return the context."
          (current-object-properties (ics-object-properties current-object)))
     (ics-object-properties-set! current-object
                                 (cons property current-object-properties))
+    ctx))
+
+(define (stream:create-component ctx content-line-ctx)
+  (let ((name (content-line-value
+               (content-line-context-result content-line-ctx))))
+    (stream-context-current-component-set! ctx
+                                           (make <ics-object>
+                                             #:name name))
+    ctx))
+
+(define (stream:append-component ctx content-line-ctx)
+  (let ((current-object    (stream-context-current-object ctx))
+        (current-component (stream-context-current-component ctx)))
+    (ics-object-components-set! current-object
+                                (append (ics-object-components current-object)
+                                        (list current-component)))
+    (stream-context-current-component-set! ctx #f)
+    ctx))
+
+(define (stream:append-component-property ctx content-line-ctx)
+  (let* ((content-line (content-line-context-result content-line-ctx))
+         (property-name (content-line-name content-line))
+         (property (make <ics-property>
+                     #:name       property-name
+                     #:value      (content-line-value content-line)
+                     #:parameters (content-line-parameters content-line)))
+         (property (if (stream-context-parse-types? ctx)
+                       (ics-property->typed-property property)
+                       property))
+         (current-component (stream-context-current-component ctx)))
+    (ics-object-properties-set! current-component
+                                (append (ics-object-properties current-component)
+                                        (list property)))
     ctx))
 
 
