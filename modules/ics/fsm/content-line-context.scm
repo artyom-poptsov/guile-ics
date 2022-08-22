@@ -138,7 +138,7 @@ EOF.)"
 
 
 (define-method (content-line-parameter-set! (content-line <content-line>)
-                                            (name         <string>)
+                                            (name         <symbol>)
                                             (value        <top>))
   "Set a CONTENT-LINE parameter."
   (let ((parameters (content-line-parameters content-line)))
@@ -227,7 +227,7 @@ EOF.)"
 
 (define (content-line:store-param-value ctx ch)
   (let* ((content-line  (content-line-context-result ctx))
-         (param-name    (content-line-context-buffer ctx))
+         (param-name    (string->symbol (content-line-context-buffer ctx)))
          (param-value   (context-buffer->string ctx))
          (param-current (content-line-parameter content-line param-name)))
     (when param-current
@@ -240,7 +240,7 @@ EOF.)"
   "Append a value to the list of parameter values for the parameter that is being
 read."
   (let* ((content-line  (content-line-context-result ctx))
-         (param-name    (content-line-context-buffer ctx))
+         (param-name    (string->symbol (content-line-context-buffer ctx)))
          (param-value   (context-buffer->string ctx))
          (param-current (content-line-parameter content-line param-name)))
     (if param-current
