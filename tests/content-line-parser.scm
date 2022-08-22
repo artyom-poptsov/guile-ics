@@ -82,7 +82,7 @@
              (ctx (fsm-run! fsm (make <content-line-context>
                                   #:port (current-input-port)))))
         (content-line-parameter (content-line-context-result ctx)
-                                "PARAM_NAME")))))
+                                'PARAM_NAME)))))
 
 
 (test-equal "correct multi-line input: name check"
@@ -163,7 +163,7 @@
                            (make <content-line-context>
                              #:port (current-input-port)))))
         (content-line-parameter (content-line-context-result ctx)
-                                "PARAM")))))
+                                'PARAM)))))
 
 (test-equal "correct property: escaped characters"
   '("a;" "b\\" "c,d\\n")
