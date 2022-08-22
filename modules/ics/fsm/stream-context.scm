@@ -30,7 +30,6 @@
   #:use-module (ics common)
   #:use-module (ics type object)
   #:use-module (ics type property)
-  #:use-module (ics parser)
   #:use-module (ics fsm context)
   #:use-module (ics fsm content-line-context)
   #:use-module (ics fsm content-line-parser)

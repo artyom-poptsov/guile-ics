@@ -24,14 +24,12 @@
 (define-module (ics type stream)
   #:use-module (srfi srfi-41)
   #:use-module (ics common)
-  #:use-module (ics parser)
   #:use-module (ics fsm stream-context)
   #:use-module (ics fsm stream-parser)
   #:use-module (ics type object)
   #:use-module (oop goops)
   #:export (<ics-stream>
             ics-stream-source
-            ics-stream-parser
             ics-stream-parse-types?
             ics-stream->scm-stream
             ics-stream->scm))
@@ -62,25 +60,6 @@
 
 (define-method (write (ics-stream <ics-stream>) (port <port>))
   (display ics-stream port))
-
-
-;;;
-
-(define (ics-read parser)
-  "Read iCalendar data using a PARSER, return a new iCalendar object."
-  (fsm-read-ics-stream parser '()))
-
-(define-method (ics-stream-parser (ics-stream <ics-stream>))
-  (let ((source (ics-stream-source ics-stream)))
-    (if (port? source)
-        (make <ics-parser>
-          #:port source
-          #:parse-types? (ics-stream-parse-types? ics-stream))
-        (call-with-input-string source
-          (lambda (port)
-            (make <ics-parser>
-              #:port port
-              #:parse-types? (ics-stream-parse-types? ics-stream)))))))
 
 
 ;;;

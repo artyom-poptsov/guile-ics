@@ -27,7 +27,6 @@
              (ice-9 streams)
              (ics)
              (ics common)
-             (ics parser)
              (ics type object)
              (ics type property))
 

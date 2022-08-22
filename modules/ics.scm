@@ -35,7 +35,6 @@
   #:use-module (oop goops)
   ;; Guile-ICS
   #:use-module (ics common)
-  #:use-module (ics parser)
   #:use-module (ics type stream)
   #:use-module (ics type object)
   #:use-module (ics type property)

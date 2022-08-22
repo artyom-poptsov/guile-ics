@@ -26,7 +26,6 @@
              (ice-9 rdelim)
              (ics)
              (ics common)
-             (ics parser)
              (ics type object)
              (ics type property))
 

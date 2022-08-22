@@ -22,7 +22,6 @@ SUBDIRS = type fsm .
 SOURCES = \
 	version.scm	\
 	common.scm	\
-	parser.scm	\
 	conv.scm
 
 EXTRA_DIST += \
