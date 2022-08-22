@@ -40,8 +40,8 @@
 (test-equal "content-line-parameter-set!"
   "value"
   (let ((content-line (make <content-line>)))
-    (content-line-parameter-set! content-line "parameter" "value")
-    (content-line-parameter content-line "parameter")))
+    (content-line-parameter-set! content-line 'parameter "value")
+    (content-line-parameter content-line 'parameter)))
 
 
 ;;; Guards.
@@ -161,7 +161,7 @@
               param-value)
     (content-line:store-param-value ctx #f)
     (content-line-parameter (content-line-context-result ctx)
-                            "param")))
+                            'param)))
 
 
 ;; Test content line predicates.
