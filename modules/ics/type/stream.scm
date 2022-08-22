@@ -88,7 +88,8 @@
 (define-method (ics-stream->scm (ics-stream <ics-stream>))
   "Convert an ICAL-STREAM to a list of iCalendar objects.  Return the
 list."
-  (let* ((fsm    (make <stream-parser>))
+  (let* ((fsm    (make <stream-parser>
+                   #:debug-mode? *debug?*))
          (source (ics-stream-source ics-stream))
          (parse-types? (ics-stream-parse-types? ics-stream))
          (port   (if (port? source)
@@ -105,7 +106,8 @@ list."
 (define (fsm-read-ics-stream-1 port parse-types?)
   "Read iCalendar object using PARSER.  Return iCalendar object or
 'stream-null' on EOF."
-  (let* ((fsm (make <stream-parser>))
+  (let* ((fsm (make <stream-parser>
+                #:debug-mode? *debug?*))
          (ctx (fsm-run! fsm (make <stream-context>
                               #:parse-types? parse-types?
                               #:lazy? #t

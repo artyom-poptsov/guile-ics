@@ -1,6 +1,6 @@
 ;;; common.scm -- Common code for Guile-ICS.
 
-;; Copyright (C) 2015, 2016, 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2015-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -26,8 +26,10 @@
 (define-module (ics common)
   #:use-module ((srfi srfi-1) #:select (fold))
   #:use-module ((ice-9 regex) #:select (regexp-substitute/global))
-  #:export (ics-debug-set! debug debug-fsm debug-fsm-transition debug-fsm-error
+  #:export (ics-debug-set!
+            debug
             ics-error
+            *debug?*
 
             value-or-default
             substitute unescape-chars
@@ -41,32 +43,6 @@
 (define (ics-debug-set! enabled?)
   "Set debug mode to an ENABLED? value."
   (set! *debug?* enabled?))
-
-(define (debug fmt . args)
-  (and *debug?*
-       (let ((fmt (string-append ";;; DEBUG: " fmt)))
-         (apply format #t fmt args))))
-
-(define (debug-fsm state fmt . args)
-  "Format and print a debug message from a finite-state machine (FSM)."
-  (apply debug (format #f "[~a]: ~a~%" state fmt) args))
-
-(define debug-fsm-transition
-  (case-lambda
-    "Debug a finite-state machine (FSM) transition."
-    ((to)
-     (debug "--->[~a]~%" to))
-    ((from to)
-     (debug "[~a]--->[~a]~%" from to))
-    ((from to type)
-     (case type
-       ((final)
-        (debug "[~a]---> ~a~%" from to))
-       (else
-        (debug "[~a]--->[~a]~%" from to))))))
-
-(define (debug-fsm-error state)
-  (debug-fsm-transition state 'ERROR 'final))
 
 
 (define ics-error
