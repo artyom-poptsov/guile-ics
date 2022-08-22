@@ -31,7 +31,6 @@
             ics-error
             *debug?*
 
-            value-or-default
             substitute unescape-chars
 
             case*))
@@ -55,19 +54,6 @@ it as a debug message.."
      (throw 'guile-ics-error message args))
     ((message . args)
      (throw 'guile-ics-error message args))))
-
-
-(define (value-or-default value default-value)
-  "Return a VALUE if it is not 'default, else return DEFAULT-VALUE."
-  (if (eq? value 'default)
-      default-value
-      value))
-
-(define (substitute str regex subst-str)
-  (regexp-substitute/global #f regex str 'pre subst-str 'post))
-
-(define (unescape-chars str char escape-char)
-  (substitute str (string escape-char char) (string char)))
 
 
 ;;;
