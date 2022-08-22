@@ -26,6 +26,7 @@
 (define-module (ics type object)
   #:use-module (oop goops)
   #:use-module (ice-9 rdelim)
+  #:use-module (ice-9 hash-table)       ; alist->hash-table
   #:use-module (srfi srfi-1)            ; find
   #:use-module (ics type property)
   #:use-module (ics type content)
@@ -37,7 +38,63 @@
             ics-object-properties-set!
             ics-object-property-ref
             ics-object-components
-            ics-object-components-set!))
+            ics-object-components-set!
+
+            %ics-calendar-components
+            ics-calendar-component-lookup))
+
+
+;;; iCalendar components.
+;; <https://datatracker.ietf.org/doc/html/rfc5545#section-3.6>
+
+(define %ics-calendar-components
+  (alist->hash-table
+   '((VEVENT
+      . ((title   . "Event Component")
+         (uri     . "https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.1")
+         (purpose
+          . ("Provide a grouping of component properties that describe an"
+             " event."))))
+     (VTODO
+      . ((title   . "To-Do Component")
+         (uri     . "https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.2")
+         (purpose
+          . ("Provide a grouping of calendar properties that describe a"
+             " to-do."))))
+     (VJOURNAL
+      . ((title   . "Journal Component")
+         (uri     . "https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.3")
+         (purpose
+          . ("Provide a grouping of component properties that describe"
+             " a journal entry."))))
+     (VFREEBUSY
+      . ((title   . "Free/Busy Component")
+         (uri     . "https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.4")
+         (purpose
+          . ("Provide a grouping of component properties that describe"
+             " either a request for free/busy time, describe a response to a"
+             " request for free/busy time, or describe a published set of busy"
+             " time."))))
+     (VTIMEZONE
+      . ((title   . "Time Zone Component")
+         (uri     . "https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.5")
+         (purpose
+          . ("Provide a grouping of component properties that defines a"
+             " time zone."))))
+     (VALARM
+      . ((title   . "Alarm Component")
+         (uri     . "https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.6")
+         (purpose
+          . ("Provide a grouping of component properties that define an"
+             " alarm.")))))))
+
+(define-generic ics-calendar-component-lookup)
+
+(define-method (ics-calendar-component-lookup (name <string>))
+  (ics-calendar-component-lookup (string->symbol name)))
+
+(define-method (ics-calendar-component-lookup (name <symbol>))
+  (hash-ref %ics-calendar-components name))
 
 
 ;;;
