@@ -25,7 +25,6 @@
   #:use-module (srfi srfi-41)
   #:use-module (ics common)
   #:use-module (ics parser)
-  #:use-module (ics fsm)
   #:use-module (ics fsm stream-context)
   #:use-module (ics fsm stream-parser)
   #:use-module (ics type object)
