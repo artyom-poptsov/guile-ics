@@ -48,6 +48,7 @@ read_param_name ->  read_param_name:  guard:#t -> action:store
 ' QSAFE-CHAR    = WSP / %x21 / %x23-7E / NON-US-ASCII
 '   ; Any character except CONTROL and DQUOTE
 
+read_param_value --> read_param_value_quoted:  guard:double-quote?
 read_param_value --> read_param_name:          guard:semicolon? -> content-line:store-param-value
 read_param_value --> read_param_value_escaped: guard:reverse-solidus?
 read_param_value --> read_value:               guard:colon? -> content-line:store-param-value
@@ -55,6 +56,10 @@ read_param_value --> read_param_value_list:    guard:comma? -> content-line:stor
 read_param_value ->  read_param_value:         content-line:safe-char? -> action:store
 
 read_param_value_escaped --> read_param_value: guard:#t -> content-line:store-escaped
+
+read_param_value_quoted --> read_param_value:        guard:double-quote?
+read_param_value_quoted --> read_param_value_quoted: content-line:qsafe-char? -> action:store
+read_param_value_quoted --> [*]: guard:#t -> content-line:error-invalid-content-line
 
 ' ---------------------------------------------------------------------------
 ' List and Field Separators:
