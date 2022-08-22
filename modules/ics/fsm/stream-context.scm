@@ -56,8 +56,8 @@
             stream:eof-object?
             stream:vcalendar-begin?
             stream:vcalendar-end?
-            stream:vevent-begin?
-            stream:vevent-end?
+            stream:component-begin?
+            stream:component-end?
             stream:lazy?
 
             ;; FSM actions.
@@ -178,15 +178,22 @@ CONTEXT.  Return the context."
   (content-line-vcalendar-end?
    (content-line-context-result content-line-ctx)))
 
-(define (stream:vevent-begin? ctx content-line-ctx)
-  "Check if CONTENT-LINE-CTX contains the beginning of an iCalendar event."
-  (content-line-vevent-begin?
-   (content-line-context-result content-line-ctx)))
+(define (stream:component-begin? ctx content-line-ctx)
+  "Check if CONTENT-LINE-CTX contains the beginning of an iCalendar component."
+  (let ((content-line (content-line-context-result content-line-ctx)))
+    (and (content-line-component-begin? content-line)
+         (let* ((name      (content-line-value content-line))
+                (component (ics-calendar-component-lookup name)))
+           (if component
+               (begin
+                 (log-debug "BEGIN COMPONENT: ~a" name)
+                 #t)
+               #f)))))
 
-(define (stream:vevent-end? ctx content-line-ctx)
+(define (stream:component-end? ctx content-line-ctx)
   "Check if CONTENT-LINE-CTX contains the ending of an iCalendar event."
-  (content-line-vevent-end?
-   (content-line-context-result content-line-ctx)))
+  (let ((content-line (content-line-context-result content-line-ctx)))
+    (content-line-component-end? content-line)))
 
 
 ;;; Actions

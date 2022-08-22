@@ -20,7 +20,7 @@ read_object:
 read_object: event-source: stream:read
 read_object --> read_object_error_eof:  stream:eof-object?
 read_object --> check_laziness:         stream:vcalendar-end? -> stream:append-object
-read_object --> read_vevent:            stream:vevent-begin? -> stream:create-component
+read_object --> read_vevent:            stream:component-begin? -> stream:create-component
 read_object --> read_object:            guard:#t -> stream:append-property
 
 check_laziness: Check if the FSM in the lazy mode.
@@ -40,7 +40,7 @@ read_vevent: Read a VEVENT.
 read_vevent:
 read_vevent: event-source: stream:read
 read_vevent --> read_vevent_error_eof:  stream:eof-object?
-read_vevent --> read_object:            stream:vevent-end? -> stream:append-component
+read_vevent --> read_object:            stream:component-end? -> stream:append-component
 read_vevent --> read_vevent:            guard:#t -> stream:append-component-property
 
 read_vevent_error_eof: Unexpected EOF was read during VEVENT parsing.

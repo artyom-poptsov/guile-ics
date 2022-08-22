@@ -188,15 +188,15 @@
                                    #:name "END"
                                    #:value "VCALENDAR")))
 
-(test-assert "content-line-vevent-begin?"
-  (content-line-vevent-begin? (make <content-line>
-                                #:name "BEGIN"
-                                #:value "VEVENT")))
+(test-assert "content-line-component-begin?"
+  (content-line-component-begin? (make <content-line>
+                                   #:name "BEGIN"
+                                   #:value "VEVENT")))
 
-(test-assert "content-line-vevent-end?"
-  (content-line-vevent-end? (make <content-line>
-                              #:name "END"
-                              #:value "VEVENT")))
+(test-assert "content-line-component-end?"
+  (content-line-component-end? (make <content-line>
+                                 #:name "END"
+                                 #:value "VEVENT")))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
