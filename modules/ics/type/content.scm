@@ -1,6 +1,6 @@
 ;;; ics-content.scm -- Common classes and procedures.
 
-;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2017-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -49,27 +49,18 @@
     (throw 'guile-ics-error "#:name slot is mandatory" initargs)))
 
 
-;;;
+;;; Class printers.
 
-(define-generic display)
-(define-generic write)
-
-(define-method (display (ics-content <ics-content>) (port <port>))
+(define-method (%display (ics-content <ics-content>) (port <port>))
   (next-method)
   (format port "#<ics-content ~a ~a>"  (ics-content-name ics-content)
           (number->string (object-address ics-content) 16)))
 
 (define-method (write (ics-content <ics-content>) (port <port>))
-  (next-method)
-  (display ics-content port))
+  (%display ics-content port))
 
-(define-method (display (ics-content <ics-content>))
-  (next-method)
-  (display ics-content (current-output-port)))
-
-(define-method (write (ics-content <ics-content>))
-  (next-method)
-  (display ics-content (current-output-port)))
+(define-method (display (ics-content <ics-content>) (port <port>))
+  (%display ics-content port))
 
 
 ;;;
