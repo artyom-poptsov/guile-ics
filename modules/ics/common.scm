@@ -28,7 +28,6 @@
   #:use-module ((ice-9 regex) #:select (regexp-substitute/global))
   #:export (ics-debug-set!
             debug
-            ics-error
             *debug?*
 
             case*))
@@ -40,18 +39,6 @@
 (define (ics-debug-set! enabled?)
   "Set debug mode to an ENABLED? value."
   (set! *debug?* enabled?))
-
-
-(define ics-error
-  (case-lambda
-    "Throw 'dsv-parser exception with the given MESSAGE and arguments ARGS.
-The procedure optionally takes STATE of FSM as the first argument and prints
-it as a debug message.."
-    ((state message . args)
-     (debug-fsm-error state)
-     (throw 'guile-ics-error message args))
-    ((message . args)
-     (throw 'guile-ics-error message args))))
 
 
 ;;;
