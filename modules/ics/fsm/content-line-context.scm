@@ -76,6 +76,19 @@
             context-buffer->string))
 
 
+;;; Constants.
+
+;; See <https://tools.ietf.org/html/rfc5545#section-3.6>.
+(define %ics-token-begin "BEGIN")
+(define %ics-token-end   "END")
+
+;; See <https://tools.ietf.org/html/rfc5545#section-3.4>.
+(define %ics-token-vcalendar "VCALENDAR")
+
+;; <https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.1>
+(define %ics-token-vevent "VEVENT")
+
+
 ;; Classes.
 
 (define-class <content-line> ()
@@ -284,19 +297,19 @@ the context."
   (string=? (content-line-value content-line) value))
 
 (define-method (content-line-vcalendar-begin? (content-line <content-line>))
-  (and (content-line-name=? content-line "BEGIN")
-       (content-line-value=? content-line "VCALENDAR")))
+  (and (content-line-name=? content-line %ics-token-begin)
+       (content-line-value=? content-line %ics-token-vcalendar)))
 
 (define-method (content-line-vcalendar-end? (content-line <content-line>))
-  (and (content-line-name=? content-line "END")
-       (content-line-value=? content-line "VCALENDAR")))
+  (and (content-line-name=? content-line %ics-token-end)
+       (content-line-value=? content-line %ics-token-vcalendar)))
 
 (define-method (content-line-vevent-begin? (content-line <content-line>))
-  (and (content-line-name=? content-line "BEGIN")
-       (content-line-value=? content-line "VEVENT")))
+  (and (content-line-name=? content-line %ics-token-begin)
+       (content-line-value=? content-line %ics-token-vevent)))
 
 (define-method (content-line-vevent-end? (content-line <content-line>))
-  (and (content-line-name=? content-line "END")
-       (content-line-value=? content-line "VEVENT")))
+  (and (content-line-name=? content-line %ics-token-end)
+       (content-line-value=? content-line %ics-token-vevent)))
 
 ;;; content-line-context.scm ends here.
