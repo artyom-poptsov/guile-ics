@@ -89,16 +89,26 @@
 (define-method (ics-stream->scm (ics-stream <ics-stream>))
   "Convert an ICAL-STREAM to a list of iCalendar objects.  Return the
 list."
-  (ics-read (ics-stream-parser ics-stream)))
+  (let* ((fsm    (make <stream-parser>))
+         (source (ics-stream-source ics-stream))
+         (parse-types? (ics-stream-parse-types? ics-stream))
+         (port   (if (port? source)
+                     source
+                     (open-input-string source)))
+         (ctx (fsm-run! fsm (make <stream-context>
+                              #:parse-types? parse-types?
+                              #:port port))))
+    (stream-context-objects ctx)))
 
 
 ;;; SRFI streams
 
-(define (fsm-read-ics-stream-1 port)
+(define (fsm-read-ics-stream-1 port parse-types?)
   "Read iCalendar object using PARSER.  Return iCalendar object or
 'stream-null' on EOF."
   (let* ((fsm (make <stream-parser>))
          (ctx (fsm-run! fsm (make <stream-context>
+                              #:parse-types? parse-types?
                               #:lazy? #t
                               #:port  port))))
           (car (stream-context-objects ctx))))
@@ -106,13 +116,17 @@ list."
 (define-method (ics-stream->scm-stream (ics-stream <ics-stream>))
   "Convert an ICS stream to an SRFI-41 stream.  Return the stream."
   (let* ((source (ics-stream-source ics-stream))
+         (parse-types? (ics-stream-parse-types? ics-stream))
          (port   (if (port? source)
                      source
                      (open-input-string source))))
-    (stream-let loop ((ics-object (fsm-read-ics-stream-1 port)))
+    (stream-let loop ((ics-object (fsm-read-ics-stream-1 port
+                                                         parse-types?)))
                 (if (stream-null? ics-object)
                     stream-null
                     (stream-cons ics-object
-                                 (loop (fsm-read-ics-stream-1 port)))))))
+                                 (loop
+                                  (fsm-read-ics-stream-1 port
+                                                         parse-types?)))))))
 
 ;;; stream.scm ends here.
