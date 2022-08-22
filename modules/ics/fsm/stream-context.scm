@@ -152,6 +152,7 @@ CONTEXT.  Return the context."
   "Event source for the ICS stream parser."
   (fsm-run! (make <content-line-parser>)
             (make <content-line-context>
+              #:debug-mode? (context-debug-mode? ctx)
               #:port (stream-context-port ctx))))
 
 (define (stream:dummy-event-source ctx)
