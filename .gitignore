@@ -21,3 +21,6 @@ pre-inst-env
 
 TAGS
 tags
+
+# Ignore directories and archives made by "make distcheck"
+guile-ics-*
