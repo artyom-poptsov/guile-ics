@@ -1,6 +1,6 @@
 ;;; binary.scm -- iCalendar DATE-TIME (RFC5545, 3.3.5) type.
 
-;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2017-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
 
 (define-class <ics-property:date-time> (<ics-property>))
 
-(define-method (initialize (property <ics-property:date-time>))
+(define-method (initialize (property <ics-property:date-time>) initargs)
   (next-method)
   (slot-set! property 'type 'DATE-TIME))
 

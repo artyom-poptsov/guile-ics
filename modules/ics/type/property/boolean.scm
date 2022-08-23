@@ -1,6 +1,6 @@
 ;;; boolean.scm -- iCalendar BOOLEAN (RFC5545, 3.3.2) type.
 
-;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2017-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 
 (define-class <ics-property:boolean> (<ics-property>))
 
-(define-method (initialize (property <ics-property:boolean>))
+(define-method (initialize (property <ics-property:boolean>) initargs)
   (next-method)
   (slot-set! property 'type 'BOOLEAN))
 

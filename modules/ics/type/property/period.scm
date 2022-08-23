@@ -1,6 +1,6 @@
 ;;; period.scm -- iCalendar PERIOD (RFC5545, 3.3.9) type.
 
-;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2017-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
 
 (define-class <ics-property:period> (<ics-property>))
 
-(define-method (initialize (property <ics-property:period>))
+(define-method (initialize (property <ics-property:period>) initargs)
   (next-method)
   (slot-set! property 'type 'PERIOD))
 
