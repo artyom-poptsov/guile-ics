@@ -193,6 +193,20 @@
              (component (car (ics-object-components object))))
         (ics-property-value (ics-object-property-ref component "DTSTART"))))))
 
+(test-equal "RFC5545 complex object 1: Check VEVENT: DTSTART type"
+  'DATE-TIME
+  (with-input-from-string
+      %rfc5545-complex-object-1
+    (lambda ()
+      (let* ((fsm       (make <stream-parser>
+                          #:debug-mode? #t))
+             (ctx       (fsm-run! fsm (make <stream-context>
+                                        #:parse-types? #t)))
+             (object    (car (stream-context-objects ctx)))
+             (component (car (ics-object-components object))))
+        (ics-property-type (ics-object-property-ref component "DTSTART"))))))
+
+
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
