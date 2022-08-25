@@ -45,30 +45,41 @@
                              (FMTTYPE  . "image/vnd.microsoft.icon")))))
     p))
 
-(test-assert "property: ics-property-parameter-ref"
+(test-equal "property: ics-property-parameter-ref: ENCODING"
+  "BASE64"
   (let ((p (make <ics-property>
              #:name       "ATTACH"
              #:value      "R05VIEd1aWxlCg=="
              #:parameters '((ENCODING . "BASE64")
                             (FMTTYPE  . "image/vnd.microsoft.icon")))))
-    (and (equal? (ics-property-parameter-ref p 'ENCODING) "BASE64")
-         (equal? (ics-property-parameter-ref p 'FMTTYPE)  "image/vnd.microsoft.icon"))))
+    (ics-property-parameter-ref p 'ENCODING)))
 
-(test-assert "property: ics-property-parameter-set!"
+(test-equal "property: ics-property-parameter-ref: FMTTTYPE"
+  "image/vnd.microsoft.icon"
+  (let ((p (make <ics-property>
+             #:name       "ATTACH"
+             #:value      "R05VIEd1aWxlCg=="
+             #:parameters '((ENCODING . "BASE64")
+                            (FMTTYPE  . "image/vnd.microsoft.icon")))))
+    (ics-property-parameter-ref p 'FMTTYPE)  "image/vnd.microsoft.icon"))
+
+(test-equal "property: ics-property-parameter-set!"
+  "audio/basic"
   (let ((p (make <ics-property>
              #:name "ATTACH"
               #:value       "R05VIEd1aWxlCg=="
               #:parameters '((ENCODING . "BASE64")
                              (FMTTYPE  . "image/vnd.microsoft.icon")))))
     (ics-property-parameter-set! p 'FMTTYPE "audio/basic")
-    (equal? (ics-property-parameter-ref p 'FMTTYPE)  "audio/basic")))
+    (ics-property-parameter-ref p 'FMTTYPE)))
 
-(test-assert "property: ics-property-determine-type, ATTACH"
+(test-equal "property: ics-property-determine-type, ATTACH"
+  'URI
   (let ((p (make <ics-property>
              #:name "ATTACH"
              #:value "ftp://example.com/pub/reports/r-960812.ps"
              #:parameters '((FMTTYPE . "application/postscript")))))
-    (equal? (ics-property-determine-type p) 'URI)))
+    (ics-property-determine-type p)))
 
 
 ;;; BINARY
@@ -176,15 +187,29 @@
               #:value (strptime "%Y%m%d" "19970714"))))
     (equal? p1 p2)))
 
-(test-assert "date: list of values"
+(test-assert "date: list of values: check type"
   (let* ((p (make <ics-property>
              #:name  "X-GNU-DATES"
              #:value '("19970715" "19970716" "19970717")))
          (d (ics-property->ics-property:date p))
          (v (ics-property-value d)))
-    (and (list? v)
-         (= (length v) 3)
-         v)))
+    (list? v)))
+
+(test-equal "date: list of values: check length"
+  3
+  (let* ((p (make <ics-property>
+              #:name  "X-GNU-DATES"
+              #:value '("19970715" "19970716" "19970717")))
+         (d (ics-property->ics-property:date p))
+         (v (ics-property-value d)))
+    (length v)))
+
+(test-assert "date: list of values: check value"
+  (let* ((p (make <ics-property>
+              #:name  "X-GNU-DATES"
+              #:value '("19970715" "19970716" "19970717")))
+         (d (ics-property->ics-property:date p)))
+    (ics-property-value d)))
 
 
 ;;; DATE-TIME
