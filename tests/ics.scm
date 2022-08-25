@@ -51,15 +51,32 @@
                  "END:VCALENDAR\r\n"))
 
 
-(test-assert "ics-string->scm"
+(test-equal "ics-string->scm: object name"
+  "VCALENDAR"
+  (let ((vcalendar (car (ics-string->scm %ics-string))))
+    (ics-object-name vcalendar)))
+
+(test-equal "ics-string->scm: VERSION: name"
+  "VERSION"
+  (let ((vcalendar (car (ics-string->scm %ics-string))))
+    (ics-property-name (ics-object-property-ref vcalendar "VERSION"))))
+
+(test-equal "ics-string->scm: VERSION: value"
+  "2.0"
+  (let ((vcalendar (car (ics-string->scm %ics-string))))
+    (ics-property-value (ics-object-property-ref vcalendar "VERSION"))))
+
+(test-equal "ics-string->scm: VEVENT: check component name"
+  "VEVENT"
   (let* ((vcalendar (car (ics-string->scm %ics-string)))
-         (version   (ics-object-property-ref vcalendar "VERSION")))
-    (and (string=? (ics-object-name vcalendar) "VCALENDAR")
-         (string=? (ics-property-name version)  "VERSION")
-         (string=? (ics-property-value version) "2.0")
-         (let ((vevent (car (ics-object-components vcalendar))))
-           (string=? (ics-object-name vevent) "VEVENT")
-           (null? (ics-object-components vevent))))))
+         (vevent    (car (ics-object-components vcalendar))))
+    (ics-object-name vevent)))
+
+(test-equal "ics-string->scm: VEVENT: ensure that it has none components"
+  '()
+  (let* ((vcalendar (car (ics-string->scm %ics-string)))
+         (vevent    (car (ics-object-components vcalendar))))
+    (ics-object-components vevent)))
 
 ;; RFC 5545, 3.1.
 (test-assert "ics-string->scm, long content lines"
@@ -81,16 +98,20 @@
                 (string=? (list-ref summary-value 1) "Day")
                 (string=? (list-ref summary-value 2) "Party"))))))
 
-(test-assert "scm->ics-string"
-  (let* ((source-str (string-append
-                      "BEGIN:VCALENDAR\r\n"
-                      "BEGIN:VEVENT\r\n"
-                      "SUMMARY:Bastille,Day,Party\r\n"
-                      "END:VEVENT\r\n"
-                      "END:VCALENDAR\r\n"))
-         (object (car (ics-string->scm source-str)))
-         (output-str (scm->ics-string object)))
-    (string=? source-str output-str)))
+
+(define %ics-string-2
+  (string-append
+   "BEGIN:VCALENDAR\r\n"
+   "BEGIN:VEVENT\r\n"
+   "SUMMARY:Bastille,Day,Party\r\n"
+   "END:VEVENT\r\n"
+   "END:VCALENDAR\r\n"))
+
+(test-equal "scm->ics-string"
+  %ics-string-2
+  (let* ((source-str %ics-string-2)
+         (object     (car (ics-string->scm source-str))))
+    (scm->ics-string object)))
 
 
 ;;;
