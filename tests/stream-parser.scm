@@ -113,6 +113,40 @@
    "END:VEVENT\r\n"
    "END:VCALENDAR\r\n"))
 
+(define %rfc5545-vtodo-example-1
+  (string-append
+   "BEGIN:VCALENDAR\r\n"
+   "BEGIN:VTODO\r\n"
+   "UID:20070313T123432Z-456553@example.com\r\n"
+   "DTSTAMP:20070313T123432Z\r\n"
+   "DUE;VALUE=DATE:20070501\r\n"
+   "SUMMARY:Submit Quebec Income Tax Return for 2006\r\n"
+   "CLASS:CONFIDENTIAL\r\n"
+   "CATEGORIES:FAMILY,FINANCE\r\n"
+   "STATUS:NEEDS-ACTION\r\n"
+   "END:VTODO\r\n"
+   "END:VCALENDAR\r\n"))
+
+(define %rfc5545-vjournal-example-1
+  (string-append
+   "BEGIN:VCALENDAR\r\n"
+   "BEGIN:VJOURNAL\r\n"
+   "UID:19970901T130000Z-123405@example.com\r\n"
+   "DTSTAMP:19970901T130000Z\r\n"
+   "DTSTART;VALUE=DATE:19970317\r\n"
+   "SUMMARY:Staff meeting minutes\r\n"
+   "DESCRIPTION:1. Staff meeting: Participants include Joe\\,\r\n"
+   "  Lisa\\, and Bob. Aurora project plans were reviewed.\r\n"
+   "  There is currently no budget reserves for this project.\r\n"
+   "  Lisa will escalate to management. Next meeting on Tuesday.\\n\r\n"
+   " 2. Telephone Conference: ABC Corp. sales representative\r\n"
+   "  called to discuss new printer. Promised to get us a demo by\r\n"
+   "  Friday.\\n3. Henry Miller (Handsoff Insurance): Car was\r\n"
+   "  totaled by tree. Is looking into a loaner car. 555-2323\r\n"
+   "  (tel).\r\n"
+   "END:VJOURNAL\r\n"
+   "END:VCALENDAR\r\n"))
+
 (test-equal "RFC5545 complex object 1: Check objects count"
   1
   (with-input-from-string
@@ -205,6 +239,41 @@
              (object    (car (stream-context-objects ctx)))
              (component (car (ics-object-components object))))
         (ics-property-type (ics-object-property-ref component "DTSTART"))))))
+
+(test-equal "RFC5545 VTODO: CATEGORIES: Check value"
+  '("FAMILY" "FINANCE")
+  (with-input-from-string
+      %rfc5545-vtodo-example-1
+    (lambda ()
+      (let* ((fsm       (make <stream-parser>
+                          #:debug-mode? #t))
+             (ctx       (fsm-run! fsm (make <stream-context>
+                                        #:parse-types? #t)))
+             (object    (car (stream-context-objects ctx)))
+             (component (car (ics-object-components object))))
+        (ics-property-value (ics-object-property-ref component "CATEGORIES"))))))
+
+(test-equal "RFC5545 VJOURNAL: DESCRIPTION: Check value"
+  (string-append
+   "1. Staff meeting: Participants include Joe,"
+   " Lisa, and Bob. Aurora project plans were reviewed."
+   " There is currently no budget reserves for this project."
+   " Lisa will escalate to management. Next meeting on Tuesday.\n"
+   "2. Telephone Conference: ABC Corp. sales representative"
+   " called to discuss new printer. Promised to get us a demo by"
+   " Friday.\n3. Henry Miller (Handsoff Insurance): Car was"
+   " totaled by tree. Is looking into a loaner car. 555-2323"
+   " (tel).")
+  (with-input-from-string
+      %rfc5545-vjournal-example-1
+    (lambda ()
+      (let* ((fsm       (make <stream-parser>
+                          #:debug-mode? #t))
+             (ctx       (fsm-run! fsm (make <stream-context>
+                                        #:parse-types? #t)))
+             (object    (car (stream-context-objects ctx)))
+             (component (car (ics-object-components object))))
+        (ics-property-value (ics-object-property-ref component "DESCRIPTION"))))))
 
 
 
