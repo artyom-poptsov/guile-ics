@@ -91,7 +91,9 @@ list."
                               #:parse-types? parse-types?
                               #:lazy? #t
                               #:port  port))))
-          (car (stream-context-objects ctx))))
+    (if (null? (stream-context-objects ctx))
+        stream-null
+        (car (stream-context-objects ctx)))))
 
 (define-method (ics-stream->scm-stream (ics-stream <ics-stream>))
   "Convert an ICS stream to an SRFI-41 stream.  Return the stream."
