@@ -21,7 +21,7 @@
 
 ;;; Code:
 
-(define-module (ics type stream)
+(define-module (ics stream)
   #:use-module (srfi srfi-41)
   #:use-module (ics common)
   #:use-module (ics fsm stream-context)

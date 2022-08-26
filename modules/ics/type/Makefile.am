@@ -20,7 +20,6 @@ include $(top_srcdir)/build-aux/am/guile.am
 SUBDIRS = property
 
 SOURCES = \
-	stream.scm	\
 	content.scm	\
 	object.scm	\
 	property.scm

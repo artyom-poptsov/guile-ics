@@ -1,6 +1,6 @@
 ;;; ics.scm -- iCalendar parser (main module)
 
-;; Copyright (C) 2016, 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2016-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
   #:use-module (oop goops)
   ;; Guile-ICS
   #:use-module (ics common)
-  #:use-module (ics type stream)
+  #:use-module (ics stream)
   #:use-module (ics type object)
   #:use-module (ics type property)
   #:export (ics->scm
