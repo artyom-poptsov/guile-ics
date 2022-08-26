@@ -1,6 +1,6 @@
-;;; text.scm -- iCalendar TEXT (RFC5545, 3.3.10) type.
+;;; time.scm -- iCalendar TIME (RFC5545, 3.3.1) type.
 
-;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2017-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -21,66 +21,66 @@
 
 ;;; Code:
 
-(define-module (ics type property text)
+(define-module (ics type uri)
   #:use-module (oop goops)
-  #:use-module (ics type property property)
-  #:export     (<ics-property:text>
-                ics-property:text?
-                ics-property->ics-property:text))
+  #:use-module (ics type property)
+  #:export     (<ics-property:uri>
+                ics-property:uri?
+                ics-property->ics-property:uri))
 
 
 ;;; Class definition.
 
-(define-class <ics-property:text> (<ics-property>))
+(define-class <ics-property:uri> (<ics-property>))
 
-(define-method (initialize (property <ics-property:text>) initargs)
+(define-method (initialize (property <ics-property:uri>) initargs)
   (next-method)
-  (slot-set! property 'type 'TEXT))
+  (slot-set! property 'type 'URI))
 
 
 ;;; Printers.
 
 (define (%display property port)
-  (format port "#<ics-property:text ~a ~a>"
+  (format port "#<ics-property:uri ~a: ~a ~a>"
           (ics-property-name property)
+          (ics-property-value property)
           (object-address->string property)))
 
-(define-method (display (property <ics-property:text>) (port <port>))
+(define-method (display (property <ics-property:uri>) (port <port>))
   (%display property port))
 
-(define-method (write (property <ics-property:text>) (port <port>))
+(define-method (write (property <ics-property:uri>) (port <port>))
   (%display property port))
 
-(define-method (display (property <ics-property:text>))
+(define-method (display (property <ics-property:uri>))
   (%display property (current-output-port)))
 
-(define-method (write (property <ics-property:text>))
+(define-method (write (property <ics-property:uri>))
   (%display property (current-output-port)))
 
 
 ;;; Predicates.
 
-(define-method (ics-property:text? x)
-  "Check if X is an instance of <ics-property:text>, return #t if
+(define-method (ics-property:uri? x)
+  "Check if X is an instance of <ics-property:uri>, return #t if
 it is, #f otherwise."
-  (is-a? x <ics-property:text>))
+  (is-a? x <ics-property:uri>))
 
 
 ;;; Converters
 
-(define-method (ics-property->ics-property:text
+(define-method (ics-property->ics-property:uri
                 (property <ics-property>))
-  (make <ics-property:text>
+  (make <ics-property:uri>
     #:name  (ics-property-name property)
     #:value (ics-property-value property)
     #:parameters (ics-property-parameters property)))
 
 (define-method (ics-typed-property->ics-property
-                (property <ics-property:text>))
+                (property <ics-property:uri>))
   (make <ics-property>
     #:name        (ics-property-name property)
     #:value       (ics-property-value property)
     #:parameters  (ics-property-parameters property)))
 
-
-;;; text.scm ends here.
+;;; time.scm ends here.

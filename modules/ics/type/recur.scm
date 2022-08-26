@@ -1,6 +1,6 @@
-;;; time.scm -- iCalendar TIME (RFC5545, 3.3.1) type.
+;;; period.scm -- iCalendar RECUR (RFC5545, 3.3.10) type.
 
-;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2017-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -21,66 +21,66 @@
 
 ;;; Code:
 
-(define-module (ics type property uri)
+(define-module (ics type recur)
   #:use-module (oop goops)
-  #:use-module (ics type property property)
-  #:export     (<ics-property:uri>
-                ics-property:uri?
-                ics-property->ics-property:uri))
+  #:use-module (ics type property)
+  #:export     (<ics-property:recur>
+                ics-property:recur?
+                ics-property->ics-property:recur))
 
 
 ;;; Class definition.
 
-(define-class <ics-property:uri> (<ics-property>))
+(define-class <ics-property:recur> (<ics-property>))
 
-(define-method (initialize (property <ics-property:uri>) initargs)
+(define-method (initialize (property <ics-property:recur>) initargs)
   (next-method)
-  (slot-set! property 'type 'URI))
+  (slot-set! property 'type 'RECUR))
 
 
 ;;; Printers.
 
 (define (%display property port)
-  (format port "#<ics-property:uri ~a: ~a ~a>"
+  (format port "#<ics-property:recur ~a: ~a ~a>"
           (ics-property-name property)
           (ics-property-value property)
           (object-address->string property)))
 
-(define-method (display (property <ics-property:uri>) (port <port>))
+(define-method (display (property <ics-property:recur>) (port <port>))
   (%display property port))
 
-(define-method (write (property <ics-property:uri>) (port <port>))
+(define-method (write (property <ics-property:recur>) (port <port>))
   (%display property port))
 
-(define-method (display (property <ics-property:uri>))
+(define-method (display (property <ics-property:recur>))
   (%display property (current-output-port)))
 
-(define-method (write (property <ics-property:uri>))
+(define-method (write (property <ics-property:recur>))
   (%display property (current-output-port)))
 
 
 ;;; Predicates.
 
-(define-method (ics-property:uri? x)
-  "Check if X is an instance of <ics-property:uri>, return #t if
+(define-method (ics-property:recur? x)
+  "Check if X is an instance of <ics-property:recur>, return #t if
 it is, #f otherwise."
-  (is-a? x <ics-property:uri>))
+  (is-a? x <ics-property:recur>))
 
 
 ;;; Converters
 
-(define-method (ics-property->ics-property:uri
+(define-method (ics-property->ics-property:recur
                 (property <ics-property>))
-  (make <ics-property:uri>
+  (make <ics-property:recur>
     #:name  (ics-property-name property)
     #:value (ics-property-value property)
     #:parameters (ics-property-parameters property)))
 
 (define-method (ics-typed-property->ics-property
-                (property <ics-property:uri>))
+                (property <ics-property:recur>))
   (make <ics-property>
-    #:name        (ics-property-name property)
-    #:value       (ics-property-value property)
-    #:parameters  (ics-property-parameters property)))
+    #:name  (ics-property-name property)
+    #:value (ics-property-value property)
+    #:parameters (ics-property-parameters property)))
 
-;;; time.scm ends here.
+;;; recur.scm ends here.

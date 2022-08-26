@@ -17,10 +17,25 @@
 
 include $(top_srcdir)/build-aux/am/guile.am
 
-SUBDIRS = property
-
 SOURCES = \
-	content.scm
+	content.scm	\
+	property.scm	\
+	binary.scm	\
+	boolean.scm	\
+	cal-address.scm	\
+	content.scm	\
+	date.scm	\
+	date-time.scm	\
+	duration.scm	\
+	float.scm	\
+	integer.scm	\
+	period.scm	\
+	property.scm	\
+	recur.scm	\
+	text.scm	\
+	time.scm	\
+	uri.scm	\
+	utc-offset.scm
 
 moddir=$(prefix)/share/guile/site/$(GUILE_EFFECTIVE_VERSION)/ics/type/
 godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ics/type/

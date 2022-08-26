@@ -21,9 +21,9 @@
 
 ;;; Code:
 
-(define-module (ics type property integer)
+(define-module (ics type integer)
   #:use-module (oop goops)
-  #:use-module (ics type property property)
+  #:use-module (ics type property)
   #:export     (<ics-property:integer>
                 ics-property:integer?
                 ics-property->ics-property:integer))

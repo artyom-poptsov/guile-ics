@@ -26,7 +26,7 @@
 
 (define-module (ics conv)
   #:use-module (ice-9 rdelim)
-  #:use-module (ics type object)
+  #:use-module (ics object)
   #:use-module (ics type property)
   #:use-module (ics type content)
   #:export (ics-object->org-mode))

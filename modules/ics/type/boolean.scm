@@ -21,9 +21,9 @@
 
 ;;; Code:
 
-(define-module (ics type property boolean)
+(define-module (ics type boolean)
   #:use-module (oop goops)
-  #:use-module (ics type property property)
+  #:use-module (ics type property)
   #:export     (<ics-property:boolean>
                 ics-property:boolean?
                 ics-property->ics-property:boolean))

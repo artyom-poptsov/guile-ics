@@ -21,9 +21,9 @@
 
 ;;; Code:
 
-(define-module (ics type property float)
+(define-module (ics type float)
   #:use-module (oop goops)
-  #:use-module (ics type property property)
+  #:use-module (ics type property)
   #:export     (<ics-property:float>
                 ics-property:float?
                 ics-property->ics-property:float))

@@ -21,9 +21,9 @@
 
 ;;; Code:
 
-(define-module (ics type property binary)
+(define-module (ics type binary)
   #:use-module (oop goops)
-  #:use-module (ics type property property)
+  #:use-module (ics type property)
   #:export (<ics-property:binary>
             ics-property:binary?
             ics-property->ics-property:binary

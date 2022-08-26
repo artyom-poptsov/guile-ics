@@ -21,9 +21,9 @@
 
 ;;; Code:
 
-(define-module (ics type property cal-address)
+(define-module (ics type cal-address)
   #:use-module (oop goops)
-  #:use-module (ics type property property)
+  #:use-module (ics type property)
   #:export     (<ics-property:cal-address>
                 ics-property:cal-address?
                 ics-property->ics-property:cal-address))

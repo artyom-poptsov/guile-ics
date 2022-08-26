@@ -1,4 +1,4 @@
-;;; period.scm -- iCalendar PERIOD (RFC5545, 3.3.9) type.
+;;; duration.scm -- iCalendar DURATION (RFC5545, 3.3.6) type.
 
 ;; Copyright (C) 2017-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
@@ -21,69 +21,66 @@
 
 ;;; Code:
 
-(define-module (ics type property period)
+(define-module (ics type duration)
   #:use-module (oop goops)
-  #:use-module (ics type property property)
-  #:export     (<ics-property:period>
-                ics-property:period?
-                ics-property->ics-property:period))
-
+  #:use-module (ics type property)
+  #:export     (<ics-property:duration>
+                ics-property:duration?
+                ics-property->ics-property:duration))
 
 
 ;;; Class definition.
 
-(define-class <ics-property:period> (<ics-property>))
+(define-class <ics-property:duration> (<ics-property>))
 
-(define-method (initialize (property <ics-property:period>) initargs)
+(define-method (initialize (property <ics-property:duration>) initargs)
   (next-method)
-  (slot-set! property 'type 'PERIOD))
+  (slot-set! property 'type 'DURATION))
 
 
 ;;; Printers.
 
 (define (%display property port)
-  (format port "#<ics-property:period ~a: ~a/~a ~a>"
+  (format port "#<ics-property:duration ~a: ~a ~a>"
           (ics-property-name property)
-          (car (ics-property-value property))
-          (cadr (ics-property-value property))
+          (ics-property-value property)
           (object-address->string property)))
 
-(define-method (display (property <ics-property:period>) (port <port>))
+(define-method (display (property <ics-property:duration>) (port <port>))
   (%display property port))
 
-(define-method (write (property <ics-property:period>) (port <port>))
+(define-method (write (property <ics-property:duration>) (port <port>))
   (%display property port))
 
-(define-method (display (property <ics-property:period>))
+(define-method (display (property <ics-property:duration>))
   (%display property (current-output-port)))
 
-(define-method (write (property <ics-property:period>))
+(define-method (write (property <ics-property:duration>))
   (%display property (current-output-port)))
 
 
 ;;; Predicates.
 
-(define-method (ics-property:period? x)
-  "Check if X is an instance of <ics-property:period>, return #t if
+(define-method (ics-property:duration? x)
+  "Check if X is an instance of <ics-property:duration>, return #t if
 it is, #f otherwise."
-  (is-a? x <ics-property:period>))
+  (is-a? x <ics-property:duration>))
 
 
 ;;; Converters.
 
-;; TODO: Handle value lists.
-(define-method (ics-property->ics-property:period
+(define-method (ics-property->ics-property:duration
                 (property <ics-property>))
-  (make <ics-property:period>
-    #:name  (ics-property-name property)
-    #:value (string-split (ics-property-value property) #\:)
+  (make <ics-property:duration>
+    #:name       (ics-property-name property)
+    #:value      (ics-property-value property)
     #:parameters (ics-property-parameters property)))
 
 (define-method (ics-typed-property->ics-property
-                (property <ics-property:period>))
+                (property <ics-property:duration>))
   (make <ics-property>
-    #:name  (ics-property-name property)
-    #:value (string-join (ics-property-value property) ":")
+    #:name       (ics-property-name property)
+    #:value      (ics-property-value property)
     #:parameters (ics-property-parameters property)))
 
-;;; period.scm ends here.
+;;; duration.scm ends here.

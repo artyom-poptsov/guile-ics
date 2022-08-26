@@ -21,10 +21,10 @@
 
 ;;; Code:
 
-(define-module (ics type property date)
+(define-module (ics type date)
   #:use-module (oop goops)
   #:use-module (srfi srfi-26)           ; cut
-  #:use-module (ics type property property)
+  #:use-module (ics type property)
   #:export     (<ics-property:date>
                 ics-property:date?
                 ics-property->ics-property:date))

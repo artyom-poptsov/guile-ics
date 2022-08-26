@@ -1,6 +1,6 @@
 ;;; time.scm -- iCalendar TIME (RFC5545, 3.3.1) type.
 
-;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2017-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -21,9 +21,9 @@
 
 ;;; Code:
 
-(define-module (ics type property utc-offset)
+(define-module (ics type utc-offset)
   #:use-module (oop goops)
-  #:use-module (ics type property property)
+  #:use-module (ics type property)
   #:export     (<ics-property:utc-offset>
                 ics-property:utc-offset?
                 ics-property->ics-property:utc-offset))
