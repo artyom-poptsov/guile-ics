@@ -10,7 +10,7 @@
 @copying
 This manual documents Guile-ICS version @value{VERSION}.
 
-Copyright (C) 2017 Artyom V. Poptsov
+Copyright (C) 2017-2022 Artyom V. Poptsov
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -83,7 +83,22 @@ describes Guile-ICS requirements and installation process.
 Guile-ICS depends on the following packages:
 @itemize
 @item @url{https://www.gnu.org/software/guile/, GNU Guile}, 2.0
+@item @url{https://github.com/artyom-poptsov/guile-smc, Guile-SMC}, 0.4.0
 @end itemize
+
+@section GNU Guix
+
+@example
+$ guix install guile-ics
+@end example
+
+@subsection Development version
+@example
+$ guix build -f ./guix.scm
+$ guix package -f ./guix.scm
+@end example
+
+@section Manual Installation
 
 To build the latest version of Guile-ICS from the sources, you need to
 download the sources from GitHub or clone them using Git@footnote{A good
@@ -174,7 +189,7 @@ lists of iCalendar objects and vice versa.
 @subsection <ics-content>
 
 A common class that represents generic iCalendar contents.  The class is
-defined in @code{(ics type content)} module.
+defined in @code{(ics content)} module.
 
 @subsubsection Fields
 
@@ -216,7 +231,7 @@ component is an iCalendar object (that is, instances of
 @code{<ics-object>} class) on its own; that means that this data
 structure can be handled recusively.
 
-The class is defined in @code{(ics type object)} module.
+The class is defined in @code{(ics object)} module.
 
 @subsubsection Fields
 
@@ -262,7 +277,7 @@ unify the way of handling iCalendar information, iCalendar property
 class is used for both iCalendar objects (as defined in RFC5545) and for
 components of iCalendar objects.
 
-The class is defined in @code{(ics type property property)} module.
+The class is defined in @code{(ics type property)} module.
 
 @subsubsection Fields
 
@@ -339,7 +354,7 @@ return a new typed property.
 
 @subsection <ics-stream>
 
-The class is defined in @code{(ics type stream)} module.
+The class is defined in @code{(ics stream)} module.
 
 @subsubsection Fields
 
@@ -382,7 +397,7 @@ Convert an @var{ics-stream} to a SRFI-41 stream.  Return the stream.
 
 @subsection <ics-property:binary>
 
-The class is defined in @code{(ics type property binary)} module.
+The class is defined in @code{(ics type binary)} module.
 
 @subsubsection Public Methods
 
@@ -402,7 +417,7 @@ Get binary encoding for a @var{property}.  The encoding value is either
 
 @subsection <ics-property:boolean>
 
-The class is defined in @code{(ics type property boolean)} module.
+The class is defined in @code{(ics type boolean)} module.
 
 @subsubsection Public Methods
 
@@ -417,7 +432,7 @@ Convert a @var{property} to a its typed version.
 
 @subsection <ics-property:cal-address>
 
-The class is defined in @code{(ics type property cal-address)} module.
+The class is defined in @code{(ics type cal-address)} module.
 
 @subsubsection Public Methods
 
@@ -432,7 +447,7 @@ Convert a @var{property} to a its typed version.
 
 @subsection <ics-property:date>
 
-The class is defined in @code{(ics type property date)} module.
+The class is defined in @code{(ics type date)} module.
 
 @subsubsection Public Methods
 
@@ -447,7 +462,7 @@ Convert a @var{property} to a its typed version.
 
 @subsection <ics-property:date-time>
 
-The class is defined in @code{(ics type property date-time)} module.
+The class is defined in @code{(ics type date-time)} module.
 
 @subsubsection Public Methods
 
@@ -462,7 +477,7 @@ Convert a @var{property} to a its typed version.
 
 @subsection <ics-property:duration>
 
-The class is defined in @code{(ics type property duration)} module.
+The class is defined in @code{(ics type duration)} module.
 
 @subsubsection Public Methods
 
@@ -477,7 +492,7 @@ Convert a @var{property} to a its typed version.
 
 @subsection <ics-property:float>
 
-The class is defined in @code{(ics type property float)} module.
+The class is defined in @code{(ics type float)} module.
 
 @subsubsection Public Methods
 
@@ -492,7 +507,7 @@ Convert a @var{property} to a its typed version.
 
 @subsection <ics-property:integer>
 
-The class is defined in @code{(ics type property integer)} module.
+The class is defined in @code{(ics type integer)} module.
 
 @subsubsection Public Methods
 
@@ -507,7 +522,7 @@ Convert a @var{property} to a its typed version.
 
 @subsection <ics-property:period>
 
-The class is defined in @code{(ics type property period)} module.
+The class is defined in @code{(ics type period)} module.
 
 @subsubsection Public Methods
 
@@ -522,7 +537,7 @@ Convert a @var{property} to a its typed version.
 
 @subsection <ics-property:recur>
 
-The class is defined in @code{(ics type property recur)} module.
+The class is defined in @code{(ics type recur)} module.
 
 @subsubsection Public Methods
 
@@ -537,7 +552,7 @@ Convert a @var{property} to a its typed version.
 
 @subsection <ics-property:text>
 
-The class is defined in @code{(ics type property text)} module.
+The class is defined in @code{(ics type text)} module.
 
 @subsubsection Public Methods
 
@@ -552,7 +567,7 @@ Convert a @var{property} to a its typed version.
 
 @subsection <ics-property:time>
 
-The class is defined in @code{(ics type property time)} module.
+The class is defined in @code{(ics type time)} module.
 
 @subsubsection Public Methods
 
@@ -567,7 +582,7 @@ Convert a @var{property} to a its typed version.
 
 @subsection <ics-property:uri>
 
-The class is defined in @code{(ics type property uri)} module.
+The class is defined in @code{(ics type uri)} module.
 
 @subsubsection Public Methods
 
@@ -582,7 +597,7 @@ Convert a @var{property} to a its typed version.
 
 @subsection <ics-property:utc-offset>
 
-The class is defined in @code{(ics type property utc-offset)} module.
+The class is defined in @code{(ics type utc-offset)} module.
 
 @subsubsection Public Methods
 
