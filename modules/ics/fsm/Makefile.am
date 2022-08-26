@@ -20,15 +20,12 @@
 include $(top_srcdir)/build-aux/am/guile.am
 
 SOURCES = \
+	context.scm	\
 	content-line-context.scm	\
 	content-line-parser.scm	\
 	stream-context.scm	\
-	stream-parser.scm
-
-EXTRA_DIST += \
-	content-line-context.scm
-	content-line-parser.scm \
-	content-line-parser.puml	\
+	stream-parser.scm \
+	content-line-parser.puml \
 	stream-parser.puml
 
 moddir=$(prefix)/share/guile/site/$(GUILE_EFFECTIVE_VERSION)/ics/fsm/
@@ -40,14 +37,14 @@ GUILE_SMC_CONTEXT_ARGS = \
 	-m "(ics fsm context)"
 
 GUILE_SMC_CONTENT_LINE_PARSER_ARGS = \
-	-L $(top_srcdir)/modules \
+	-L $(abs_top_srcdir)/modules \
 	--fsm-name content-line-parser \
 	--fsm-module "(ics fsm content-line-parser)" \
 	-U "((ics fsm context) (ics fsm content-line-context))" \
 	--validate
 
 GUILE_SMC_STREAM_PARSER_ARGS = \
-	-L $(top_srcdir)/modules \
+	-L $(abs_top_srcdir)/modules \
 	--fsm-name stream-parser \
 	--fsm-module "(ics fsm stream-parser)" \
 	-U "((ics fsm context) (ics fsm stream-context))" \
