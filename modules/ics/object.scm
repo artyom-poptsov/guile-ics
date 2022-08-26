@@ -28,7 +28,7 @@
   #:use-module (ice-9 rdelim)
   #:use-module (ice-9 hash-table)       ; alist->hash-table
   #:use-module (srfi srfi-1)            ; find
-  #:use-module (ics type property)
+  #:use-module (ics property)
   #:use-module (ics type content)
   #:export (<ics-object>
             ics-object?

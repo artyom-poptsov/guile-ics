@@ -29,7 +29,7 @@
   #:use-module (oop goops)
   #:use-module (ics common)
   #:use-module (ics object)
-  #:use-module (ics type property)
+  #:use-module (ics property)
   #:use-module (ics fsm context)
   #:use-module (ics fsm content-line-context)
   #:use-module (ics fsm content-line-parser)

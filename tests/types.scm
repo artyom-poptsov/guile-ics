@@ -27,7 +27,7 @@
              (ics)
              (ics common)
              (ics object)
-             (ics type property))
+             (ics property))
 
 
 (define %test-suite-name "types")

@@ -20,8 +20,7 @@ include $(top_srcdir)/build-aux/am/guile.am
 SUBDIRS = property
 
 SOURCES = \
-	content.scm	\
-	property.scm
+	content.scm
 
 moddir=$(prefix)/share/guile/site/$(GUILE_EFFECTIVE_VERSION)/ics/type/
 godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ics/type/

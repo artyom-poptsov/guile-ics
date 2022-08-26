@@ -37,7 +37,7 @@
   #:use-module (ics common)
   #:use-module (ics stream)
   #:use-module (ics object)
-  #:use-module (ics type property)
+  #:use-module (ics property)
   #:export (ics->scm
             ics-string->scm
             ics->stream
