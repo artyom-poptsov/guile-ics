@@ -17,12 +17,12 @@ jobs:
           - distro: 'ubuntu:20.04'
             pre: |
               apt --force-yes -qy install guile-3.0 guile-3.0-libs guile-3.0-dev guile-library texinfo gettext make automake autoconf
-              git clone https://github.com/artyom-poptsov/guile-smc
-              cd guile-smc
-              git checkout master
-              autoreconf -vif
-              ./configure --with-guilesitedir=/usr/share/guile/site/3.0 --prefix=/usr
-              sudo make -j$(nproc) install
+              && git clone https://github.com/artyom-poptsov/guile-smc
+              && cd guile-smc
+              && git checkout master
+              && autoreconf -vif
+              && ./configure --with-guilesitedir=/usr/share/guile/site/3.0 --prefix=/usr
+              && sudo make -j$(nproc) install
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
