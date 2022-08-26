@@ -8,26 +8,29 @@ on:
 
 jobs:
   build:
-    name: Required Packages
-    strategy:
-      matrix:
-        distro:
-          - 'ubuntu:20.04'
-        include:
-          - distro: 'ubuntu:20.04'
-            pre: |
-              apt --force-yes -qy install guile-3.0 guile-3.0-libs guile-3.0-dev guile-library texinfo gettext make automake autoconf
-              && git clone https://github.com/artyom-poptsov/guile-smc
-              && cd guile-smc
-              && git checkout master
-              && autoreconf -vif
-              && ./configure --with-guilesitedir=/usr/share/guile/site/3.0 --prefix=/usr
-              && sudo make -j$(nproc) install
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v1
-      - name: Test building on ${{ matrix.distro }}
-        env:
-          PRE: ${{ matrix.pre }}
+      - name: Install dependencies
         run: |
-          docker run --rm -e PRE -e DEBIAN_FRONTEND=noninteractive -v $PWD:/guile-ics -w /guile-ics ${{ matrix.distro }} /bin/sh -c '[ -n "${PRE}" ] && apt update && ${PRE} && autoreconf -vif && ./configure && make check'
+          apt --force-yes -qy install guile-3.0 guile-3.0-libs guile-3.0-dev guile-library texinfo gettext make automake autoconf
+
+      - name: Install Guile-SMC
+        run: |
+          git clone https://github.com/artyom-poptsov/guile-smc
+          cd guile-smc
+          git checkout master
+          autoreconf -vif
+          ./configure --with-guilesitedir=/usr/share/guile/site/3.0 --prefix=/usr
+          sudo make -j$(nproc) install
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Autoreconf
+        run: autoreconf -vif
+
+      - name: Configure
+        run: ./configure
+
+      - name: Run tests
+        run: make check
