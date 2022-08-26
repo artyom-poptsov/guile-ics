@@ -60,15 +60,15 @@
                         #:select? (git-predicate %source-dir)))
     (build-system gnu-build-system)
     (native-inputs
-     `(("autoconf" ,autoconf)
-       ("automake" ,automake)
-       ("help2man" ,help2man)
-       ("texinfo" ,texinfo)
-       ;; Gettext brings 'AC_LIB_LINKFLAGS_FROM_LIBS'.
-       ("gettext" ,gettext-minimal)
-       ("pkg-config" ,pkg-config)))
+     (list autoconf
+           automake
+           help2man
+           texinfo
+           ;; Gettext brings 'AC_LIB_LINKFLAGS_FROM_LIBS'.
+           gettext-minimal
+           pkg-config))
     (inputs (list guile-3.0 which))
-    (propagated-inputs (list guile-lib))
+    (propagated-inputs (list guile-lib guile-smc))
     (home-page "https://github.com/artyom-poptsov/guile-ics")
     (synopsis "Guile parser library for the iCalendar format")
     (description
