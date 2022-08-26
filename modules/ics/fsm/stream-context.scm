@@ -28,12 +28,11 @@
   #:use-module (srfi srfi-26)
   #:use-module (oop goops)
   #:use-module (ics common)
-  #:use-module (ics type object)
+  #:use-module (ics object)
   #:use-module (ics type property)
   #:use-module (ics fsm context)
   #:use-module (ics fsm content-line-context)
   #:use-module (ics fsm content-line-parser)
-  #:use-module (ics type object)
   #:export (<stream-context>
             stream-context?
             stream-context-append-object!

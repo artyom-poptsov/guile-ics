@@ -36,7 +36,7 @@
   ;; Guile-ICS
   #:use-module (ics common)
   #:use-module (ics stream)
-  #:use-module (ics type object)
+  #:use-module (ics object)
   #:use-module (ics type property)
   #:export (ics->scm
             ics-string->scm

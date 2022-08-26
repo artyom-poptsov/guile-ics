@@ -23,7 +23,7 @@
 
 ;;; Code:
 
-(define-module (ics type object)
+(define-module (ics object)
   #:use-module (oop goops)
   #:use-module (ice-9 rdelim)
   #:use-module (ice-9 hash-table)       ; alist->hash-table

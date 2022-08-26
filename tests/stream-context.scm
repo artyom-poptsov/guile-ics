@@ -23,7 +23,7 @@
 
 (use-modules (srfi srfi-64)
              (oop goops)
-             (ics type object)
+             (ics object)
              (ics fsm context)
              (ics fsm content-line-context)
              (ics fsm stream-context))

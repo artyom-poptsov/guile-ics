@@ -1,6 +1,6 @@
 ;;; ics.scm -- Type tests for ICS parser.
 
-;; Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2017-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
              (ice-9 rdelim)
              (ics)
              (ics common)
-             (ics type object)
+             (ics object)
              (ics type property))
 
 

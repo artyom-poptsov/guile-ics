@@ -22,6 +22,7 @@ SUBDIRS = type fsm .
 SOURCES = \
 	version.scm	\
 	stream.scm	\
+	object.scm	\
 	common.scm	\
 	conv.scm
 

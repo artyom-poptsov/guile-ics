@@ -21,7 +21,6 @@ SUBDIRS = property
 
 SOURCES = \
 	content.scm	\
-	object.scm	\
 	property.scm
 
 moddir=$(prefix)/share/guile/site/$(GUILE_EFFECTIVE_VERSION)/ics/type/

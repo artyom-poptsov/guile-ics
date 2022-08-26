@@ -26,7 +26,7 @@
   #:use-module (ics common)
   #:use-module (ics fsm stream-context)
   #:use-module (ics fsm stream-parser)
-  #:use-module (ics type object)
+  #:use-module (ics object)
   #:use-module (oop goops)
   #:export (<ics-stream>
             ics-stream-source
