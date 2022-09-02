@@ -34,9 +34,13 @@ godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ics/fsm/
 SUFFIXES = .puml
 
 GUILE_SMC_CONTEXT_ARGS = \
+	--log-driver file \
+	--log-opt "file=context.log" \
 	-m "(ics fsm context)"
 
 GUILE_SMC_CONTENT_LINE_PARSER_ARGS = \
+	--log-driver file \
+	--log-opt "file=content-line-parser.log" \
 	-L $(abs_top_srcdir)/modules \
 	--fsm-name content-line-parser \
 	--fsm-module "(ics fsm content-line-parser)" \
@@ -44,6 +48,8 @@ GUILE_SMC_CONTENT_LINE_PARSER_ARGS = \
 	--validate
 
 GUILE_SMC_STREAM_PARSER_ARGS = \
+	--log-driver file \
+	--log-opt "file=stream-parser.log" \
 	-L $(abs_top_srcdir)/modules \
 	--fsm-name stream-parser \
 	--fsm-module "(ics fsm stream-parser)" \
