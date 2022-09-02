@@ -20,18 +20,20 @@
 include $(top_srcdir)/build-aux/am/guile.am
 
 SOURCES = \
-	context.scm	\
 	content-line-context.scm	\
+	stream-context.scm \
 	content-line-parser.scm	\
-	stream-context.scm	\
-	stream-parser.scm \
+	stream-parser.scm
+
+BUILT_SOURCES = \
+	context.scm
+
+EXTRA_DIST += \
 	content-line-parser.puml \
 	stream-parser.puml
 
 moddir=$(prefix)/share/guile/site/$(GUILE_EFFECTIVE_VERSION)/ics/fsm/
 godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ics/fsm/
-
-SUFFIXES = .puml
 
 GUILE_SMC_CONTEXT_ARGS = \
 	--log-driver file \
