@@ -67,16 +67,20 @@ GUILE_SMC_STREAM_PARSER_ARGS += \
 	--target=guile-standalone
 endif
 
+GUILE_SMC_ENV = GUILE_AUTO_COMPILE=0
+
+all: context.scm
+
 context.scm:
 	@echo "  SMC      $@"
-	@smc context $(GUILE_SMC_CONTEXT_ARGS) > $@
+	@$(GUILE_SMC_ENV) smc context $(GUILE_SMC_CONTEXT_ARGS) > $@
 
-content-line-parser.scm: context.scm content-line-parser.puml
+content-line-parser.scm: context.go content-line-context.go content-line-parser.puml
 	@echo "  SMC      $@"
-	@smc compile $(GUILE_SMC_CONTENT_LINE_PARSER_ARGS) content-line-parser.puml > $@
+	@$(GUILE_SMC_ENV) smc compile $(GUILE_SMC_CONTENT_LINE_PARSER_ARGS) content-line-parser.puml > $@
 
-stream-parser.scm: context.scm stream-context.scm
+stream-parser.scm: context.go stream-context.go content-line-parser.go stream-parser.puml
 	@echo "  SMC      $@"
-	@smc compile $(GUILE_SMC_STREAM_PARSER_ARGS) stream-parser.puml > $@
+	@$(GUILE_SMC_ENV) smc compile $(GUILE_SMC_STREAM_PARSER_ARGS) stream-parser.puml > $@
 
 ### Makefile.am ends here.
