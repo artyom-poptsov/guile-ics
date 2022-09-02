@@ -100,6 +100,9 @@ AM_MISSING_PROG([HELP2MAN], [help2man])
 AC_CONFIG_FILES([pre-inst-env:build-aux/pre-inst-env.in],
    [chmod +x pre-inst-env])
 
+AC_CONFIG_LINKS([modules/ics/fsm/content-line-parser.puml:modules/ics/fsm/content-line-parser.puml])
+AC_CONFIG_LINKS([modules/ics/fsm/stream-parser.puml:modules/ics/fsm/stream-parser.puml])
+
 # Generate a Makefile, based on the results.
 AC_OUTPUT
 
