@@ -43,7 +43,7 @@ GUILE_SMC_CONTEXT_ARGS = \
 GUILE_SMC_CONTENT_LINE_PARSER_ARGS = \
 	--log-driver file \
 	--log-opt "file=content-line-parser.log" \
-	-L $(abs_top_srcdir)/modules \
+	-L $(abs_top_srcdir)/modules:$(abs_top_builddir)/modules \
 	--fsm-name content-line-parser \
 	--fsm-module "(ics fsm content-line-parser)" \
 	-U "((ics fsm context) (ics fsm content-line-context))" \
@@ -52,7 +52,7 @@ GUILE_SMC_CONTENT_LINE_PARSER_ARGS = \
 GUILE_SMC_STREAM_PARSER_ARGS = \
 	--log-driver file \
 	--log-opt "file=stream-parser.log" \
-	-L $(abs_top_srcdir)/modules \
+	-L $(abs_top_srcdir)/modules:$(abs_top_builddir)/modules \
 	--fsm-name stream-parser \
 	--fsm-module "(ics fsm stream-parser)" \
 	-U "((ics fsm context) (ics fsm stream-context))" \
