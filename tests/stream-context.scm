@@ -21,7 +21,7 @@
 
 ;;; Code:
 
-(add-to-load-path (getenv "abs_top_builddir"))
+(add-to-load-path (getenv "abs_top_srcdir"))
 
 (use-modules (srfi srfi-64)
              (oop goops)
