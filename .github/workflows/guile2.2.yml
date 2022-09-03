@@ -25,7 +25,7 @@ jobs:
           git checkout master
           autoreconf -vif
           ./configure --with-guilesitedir=/usr/share/guile/site/2.2 --prefix=/usr
-          sudo make -j2 install
+          sudo make -j$(nproc) install
 
       - name: Checkout repository 
         uses: actions/checkout@v2
