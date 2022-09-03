@@ -79,7 +79,9 @@ content-line-parser.scm: context.go content-line-context.go content-line-parser.
 	@echo "  SMC      $@"
 	@$(GUILE_SMC_ENV) smc compile $(GUILE_SMC_CONTENT_LINE_PARSER_ARGS) content-line-parser.puml > $@
 
-stream-parser.scm: context.go content-line-parser.go stream-context.go stream-parser.puml
+stream-context.scm: content-line-parser.scm
+
+stream-parser.scm: context.go content-line-parser.scm stream-context.go stream-parser.puml
 	@echo "  SMC      $@"
 	@$(GUILE_SMC_ENV) smc compile $(GUILE_SMC_STREAM_PARSER_ARGS) stream-parser.puml > $@
 
