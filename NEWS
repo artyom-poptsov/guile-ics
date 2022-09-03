@@ -7,18 +7,21 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
-* Unreleased
+* Changes in version 0.3.0 (2022-09-03)
 ** Use the Guile State Machine Compiler (Guile-SMC)
 Guile-ICS now uses Guile-SMC for generating the code for its finite-state
 machine.
 ** API changes
+*** =(ics fsm)= module is removed
 *** =(ics type property ...)= now =(ics type ...)=
 All the modules from =modules/ics/type/property= directory are moved to
 =modules/ics/type=.
 *** =(ics type stream)= now =(ics stream)=
 *** =(ics type object)= now =(ics object)=
 *** =(ics type property)= now =(ics property)=
+** Documentation update
 ** Add new tests
+
 * Changes in version 0.2.1 (2022-05-10)
 ** Guile-ICS now uses SRFI-64 that comes with Guile
 ** Guile-ICS now builds with Guile 3.0+
