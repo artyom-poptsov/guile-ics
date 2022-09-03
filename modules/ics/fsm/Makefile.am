@@ -21,16 +21,14 @@ include $(top_srcdir)/build-aux/am/guile.am
 
 SOURCES = \
 	content-line-context.scm	\
-	content-line-parser.scm	\
-	stream-context.scm \
-	stream-parser.scm
-
-BUILT_SOURCES = \
-	context.scm
+	stream-context.scm
 
 EXTRA_DIST += \
+	context.scm	\
 	content-line-parser.puml \
-	stream-parser.puml
+	content-line-parser.scm	\
+	stream-parser.puml	\
+	stream-parser.scm
 
 moddir=$(prefix)/share/guile/site/$(GUILE_EFFECTIVE_VERSION)/ics/fsm/
 godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ics/fsm/
@@ -86,9 +84,12 @@ stream-parser.scm: context.go content-line-parser.scm stream-context.go stream-p
 	@$(GUILE_SMC_ENV) smc compile $(GUILE_SMC_STREAM_PARSER_ARGS) stream-parser.puml > $@
 
 CLEANFILES += \
+	content-line-parser.scm \
 	content-line-parser.log	\
 	context.log	\
+	context.scm	\
 	context.go	\
+	stream-parser.scm	\
 	stream-parser.log
 
 ### Makefile.am ends here.
