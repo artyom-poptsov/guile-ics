@@ -64,9 +64,9 @@
            automake
            help2man
            texinfo
-           ;; Gettext brings 'AC_LIB_LINKFLAGS_FROM_LIBS'.
-           gettext-minimal
-           pkg-config))
+           gettext-minimal ; Gettext brings 'AC_LIB_LINKFLAGS_FROM_LIBS'.
+           pkg-config
+           texlive))
     (inputs (list guile-3.0 which))
     (propagated-inputs (list guile-lib guile-smc))
     (home-page "https://github.com/artyom-poptsov/guile-ics")
