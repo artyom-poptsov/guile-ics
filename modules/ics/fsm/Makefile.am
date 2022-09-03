@@ -35,6 +35,9 @@ EXTRA_DIST += \
 	stream-parser.puml	\
 	stream-parser.scm
 
+INSTALL += \
+	context.scm
+
 moddir=$(prefix)/share/guile/site/$(GUILE_EFFECTIVE_VERSION)/ics/fsm/
 godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ics/fsm/
 
