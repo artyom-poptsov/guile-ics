@@ -1,3 +1,9 @@
 content-line-parser.scm
+content-line-parser.log
+
 stream-parser.scm
+stream-parser.log
+
 context.scm
+context.log
+
