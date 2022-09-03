@@ -42,8 +42,8 @@ SCM_LOG_COMPILER = \
 	$(GUILE)
 
 AM_SCM_LOG_FLAGS = \
-	-L "$(top_srcdir)" \
-	-L "$(top_srcdir)/modules"	\
+	-L "$(abs_top_srcdir)/modules"	\
+	-L "$(abs_top_builddir)/modules"	\
 	-s
 
 EXTRA_DIST = \
