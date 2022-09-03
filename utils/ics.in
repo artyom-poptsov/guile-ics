@@ -79,7 +79,6 @@ Options:
 
 (define (handle-pretty-print indent)
   (let ((l (ics->stream)))
-    (format #t "handle-pretty-print: ~a~%" l)
     (stream-for-each (lambda (e)
                        (ics-pretty-print e #:indent indent))
                      l)))
