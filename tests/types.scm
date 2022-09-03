@@ -21,9 +21,12 @@
 
 ;;; Code:
 
+(add-to-load-path (getenv "abs_top_builddir"))
+
 (use-modules (srfi srfi-64)
              (oop goops)
              (ice-9 rdelim)
+             (tests common)
              (ics)
              (ics common)
              (ics object)
@@ -31,6 +34,8 @@
 
 
 (define %test-suite-name "types")
+
+(configure-test-logging! %test-suite-name)
 
 (test-begin %test-suite-name)
 

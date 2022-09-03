@@ -20,8 +20,11 @@
 
 
 
+(add-to-load-path (getenv "abs_top_builddir"))
+
 (use-modules (srfi srfi-64)
              (oop goops)
+             (tests common)
              (ics object)
              (ics property)
              (ics fsm context)
@@ -32,6 +35,8 @@
 
 
 (define %test-suite-name "stream-parser")
+
+(configure-test-logging! %test-suite-name)
 
 (test-begin %test-suite-name)
 
