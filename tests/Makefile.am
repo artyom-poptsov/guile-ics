@@ -17,8 +17,6 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Guile-ICS.  If not, see <http://www.gnu.org/licenses/>.
 
-include $(top_srcdir)/build-aux/am/guilec
-
 SCM_TESTS = \
 	content-line-context.scm \
 	content-line-parser.scm \
@@ -50,27 +48,6 @@ AM_SCM_LOG_FLAGS = \
 
 EXTRA_DIST = \
 	${SCM_TESTS}
-
-ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ssh
-nobase_dist_ccache_DATA = $(GOBJECTS)
-
-guilec_warnings =				\
-  -Wunbound-variable -Warity-mismatch		\
-  -Wunused-variable -Wunused-toplevel
-
-guilec_opts = 					\
-	$(guilec_warnings)
-
-# TODO: Move environment setup to a separate file.
-guilec_env  = 									\
-	GUILE_AUTO_COMPILE=0 							\
-	GUILE_LOAD_PATH="$(abs_top_srcdir)/modules"
-
-.scm.go:
-	$(AM_V_GUILEC)$(guilec_env) $(GUILEC) $(guilec_opts) \
-	--output=$@ $<
-
-###
 
 CLEANFILES = \
 	$(GOBJECTS)
