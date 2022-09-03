@@ -85,4 +85,10 @@ stream-parser.scm: context.go content-line-parser.scm stream-context.go stream-p
 	@echo "  SMC      $@"
 	@$(GUILE_SMC_ENV) smc compile $(GUILE_SMC_STREAM_PARSER_ARGS) stream-parser.puml > $@
 
+CLEANFILES += \
+	content-line-parser.log	\
+	context.log	\
+	context.go	\
+	stream-parser.log
+
 ### Makefile.am ends here.
