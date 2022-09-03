@@ -23,14 +23,12 @@ SOURCES = \
 	binary.scm	\
 	boolean.scm	\
 	cal-address.scm	\
-	content.scm	\
 	date.scm	\
 	date-time.scm	\
 	duration.scm	\
 	float.scm	\
 	integer.scm	\
 	period.scm	\
-	property.scm	\
 	recur.scm	\
 	text.scm	\
 	time.scm	\
