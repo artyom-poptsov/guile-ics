@@ -21,8 +21,8 @@ include $(top_srcdir)/build-aux/am/guile.am
 
 SOURCES = \
 	content-line-context.scm	\
-	stream-context.scm \
 	content-line-parser.scm	\
+	stream-context.scm \
 	stream-parser.scm
 
 BUILT_SOURCES = \
