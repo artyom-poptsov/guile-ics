@@ -50,4 +50,5 @@ EXTRA_DIST = \
 	${SCM_TESTS}
 
 CLEANFILES = \
-	$(GOBJECTS)
+	$(GOBJECTS)	\
+	*.log
