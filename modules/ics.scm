@@ -149,23 +149,34 @@ for indentation."
 ;;;
 
 (define-generic ics-describe)
+
 (define-method (ics-describe (object <ics-object>))
-  (format #t ";;; ~54a ~a~%"
-          (class-of object) (ics-object-name object))
-  (display   ";;;   properties:\n")
-  (for-each (lambda (property)
-              (format #t ";;;     ~50a ~20a ~a~%"
-                      (class-of property)
-                      (ics-property-name property)
-                      (ics-property-type property)))
-            (ics-object-properties object))
-  (unless (null? (ics-object-components object))
-    (display   ";;;   components:\n")
-    (for-each (lambda (component)
-                (format #t ";;;     ~50a ~20a~%"
-                        (class-of component)
-                        (ics-object-name component)))
-              (ics-object-components object))))
+  (ics-describe object 0))
+
+(define-method (ics-describe (object <ics-object>) (indent <number>))
+  (let ((indent-string (make-string indent #\space)))
+    (format #t ";;; ~a ~54a ~a~%"
+            indent-string
+            (class-of object)
+            (ics-object-name object))
+    (format #t ";;; ~a  properties:\n"
+            indent-string)
+    (for-each (lambda (property)
+                (format #t ";;; ~a    ~50a ~20a ~a~%"
+                        indent-string
+                        (class-of property)
+                        (ics-property-name property)
+                        (ics-property-type property)))
+              (ics-object-properties object))
+    (unless (null? (ics-object-components object))
+      (format #t ";;; ~a  components:\n"
+              indent-string)
+      (for-each (lambda (component)
+                  (format #t ";;; ~a    ~50a ~20a~%"
+                          indent-string
+                          (class-of component)
+                          (ics-object-name component)))
+                (ics-object-components object)))))
 
 (define-method (ics-describe (property <ics-property>))
   (format #t ";;; ~54a ~a~%"
