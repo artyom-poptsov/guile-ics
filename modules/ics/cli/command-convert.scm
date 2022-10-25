@@ -42,7 +42,8 @@ Options:
 "))
 
 (define %option-spec
-  '((help                     (single-char #\h) (value #f))))
+  '((help                     (single-char #\h) (value #f))
+    (to                       (single-char #\t) (value #t))))
 
 
 (define (command-convert args)
