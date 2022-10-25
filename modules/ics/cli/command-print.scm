@@ -21,17 +21,17 @@
 
 ;;; Code:
 
-(define-module (ics cli command-convert)
+(define-module (ics cli command-print)
   #:use-module (ice-9 getopt-long)
   #:use-module (srfi srfi-41)
   #:use-module (ics)
   #:use-module (ics conv)
-  #:export (command-convert))
+  #:export (command-print))
 
 
 (define (print-help)
   (display "\
-Usage: ics convert [options] [input-file]
+Usage: ics print [options] [input-file]
 
 Options:
   --help, -h                 Print this message and exit.
@@ -46,7 +46,7 @@ Options:
     (to                       (single-char #\t) (value #t))))
 
 
-(define (command-convert args)
+(define (command-print args)
   (let* ((options          (getopt-long args %option-spec))
          (help-needed?     (option-ref options 'help  #f))
          (to               (option-ref options 'to    "pretty"))

@@ -36,7 +36,7 @@
              (ics common)
              (ics cli common)
              (ics cli command-describe)
-             (ics cli command-convert)
+             (ics cli command-print)
              (ics conv))
 
 (define (print-version)
@@ -69,7 +69,7 @@ Options:
 
 (define %commands
   `((("describe")               ,command-describe)
-    (("convert")                ,command-convert)
+    (("print")                  ,command-print)
     (("--version" "version")    ,(lambda (rest)
                                    (print-version)))
     (("help", "--help", "-h")   ,(lambda (rest)

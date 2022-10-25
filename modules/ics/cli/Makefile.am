@@ -20,7 +20,7 @@ include $(top_srcdir)/build-aux/am/guile.am
 SOURCES = \
 	common.scm						\
 	command-describe.scm	\
-	command-convert.scm
+	command-print.scm
 
 moddir=$(prefix)/share/guile/site/$(GUILE_EFFECTIVE_VERSION)/ics/cli/
 godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ics/cli/
