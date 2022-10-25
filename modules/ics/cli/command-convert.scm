@@ -36,6 +36,9 @@ Usage: ics convert [options] [input-file]
 Options:
   --help, -h                 Print this message and exit.
   --to, -t <target-format>   Set the target format.
+                             Supported targets:
+                             - \"pretty\" (default)
+                             - \"org-mode\"
 "))
 
 (define %option-spec
@@ -45,7 +48,7 @@ Options:
 (define (command-convert args)
   (let* ((options          (getopt-long args %option-spec))
          (help-needed?     (option-ref options 'help  #f))
-         (to               (option-ref options 'to    "org-mode"))
+         (to               (option-ref options 'to    "pretty"))
          (args             (option-ref options '()    #f)))
 
     (when help-needed?
@@ -59,6 +62,14 @@ Options:
                            (error "Could not open a file" (car args)))
                          p)))
            (stream (ics->stream port)))
-      (stream-for-each ics-object->org-mode stream))))
+      (case (string->symbol to)
+        ((pretty)
+         (stream-for-each (lambda (e)
+                            (ics-pretty-print e #:indent 4))
+                          stream))
+        ((org-mode)
+         (stream-for-each ics-object->org-mode stream))
+        (else
+         (error "Unknown format" to))))))
 
 ;;; command-convert.scm ends here.
