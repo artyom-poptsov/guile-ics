@@ -171,11 +171,11 @@ for indentation."
 
 (define-method (ics-describe (property <ics-property>) (indent <number>))
   (let ((indent-string (make-string indent #\space)))
-    (format #t ";;; ~a ~54a ~%"
+    (format #t ";;; ~a ~a (~a)~%"
             indent-string
-            (ics-property-name property))
-    (ics-describe (ics-property-name->type (ics-property-name property))
-                  indent)
+            (ics-property-name property)
+            (ics-describe-type (ics-property-name->type (ics-property-name property))))
+    (ics-describe-type (ics-property-name->type (ics-property-name property)))
     (format #t ";;; ~a    ~a~%" indent-string (ics-property-value property))
     (unless (null? (ics-property-parameters property))
       (for-each (lambda (parameter)
@@ -188,39 +188,37 @@ for indentation."
 (define-method (ics-describe (name <symbol>))
   (ics-describe name 0))
 
-(define-method (ics-describe (name <symbol>) (indent <number>))
-  (let ((indent-string (make-string indent #\space)))
-    (case name
-      ;; Types.
-      ((BINARY)
-       (format #t ";;; ~a BINARY: Binary type (RFC5545, 3.3.1)\n"
-               indent-string))
-      ((BOOLEAN)
-       (format #t ";;; ~a BOOLEAN: Boolean type (RFC5545, 3.3.2)\n"
-               indent-string))
-      ((CAL-ADDRESS)
-       (format #t ";;; ~a CAL-ADDRESS: Calendar User Address type (RFC5545, 3.3.3)\n"
-               indent-string))
-      ((DATE)
-       (format #t ";;; ~a DATE: Date type (RFC5545, 3.3.4)\n"
-               indent-string))
-      ((DATE-TIME)
-       (format #t ";;; ~a DATE-TIME: Date-Time type (RFC5545, 3.3.5)\n"
-               indent-string))
-      ((DURATION)
-       (format #t ";;; ~a DURATION: Duration type (RFC5545, 3.3.6)\n"
-               indent-string))
-      ((FLOAT)
-       (format #t ";;; ~a FLOAT: Float type (RFC5545, 3.3.7)\n"
-               indent-string))
-      ((INTEGER)     (format #t ";;; ~a RFC5545, 3.3.8~%" indent-string))
-      ((PERIOD)      (format #t ";;; ~a RFC5545, 3.3.9~%" indent-string))
-      ((RECUR)       (format #t ";;; ~a RFC5545, 3.3.10~%" indent-string))
-      ((TEXT)
-       (format #t ";;; ~a TEXT: Text type (RFC5545, 3.3.11)~%" indent-string))
-      ((TIME)        (format #t ";;; ~a RFC5545, 3.3.12~$" indent-string))
-      ((URI)         (format #t ";;; ~a RFC5545, 3.3.13~%" indent-string))
-      ((UTC-OFFSET)  (format #t ";;; ~a RFC5545, 3.3.14~%" indent-string)))))
+(define-method (ics-describe-type (name <symbol>))
+  (case name
+    ;; Types.
+    ((BINARY)
+     "BINARY: Binary type: RFC5545, 3.3.1")
+    ((BOOLEAN)
+     "BOOLEAN: Boolean type: RFC5545, 3.3.2")
+    ((CAL-ADDRESS)
+     "CAL-ADDRESS: Calendar User Address type -- RFC5545, 3.3.3)")
+    ((DATE)
+     "DATE: Date type: RFC5545, 3.3.4")
+    ((DATE-TIME)
+     "DATE-TIME: Date-Time type: RFC5545, 3.3.5")
+    ((DURATION)
+     "DURATION: Duration type: RFC5545, 3.3.6")
+    ((FLOAT)
+     "FLOAT: Float type: RFC5545, 3.3.7")
+    ((INTEGER)
+     "INTEGER: RFC5545, 3.3.8")
+    ((PERIOD)
+     "PERIOD: RFC5545, 3.3.9")
+    ((RECUR)
+     "RECUR: RFC5545, 3.3.10")
+    ((TEXT)
+     "TEXT: Text type: RFC5545, 3.3.11")
+    ((TIME)
+     "TIME: RFC5545, 3.3.12")
+    ((URI)
+     "URI: RFC5545, 3.3.13")
+    ((UTC-OFFSET)
+     "UTC-OFFSET: RFC5545, 3.3.14")))
 
 
 ;;; ics.scm ends here.
