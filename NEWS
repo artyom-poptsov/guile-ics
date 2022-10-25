@@ -7,6 +7,12 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Unreleased
+** =ics= program is improved
+*** =print=: New command
+*** =describe=: New command
+** =(ics)=: =ics-describe= now more informative
+
 * Changes in version 0.3.0 (2022-09-03)
 ** Use the Guile State Machine Compiler (Guile-SMC)
 Guile-ICS now uses Guile-SMC for generating the code for its finite-state
