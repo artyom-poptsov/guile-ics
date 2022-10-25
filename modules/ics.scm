@@ -213,14 +213,14 @@ for indentation."
       ((FLOAT)
        (format #t ";;; ~a FLOAT: Float type (RFC5545, 3.3.7)\n"
                indent-string))
-      ((INTEGER)     (format #t ";;; ~a RFC5545, 3.3.8" indent-string))
-      ((PERIOD)      (format #t ";;; ~a RFC5545, 3.3.9" indent-string))
-      ((RECUR)       (format #t ";;; ~a RFC5545, 3.3.10" indent-string))
+      ((INTEGER)     (format #t ";;; ~a RFC5545, 3.3.8~%" indent-string))
+      ((PERIOD)      (format #t ";;; ~a RFC5545, 3.3.9~%" indent-string))
+      ((RECUR)       (format #t ";;; ~a RFC5545, 3.3.10~%" indent-string))
       ((TEXT)
-       (format #t ";;; ~a TEXT: Text type (RFC5545, 3.3.11)\n" indent-string))
-      ((TIME)        (format #t ";;; ~a RFC5545, 3.3.12" indent-string))
-      ((URI)         (format #t ";;; ~a RFC5545, 3.3.13" indent-string))
-      ((UTC-OFFSET)  (format #t ";;; ~a RFC5545, 3.3.14" indent-string)))))
+       (format #t ";;; ~a TEXT: Text type (RFC5545, 3.3.11)~%" indent-string))
+      ((TIME)        (format #t ";;; ~a RFC5545, 3.3.12~$" indent-string))
+      ((URI)         (format #t ";;; ~a RFC5545, 3.3.13~%" indent-string))
+      ((UTC-OFFSET)  (format #t ";;; ~a RFC5545, 3.3.14~%" indent-string)))))
 
 
 ;;; ics.scm ends here.
