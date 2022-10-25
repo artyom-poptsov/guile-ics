@@ -52,8 +52,8 @@
             ;; Predicatres and FSM guards.
             stream-parser-context?
             stream:eof-object?
-            stream:vcalendar-begin?
-            stream:vcalendar-end?
+            stream:object-begin?
+            stream:object-end?
             stream:component-begin?
             stream:component-end?
             stream:lazy?
@@ -166,12 +166,12 @@ CONTEXT.  Return the context."
   "Check if CONTENT-LINE-CTX contains EOF."
   (content-line-context-eof? content-line-ctx))
 
-(define (stream:vcalendar-begin? ctx content-line-ctx)
+(define (stream:object-begin? ctx content-line-ctx)
   "Check if CONTENT-LINE-CTX contains the beginning of an iCalendar object."
   (content-line-component-begin?
    (content-line-context-result content-line-ctx)))
 
-(define (stream:vcalendar-end? ctx content-line-ctx)
+(define (stream:object-end? ctx content-line-ctx)
   "Check if CONTENT-LINE-CTX contains the ending of an iCalendar object."
   (content-line-component-end?
    (content-line-context-result content-line-ctx)))
