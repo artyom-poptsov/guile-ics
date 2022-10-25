@@ -176,17 +176,24 @@ for indentation."
                 (ics-object-components object)))))
 
 (define-method (ics-describe (property <ics-property>))
-  (format #t ";;; ~54a ~a~%"
-          (class-of property) (ics-property-name property))
-  (display   ";;;   value:\n")
-  (format #t ";;;     ~a~%" (ics-property-value property))
-  (unless (null? (ics-property-parameters property))
-    (display   ";;;   parameters:\n")
-    (for-each (lambda (parameter)
-                (format #t ";;;     ~50a ~20a~%"
-                        (car parameter)
-                        (cdr parameter)))
-              (ics-property-parameters property))))
+  (ics-describe property 0))
+
+(define-method (ics-describe (property <ics-property>) (indent <number>))
+  (let ((indent-string (make-string indent #\space)))
+    (format #t ";;; ~a ~54a ~a~%"
+            indent-string
+            (class-of property)
+            (ics-property-name property))
+    (format #t ";;; ~a  value:\n" indent-string)
+    (format #t ";;; ~a    ~a~%" (ics-property-value property) indent-string)
+    (unless (null? (ics-property-parameters property))
+      (format #t ";;; ~a  parameters:\n" indent-string)
+      (for-each (lambda (parameter)
+                  (format #t ";;; ~a    ~50a ~20a~%"
+                          indent-string
+                          (car parameter)
+                          (cdr parameter)))
+                (ics-property-parameters property)))))
 
 (define-method (ics-describe (name <symbol>))
   (case name
