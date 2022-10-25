@@ -136,14 +136,14 @@ for indentation."
                     (format port "~aEND: ~a\n" s cname)))
                 components)))
 
-  (define (print-vcalendar)
+  (define (print-object)
     "Print a VCALENDAR object from an iCalendar stream."
-    (write-line "BEGIN: VCALENDAR" port)
+    (write-line (format #f "BEGIN: ~a" (ics-object-name ics-object)) port)
     (print-icalprops (ics-object-properties ics-object) indent)
     (print-components (ics-object-components ics-object) indent)
-    (write-line "END: VCALENDAR" port))
+    (write-line (format #f "END: ~a" ics-object) port))
 
-  (print-vcalendar))
+  (print-object))
 
 
 ;;;
