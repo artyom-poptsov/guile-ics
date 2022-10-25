@@ -105,6 +105,17 @@ symbol."
      'CAL-ADDRESS)
     (("PERCENT-COMPLETE" "PRIORITY" "REPEAT" "SEQUENCE")
      'INTEGER)
+
+    ;; vCard specific properties.
+    (("ADR" "TEL" "CATEGORIES" "CLIENTPIDMAP" "EMAIL" "FN" "GENDER" "IMPP"
+      "KEY" "LANG" "LOGO" "MAILER" "MEMBER" "NOTE" "N" "NICKNAME" "ORG"
+      "ROLE" "TITLE" "XML")
+     'TEXT)
+    (("ANNIVERSARY" "BDARY" "REV")
+     'DATE-TIME)
+    (("CALADRURI" "CALURI" "FBURL" "SOURCE")
+     'URI)
+
     (else
      ;; Non-standard properties and IANA properties are
      ;; of type TEXT by default (see RFC5545, 3.8.8.)
