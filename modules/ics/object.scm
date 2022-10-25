@@ -176,12 +176,12 @@ to a specified PORT."
                   (print-components (ics-object-components object))
                   (ics-format port "END:~a" cname)))
               components))
-  (define (print-vcalendar)
-    (ics-write-line "BEGIN:VCALENDAR" port)
+  (define (print-object)
+    (ics-write-line (format #f "BEGIN:~a" (ics-object-name obj)) port)
     (print-properties (ics-object-properties obj))
     (print-components (ics-object-components obj))
-    (ics-write-line "END:VCALENDAR" port))
+    (ics-write-line (format #f "END:~a" (ics-object-name obj)) port))
 
-  (print-vcalendar))
+  (print-object))
 
 ;;; object.scm ends here.
