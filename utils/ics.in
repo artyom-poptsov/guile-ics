@@ -52,18 +52,23 @@ Written by Artyom V. Poptsov.
 
 (define (print-help-and-exit)
   (display "\
-Usage ics [options]
+Usage ics [command] [options]
 
 The default behaviour of the program is to read iCalendar stream from
 stdin and handle it according to the specified options.
 
+Commands:
+  print          Print the input iCalendar data in various formats.
+  describe       Describe the input iCalendar data in the human-readable
+                 form.
+  help           Print this help message.
+
 Options:
   --help, -h                 Print this message and exit.
   --version                  Print Guile-ICS version.
-  --pretty-print, -p <indent>
-                             Pretty-print iCalendar stream to the
-                             stdout.
-  --to-org-mode              Convert iCalendar data to org-mode format.
+
+For each command there's '--help' option (or '-h' for short) that prints a help
+message for the given command.
 ")
   (exit))
 
