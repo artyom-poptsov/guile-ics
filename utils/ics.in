@@ -59,6 +59,7 @@ stdin and handle it according to the specified options.
 
 Commands:
   print          Print the input iCalendar data in various formats.
+                 This is the default action if no command is provided.
   describe       Describe the input iCalendar data in the human-readable
                  form.
   help           Print this help message.
@@ -84,21 +85,17 @@ message for the given command.
 (ics-debug-set! #f)
 
 
-;;; Entry point.
-
 (define (main args)
-
-  (when (< (length args) 2)
-    (print-help-and-exit))
-
-  (let* ((command (cadr args))
-         (rest    (cons (car args) (cddr args)))
-         (handler (command-match command %commands)))
-    (if handler
-        (handler rest)
-        (begin
-          (format (current-error-port) "Unknown command: ~a~%" command)
-          (print-help-and-exit)))))
+  "Entry point."
+  (if (< (length args) 2)
+      (command-print args)
+      (let* ((command (cadr args))
+             (rest    (cons (car args) (cddr args)))
+             (handler (command-match command %commands)))
+        (if handler
+            (handler rest)
+            (begin
+              (command-print args))))))
 
 ;; Local Variables:
 ;; mode: Scheme
