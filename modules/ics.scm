@@ -141,7 +141,7 @@ for indentation."
     (write-line (format #f "BEGIN: ~a" (ics-object-name ics-object)) port)
     (print-icalprops (ics-object-properties ics-object) indent)
     (print-components (ics-object-components ics-object) indent)
-    (write-line (format #f "END: ~a" ics-object) port))
+    (write-line (format #f "END: ~a" (ics-object-name ics-object)) port))
 
   (print-object))
 
