@@ -26,6 +26,7 @@
 ;;; Code:
 
 (use-modules (ice-9 getopt-long)
+             (ice-9 eval-string)
              ((ice-9 pretty-print)
               #:renamer (symbol-prefix-proc 'ice-9:))
              (srfi srfi-41)
@@ -33,6 +34,9 @@
              (ics version)
              (ics object)
              (ics common)
+             (ics cli common)
+             (ics cli command-describe)
+             (ics cli command-convert)
              (ics conv))
 
 (define (print-version)
@@ -63,52 +67,33 @@ Options:
 ")
   (exit))
 
+(define %commands
+  `((("describe")               ,command-describe)
+    (("convert")                ,command-convert)
+    (("--version" "version")    ,(lambda (rest)
+                                   (print-version)))
+    (("help", "--help", "-h")   ,(lambda (rest)
+                                   (print-help-and-exit)))))
+
 
-;;; Option spec.
-
-(define %option-spec
-  '((help         (single-char #\h) (value #f))
-    (version                        (value #f))
-    (to-org-mode                    (value #f))
-    (pretty-print (single-char #\p) (value optional))))
-
 (ics-debug-set! #f)
 
 
 ;;; Entry point.
 
-(define (handle-pretty-print indent)
-  (let ((l (ics->stream)))
-    (stream-for-each (lambda (e)
-                       (ics-pretty-print e #:indent indent))
-                     l)))
-
-(define (handle-to-org-mode)
-  (stream-for-each (lambda (ics-object)
-                     (ics-object->org-mode ics-object))
-                   (ics->stream)))
-
 (define (main args)
-  (let* ((options      (getopt-long args %option-spec))
-         (help-needed? (option-ref options 'help #f))
-         (version-needed? (option-ref options 'version #f))
-         (to-org-mode  (option-ref options 'to-org-mode #f))
-         (pretty-print (option-ref options 'pretty-print #f)))
 
-    (when version-needed?
-      (print-version)
-      (exit 0))
+  (when (< (length args) 2)
+    (print-help-and-exit))
 
-    (cond
-     (pretty-print
-      (let ((indent (if (boolean? pretty-print)
-                        2
-                        (string->number pretty-print))))
-        (handle-pretty-print indent)))
-     (to-org-mode
-      (handle-to-org-mode))
-     (#t
-      (print-help-and-exit)))))
+  (let* ((command (cadr args))
+         (rest    (cons (car args) (cddr args)))
+         (handler (command-match command %commands)))
+    (if handler
+        (handler rest)
+        (begin
+          (format (current-error-port) "Unknown command: ~a~%" command)
+          (print-help-and-exit)))))
 
 ;; Local Variables:
 ;; mode: Scheme
