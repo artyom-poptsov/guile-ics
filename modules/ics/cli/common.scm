@@ -37,8 +37,10 @@
     (string-any=? str (cdr string-list)))))
 
 (define (command-match command command-list)
-  (if (string-any=? command (caar command-list))
-      (cadar command-list)
-      (command-match command (cdr command-list))))
+  (if (null? command-list)
+      #f
+      (if (string-any=? command (caar command-list))
+          (cadar command-list)
+          (command-match command (cdr command-list)))))
 
 ;;; common.scm ends here.
