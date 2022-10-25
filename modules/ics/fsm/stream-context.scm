@@ -168,12 +168,12 @@ CONTEXT.  Return the context."
 
 (define (stream:vcalendar-begin? ctx content-line-ctx)
   "Check if CONTENT-LINE-CTX contains the beginning of an iCalendar object."
-  (content-line-vcalendar-begin?
+  (content-line-component-begin?
    (content-line-context-result content-line-ctx)))
 
 (define (stream:vcalendar-end? ctx content-line-ctx)
   "Check if CONTENT-LINE-CTX contains the ending of an iCalendar object."
-  (content-line-vcalendar-end?
+  (content-line-component-end?
    (content-line-context-result content-line-ctx)))
 
 (define (stream:component-begin? ctx content-line-ctx)
