@@ -155,22 +155,13 @@ for indentation."
 
 (define-method (ics-describe (object <ics-object>) (indent <number>))
   (let ((indent-string (make-string indent #\space)))
-    (format #t ";;; ~a ~54a ~a~%"
+    (format #t ";;; ~a ~54a~%"
             indent-string
-            (class-of object)
             (ics-object-name object))
-    (format #t ";;; ~a  properties:\n"
-            indent-string)
     (for-each (lambda (property)
-                (format #t ";;; ~a    ~50a ~20a ~a~%"
-                        indent-string
-                        (class-of property)
-                        (ics-property-name property)
-                        (ics-property-type property)))
+                (ics-describe property (+ indent 4)))
               (ics-object-properties object))
     (unless (null? (ics-object-components object))
-      (format #t ";;; ~a  components:\n"
-              indent-string)
       (for-each (lambda (component)
                   (ics-describe component (+ indent 4)))
                 (ics-object-components object)))))
@@ -180,46 +171,56 @@ for indentation."
 
 (define-method (ics-describe (property <ics-property>) (indent <number>))
   (let ((indent-string (make-string indent #\space)))
-    (format #t ";;; ~a ~54a ~a~%"
+    (format #t ";;; ~a ~54a ~%"
             indent-string
-            (class-of property)
             (ics-property-name property))
-    (format #t ";;; ~a  value:\n" indent-string)
-    (format #t ";;; ~a    ~a~%" (ics-property-value property) indent-string)
+    (ics-describe (ics-property-name->type (ics-property-name property))
+                  indent)
+    (format #t ";;; ~a    ~a~%" indent-string (ics-property-value property))
     (unless (null? (ics-property-parameters property))
-      (format #t ";;; ~a  parameters:\n" indent-string)
       (for-each (lambda (parameter)
                   (format #t ";;; ~a    ~50a ~20a~%"
-                          indent-string
+                          (make-string (+ indent 4) #\space)
                           (car parameter)
                           (cdr parameter)))
                 (ics-property-parameters property)))))
 
 (define-method (ics-describe (name <symbol>))
-  (case name
-    ;; Types.
-    ((BINARY)
-     (display ";;; BINARY: Binary type (RFC5545, 3.3.1)\n"))
-    ((BOOLEAN)
-     (display ";;; BOOLEAN: Boolean type (RFC5545, 3.3.2)\n"))
-    ((CAL-ADDRESS)
-     (display ";;; CAL-ADDRESS: Calendar User Address type (RFC5545, 3.3.3)\n"))
-    ((DATE)
-     (display ";;; DATE: Date type (RFC5545, 3.3.4)\n"))
-    ((DATE-TIME)
-     (display ";;; DATE-TIME: Date-Time type (RFC5545, 3.3.5)\n"))
-    ((DURATION)
-     (display ";;; DURATION: Duration type (RFC5545, 3.3.6)\n"))
-    ((FLOAT)
-     (display ";;; FLOAT: Float type (RFC5545, 3.3.7)\n"))
-    ((INTEGER)     "RFC5545, 3.3.8")
-    ((PERIOD)      "RFC5545, 3.3.9")
-    ((RECUR)       "RFC5545, 3.3.10")
-    ((TEXT)
-     (display ";;; TEXT: Text type (RFC5545, 3.3.11)\n"))
-    ((TIME)        "RFC5545, 3.3.12")
-    ((URI)         "RFC5545, 3.3.13")
-    ((UTC-OFFSET)  "RFC5545, 3.3.14")))
+  (ics-describe name 0))
+
+(define-method (ics-describe (name <symbol>) (indent <number>))
+  (let ((indent-string (make-string indent #\space)))
+    (case name
+      ;; Types.
+      ((BINARY)
+       (format #t ";;; ~a BINARY: Binary type (RFC5545, 3.3.1)\n"
+               indent-string))
+      ((BOOLEAN)
+       (format #t ";;; ~a BOOLEAN: Boolean type (RFC5545, 3.3.2)\n"
+               indent-string))
+      ((CAL-ADDRESS)
+       (format #t ";;; ~a CAL-ADDRESS: Calendar User Address type (RFC5545, 3.3.3)\n"
+               indent-string))
+      ((DATE)
+       (format #t ";;; ~a DATE: Date type (RFC5545, 3.3.4)\n"
+               indent-string))
+      ((DATE-TIME)
+       (format #t ";;; ~a DATE-TIME: Date-Time type (RFC5545, 3.3.5)\n"
+               indent-string))
+      ((DURATION)
+       (format #t ";;; ~a DURATION: Duration type (RFC5545, 3.3.6)\n"
+               indent-string))
+      ((FLOAT)
+       (format #t ";;; ~a FLOAT: Float type (RFC5545, 3.3.7)\n"
+               indent-string))
+      ((INTEGER)     (format #t ";;; ~a RFC5545, 3.3.8" indent-string))
+      ((PERIOD)      (format #t ";;; ~a RFC5545, 3.3.9" indent-string))
+      ((RECUR)       (format #t ";;; ~a RFC5545, 3.3.10" indent-string))
+      ((TEXT)
+       (format #t ";;; ~a TEXT: Text type (RFC5545, 3.3.11)\n" indent-string))
+      ((TIME)        (format #t ";;; ~a RFC5545, 3.3.12" indent-string))
+      ((URI)         (format #t ";;; ~a RFC5545, 3.3.13" indent-string))
+      ((UTC-OFFSET)  (format #t ";;; ~a RFC5545, 3.3.14" indent-string)))))
 
 
 ;;; ics.scm ends here.
