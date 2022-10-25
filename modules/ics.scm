@@ -172,10 +172,7 @@ for indentation."
       (format #t ";;; ~a  components:\n"
               indent-string)
       (for-each (lambda (component)
-                  (format #t ";;; ~a    ~50a ~20a~%"
-                          indent-string
-                          (class-of component)
-                          (ics-object-name component)))
+                  (ics-describe component (+ indent 4)))
                 (ics-object-components object)))))
 
 (define-method (ics-describe (property <ics-property>))
