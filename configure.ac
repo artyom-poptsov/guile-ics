@@ -92,6 +92,7 @@ AC_CONFIG_FILES([
     modules/ics/fsm/Makefile
     modules/ics/Makefile
     modules/ics/type/Makefile
+    modules/ics/cli/Makefile
     tests/Makefile
     utils/Makefile doc/Makefile
 ])

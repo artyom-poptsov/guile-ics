@@ -1,4 +1,4 @@
-## Copyright (C) 2016-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-ICS.
 ##
@@ -17,31 +17,12 @@
 
 include $(top_srcdir)/build-aux/am/guile.am
 
-SUBDIRS = type fsm cli .
-
 SOURCES = \
-	version.scm	\
-	property.scm	\
-	stream.scm	\
-	object.scm	\
-	common.scm	\
-	conv.scm
+	common.scm						\
+	command-describe.scm	\
+	command-convert.scm
 
-EXTRA_DIST += \
-	version.scm.in
-
-moddir=$(prefix)/share/guile/site/$(GUILE_EFFECTIVE_VERSION)/ics/
-godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ics/
-
-SUFFIXES = .in
-
-substitute = sed -e 's,[@]VERSION[@],$(PACKAGE_VERSION),g'
-
-version.scm: version.scm.in
-	@echo "  GEN      $@"
-	@$(substitute) "$^" > "$@"
-
-CLEANFILES += \
-	version.scm
+moddir=$(prefix)/share/guile/site/$(GUILE_EFFECTIVE_VERSION)/ics/cli/
+godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ics/cli/
 
 ## Makefile.am ends here.
