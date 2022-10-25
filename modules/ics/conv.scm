@@ -66,11 +66,11 @@ results to a PORT."
                                       (+ current-indent 1)
                                       (1+ level))))
                 components)))
-  (define (print-vcalendar)
-    (write-line "* VCALENDAR" port)
+  (define (print-object)
+    (write-line (format #f "* ~a" (ics-object-name ics-object) port))
     (print-properties (ics-object-properties ics-object) 2)
     (print-components (ics-object-components ics-object) 2 1))
 
-  (print-vcalendar))
+  (print-object))
 
 ;;; conv.scm ends here.
