@@ -1,7 +1,12 @@
 (define-module (ics cli command-convert)
   #:use-module (ice-9 getopt-long)
+  #:use-module (ice-9 rdelim)
+  #:use-module (ice-9 textual-ports)
   #:use-module (srfi srfi-41)
+  #:use-module (oop goops)
   #:use-module (ics)
+  #:use-module (ics property)
+  #:use-module (ics object)
   #:export (command-convert))
 
 (define (print-help)
@@ -25,7 +30,25 @@ Options:
     (format                   (single-char #\f) (value #t))
     (to                       (single-char #\t) (value #t))))
 
-(define (command-describe args)
+(define (record->vcard record header)
+  "Convert a RECORD to a vCard object using HEADER.  Return a new vCard object."
+  (let loop ((r          record)
+             (h          header)
+             (properties '()))
+    (if (null? r)
+        (make <ics-object>
+          #:name "VCARD"
+          #:properties properties)
+        (let* ((name  (string->symbol (car h)))
+               (value (car r))
+               (prop  (make <ics-property>
+                        #:name name
+                        #:value value)))
+          (loop (cdr r)
+                (cdr h)
+                (cons prop properties))))))
+
+(define (command-convert args)
   (let* ((options          (getopt-long args %option-spec))
          (fmt              (option-ref options 'format "dsv"))
          (to               (option-ref options 'to     "vcard"))
@@ -44,14 +67,28 @@ Options:
                        p))))
       (if (string=? fmt "dsv")
           (begin
-            (use-modules (dsv))
-            (let* ((data   (dsv->scm port))
-                   (header (car data))
-                   (rest   (cdr data)))
-              (format (current-output-port) "BEGIN:VCARD\r\n")
-              (for-each (lambda (record)
-                          #t))
-              (format (current-output-port) "END:VCARD\r\n")))
+            (let* ((delimiter (let* ((line
+                                      (read-line port))
+                                     (delimiter
+                                      ((@ (dsv) guess-delimiter) line)))
+                                (unget-char port #\newline)
+                                (unget-string port line)
+                                delimiter))
+                   (data      ((@ (dsv) dsv->scm) port delimiter))
+                   (header    (car data))
+                   (rest      (cdr data)))
+              (let ((vcards (map (lambda (record)
+                                   (record->vcard record header))
+                                 rest)))
+                (for-each (lambda (vcard)
+                            (format #t "BEGIN:VCARD\r\n")
+                            (for-each (lambda (prop)
+                                        (format #t "~a:~a\r\n"
+                                                (ics-property-name prop)
+                                                (ics-property-value prop)))
+                                      (ics-object-properties vcard))
+                            (format #t "END:VCARD\r\n"))
+                          vcards))))
           (error "Unknown format" fmt)))))
 
 ;;; describe.scm ends here.
