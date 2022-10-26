@@ -1,4 +1,4 @@
-;;; command-convert.scm -- CLI interface for the format converter.
+;;; command-convert.scm -- CLI for the format converter.
 
 ;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
@@ -18,7 +18,7 @@
 
 ;;; Commentary:
 
-;; This module contains the CLI interface for converting formats to
+;; This module contains the command line interface for converting formats to
 ;; icalendar/vCard.
 
 

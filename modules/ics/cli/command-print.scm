@@ -1,4 +1,4 @@
-;;; command-convert.scm -- CLI interface for iCalendar conversion.
+;;; command-print.scm -- CLI for iCalendar/vCard formatting.
 
 ;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
@@ -17,6 +17,9 @@
 
 
 ;;; Commentary:
+
+;; This module contains the command line interface for printing iCalendar/vCard
+;; data in various formats.
 
 
 ;;; Code:
