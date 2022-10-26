@@ -81,13 +81,13 @@ Options:
                                    (record->vcard record header))
                                  rest)))
                 (for-each (lambda (vcard)
-                            (format #t "BEGIN:VCARD\r\n")
+                            (format #t "BEGIN:~a\r\n" (ics-object-name vcard))
                             (for-each (lambda (prop)
                                         (format #t "~a:~a\r\n"
                                                 (ics-property-name prop)
                                                 (ics-property-value prop)))
                                       (ics-object-properties vcard))
-                            (format #t "END:VCARD\r\n"))
+                            (format #t "END:~a\r\n\r\n" (ics-object-name vcard)))
                           vcards))))
           (error "Unknown format" fmt)))))
 
