@@ -3,7 +3,7 @@
 
 [[https://github.com/artyom-poptsov/guile-ics][https://github.com/artyom-poptsov/guile-ics/workflows/GNU%20Guile%202.2/badge.svg]] [[https://github.com/artyom-poptsov/guile-ics][https://github.com/artyom-poptsov/guile-ics/workflows/GNU%20Guile%203.0/badge.svg]]
 
-Guile-ICS is an iCalendar format ([[https://tools.ietf.org/html/rfc5545][RFC5545]]) parser for GNU Guile.
+Guile-ICS is an iCalendar ([[https://tools.ietf.org/html/rfc5545][RFC 5545]]) and vCard ([[https://datatracker.ietf.org/doc/html/rfc6350][RFC 6350]]) parser for GNU Guile.
 
 ** License
     Guile-ICS is free software: you can redistribute it and/or modify it under
