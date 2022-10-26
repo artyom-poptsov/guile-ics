@@ -34,6 +34,9 @@
 (define (print-help)
   (display "\
 Usage: ics describe [options] [input-file]
+
+Options:
+  --help, -h                 Print this message and exit.
 "))
 
 (define %option-spec
