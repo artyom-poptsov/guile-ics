@@ -23,6 +23,7 @@ SCM_TESTS = \
 	stream-context.scm \
 	stream-parser.scm \
 	ics.scm		\
+	vcf.scm		\
 	types.scm
 
 TESTS = ${SCM_TESTS}
