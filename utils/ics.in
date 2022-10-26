@@ -55,7 +55,7 @@ Written by Artyom V. Poptsov.
   (display "\
 Usage ics [command] [options]
 
-The default behaviour of the program is to read iCalendar stream from
+The default behaviour of the program is to read iCalendar/vCard stream from
 stdin and handle it according to the specified options.
 
 Commands:
@@ -63,6 +63,7 @@ Commands:
                  This is the default action if no command is provided.
   describe       Describe the input iCalendar data in the human-readable
                  form.
+  convert        Convert data to the vCard/iCalendar format.
   help           Print this help message.
 
 Options:
