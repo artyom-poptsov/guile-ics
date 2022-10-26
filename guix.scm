@@ -67,6 +67,7 @@
            texinfo
            gettext-minimal ; Gettext brings 'AC_LIB_LINKFLAGS_FROM_LIBS'.
            pkg-config
+           guile-dsv
            texlive))
     (inputs (list guile-3.0 which))
     (propagated-inputs (list guile-lib guile-smc))
