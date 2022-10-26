@@ -9,6 +9,7 @@
   #:use-module (ics object)
   #:export (command-convert))
 
+
 (define (print-help)
   (display "\
 Usage: ics describe [options] [input-file]
@@ -21,8 +22,8 @@ Options:
                              - \"dsv\" (default, requires Guile-DSV)
   --to, -t <output-format>   Set the output format.
                              Supported output formats:
-                             - \"vcard\" (default)
-                             - \"ical\"
+                             - \"vcf\" (\"Virtual Contact File\", default)
+                             - \"ics\" (\"Internet Calendaring and Scheduling\")
 "))
 
 (define %option-spec
@@ -30,14 +31,14 @@ Options:
     (format                   (single-char #\f) (value #t))
     (to                       (single-char #\t) (value #t))))
 
-(define (record->vcard record header)
+(define (record->object name record header)
   "Convert a RECORD to a vCard object using HEADER.  Return a new vCard object."
   (let loop ((r          record)
              (h          header)
              (properties '()))
     (if (null? r)
         (make <ics-object>
-          #:name "VCARD"
+          #:name name
           #:properties properties)
         (let* ((name  (string->symbol (car h)))
                (value (car r))
@@ -51,7 +52,7 @@ Options:
 (define (command-convert args)
   (let* ((options          (getopt-long args %option-spec))
          (fmt              (option-ref options 'format "dsv"))
-         (to               (option-ref options 'to     "vcard"))
+         (to               (option-ref options 'to     "vcf"))
          (help-needed?     (option-ref options 'help   #f))
          (args             (option-ref options '()     #f)))
 
@@ -76,9 +77,16 @@ Options:
                                 delimiter))
                    (data      ((@ (dsv) dsv->scm) port delimiter))
                    (header    (car data))
-                   (rest      (cdr data)))
+                   (rest      (cdr data))
+                   (name      (case (string->symbol to)
+                                ((vcf)
+                                 "VCARD")
+                                ((ics)
+                                 "VCALENDAR")
+                                (else
+                                 (error "Unknown output format" to)))))
               (let ((vcards (map (lambda (record)
-                                   (record->vcard record header))
+                                   (record->object name record header))
                                  rest)))
                 (for-each (lambda (vcard)
                             (format #t "BEGIN:~a\r\n" (ics-object-name vcard))
