@@ -274,13 +274,28 @@ the context."
 ;;; Errors.
 
 (define (content-line:error-invalid-name ctx ch)
-  (error "Invalid name" ctx ch))
+  (error (format #f
+                 "~a:~a:~a: Invalid name"
+                 (char-context-port ctx)
+                 (char-context-row ctx)
+                 (char-context-col ctx))
+         ctx ch))
 
 (define (content-line:error-param-eof ctx ch)
-  (error "Unexpected EOF during parameter read" ctx ch))
+  (error (format #f
+                 "~a:~a:~a: Unexpected EOF during parameter read"
+                 (char-context-port ctx)
+                 (char-context-row ctx)
+                 (char-context-col ctx))
+         ctx ch))
 
 (define (content-line:error-invalid-content-line ctx ch)
-  (error "Invalid content line" ctx ch))
+  (error (format #f
+                 "~a:~a:~a: Invalid content line"
+                 (char-context-port ctx)
+                 (char-context-row ctx)
+                 (char-context-col ctx))
+         ctx ch))
 
 
 ;; Content line predicates.
