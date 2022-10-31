@@ -27,6 +27,7 @@
 (define-module (ics cli command-print)
   #:use-module (ice-9 getopt-long)
   #:use-module (srfi srfi-41)
+  #:use-module (ics fsm context)
   #:use-module (ics)
   #:use-module (ics conv)
   #:export (command-print))
@@ -38,6 +39,7 @@ Usage: ics print [options] [input-file]
 
 Options:
   --help, -h                 Print this message and exit.
+  --debug                    Enable debug mode.
   --format, -f <output-format>
                              Set the target format.
                              Supported targets:
@@ -47,18 +49,23 @@ Options:
 
 (define %option-spec
   '((help                     (single-char #\h) (value #f))
+    (debug                                      (value #f))
     (format                   (single-char #\f) (value #t))))
 
 
 (define (command-print args)
   (let* ((options          (getopt-long args %option-spec))
          (help-needed?     (option-ref options 'help  #f))
+         (debug-mode?      (option-ref options 'debug #f))
          (fmt              (option-ref options 'format "pretty"))
          (args             (option-ref options '()    #f)))
 
     (when help-needed?
       (print-help)
       (exit 0))
+
+    (ics-debug-set! debug-mode?)
+    (log-use-stderr! debug-mode?)
 
     (let* ((port   (if (null? args)
                        (current-input-port)
