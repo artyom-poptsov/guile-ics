@@ -103,7 +103,7 @@ CURRENT-INDENT for indentation."
                 (let ((s (make-string current-indent #\space))
                       (type (ics-property-type e))
                       (e (ics-typed-property->ics-property e)))
-                  (if show-types?
+                  (if (and show-types? type)
                       (format port "~a~a (~a)" s (ics-property-name e) type)
                       (format port "~a~a" s (ics-property-name e)))
                   (for-each (lambda (property)
