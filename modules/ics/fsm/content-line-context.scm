@@ -184,6 +184,7 @@ EOF.)"
        (not (guard:double-quote? ctx ch))))
 
 (define (content-line:value-char? ctx ch)
+  "Check if a CH is a valid character for a value."
   (let ((codepoint (char->integer ch)))
     (>= codepoint #x20)))
 
