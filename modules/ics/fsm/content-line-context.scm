@@ -274,28 +274,31 @@ the context."
 ;;; Errors.
 
 (define (content-line:error-invalid-name ctx ch)
-  (error (format #f
-                 "~a:~a:~a: Invalid name"
-                 (char-context-port ctx)
-                 (char-context-row ctx)
-                 (char-context-col ctx))
-         ctx ch))
+  (let ((msg "Invalid name"))
+    (log-error "~a:~a:~a: ~a"
+               (char-context-port ctx)
+               (char-context-row ctx)
+               (char-context-col ctx)
+               msg)
+    (error msg ctx ch)))
 
 (define (content-line:error-param-eof ctx ch)
-  (error (format #f
-                 "~a:~a:~a: Unexpected EOF during parameter read"
-                 (char-context-port ctx)
-                 (char-context-row ctx)
-                 (char-context-col ctx))
-         ctx ch))
+  (let ((msg "Unexpected EOF during parameter read"))
+    (log-error "~a:~a:~a: ~a"
+               (char-context-port ctx)
+               (char-context-row ctx)
+               (char-context-col ctx)
+               msg)
+    (error msg ctx ch)))
 
 (define (content-line:error-invalid-content-line ctx ch)
-  (error (format #f
-                 "~a:~a:~a: Invalid content line"
-                 (char-context-port ctx)
-                 (char-context-row ctx)
-                 (char-context-col ctx))
-         ctx ch))
+  (let ((msg "Invalid content line"))
+    (log-error "~a:~a:~a: ~a"
+               (char-context-port ctx)
+               (char-context-row ctx)
+               (char-context-col ctx)
+               msg)
+    (error msg ctx ch)))
 
 
 ;; Content line predicates.
