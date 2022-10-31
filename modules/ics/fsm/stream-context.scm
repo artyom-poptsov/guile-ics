@@ -128,11 +128,23 @@
    #:init-value   '()
    #:init-keyword #:objects
    #:getter       stream-context-objects
-   #:setter       stream-context-objects-set!))
+   #:setter       stream-context-objects-set!)
+
+  ;; Current line number of the parser.
+  ;;
+  ;; <number>
+  (line-number
+   #:init-value   0
+   #:getter       stream-context-line-number
+   #:setter       stream-context-line-number-set!))
 
 (define (stream-context? x)
   "Check if X is an <stream-context> instance."
   (is-a? x <stream-context>))
+
+(define-method (stream-context-line-number++! (context <stream-context>))
+  (stream-context-line-number-set! context
+                                   (+ (stream-context-line-number context) 1)))
 
 (define-method (stream-context-append-object! (context <stream-context>))
   "Append the current object from CONTEXT to the list of objects inside
@@ -148,10 +160,26 @@ CONTEXT.  Return the context."
 
 (define (stream:read ctx)
   "Event source for the ICS stream parser."
-  (fsm-run! (make <content-line-parser>)
-            (make <content-line-context>
-              #:debug-mode? (context-debug-mode? ctx)
-              #:port (stream-context-port ctx))))
+  (catch 'content-line-error
+         (lambda ()
+           (let ((context-line
+                  (fsm-run! (make <content-line-parser>)
+                            (make <content-line-context>
+                              #:debug-mode? (context-debug-mode? ctx)
+                              #:port (stream-context-port ctx)))))
+             (stream-context-line-number++! ctx)
+             context-line))
+         (lambda (key message content-line-context ch)
+           (let* ((buffer (context-stanza content-line-context))
+                  (message "Invalid content line"))
+             (log-error "~a:~a:~a ~a: ~a (~a)"
+                                  (stream-context-port ctx)
+                                  (stream-context-line-number ctx)
+                                  (char-context-col content-line-context)
+                                  message
+                                  buffer
+                                  ch)
+             (error message ctx)))))
 
 (define (stream:dummy-event-source ctx)
   #t)
