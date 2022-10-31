@@ -85,6 +85,8 @@
 ;; See <https://tools.ietf.org/html/rfc5545#section-3.4>.
 (define %ics-token-vcalendar "VCALENDAR")
 
+(define %content-line-error-key 'content-line-error)
+
 
 ;; Classes.
 
@@ -280,7 +282,7 @@ the context."
                (char-context-row ctx)
                (char-context-col ctx)
                msg)
-    (error msg ctx ch)))
+    (throw %content-line-error-key msg ctx ch)))
 
 (define (content-line:error-param-eof ctx ch)
   (let ((msg "Unexpected EOF during parameter read"))
@@ -289,7 +291,7 @@ the context."
                (char-context-row ctx)
                (char-context-col ctx)
                msg)
-    (error msg ctx ch)))
+    (throw %content-line-error-key msg ctx ch)))
 
 (define (content-line:error-invalid-content-line ctx ch)
   (let ((msg "Invalid content line"))
@@ -298,7 +300,7 @@ the context."
                (char-context-row ctx)
                (char-context-col ctx)
                msg)
-    (error msg ctx ch)))
+    (throw %content-line-error-key msg ctx ch)))
 
 
 ;; Content line predicates.
