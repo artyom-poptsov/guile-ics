@@ -11,7 +11,9 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ** =ics= program is improved
 *** =print=: New command
 *** =describe=: New command
-** =(ics)=: =ics-describe= now more informative
+*** =convert=: New command.
+** Guile-ICS now can read vCard format
+** =(ics)=: =ics-describe= is now more informative
 
 * Changes in version 0.3.0 (2022-09-03)
 ** Use the Guile State Machine Compiler (Guile-SMC)
