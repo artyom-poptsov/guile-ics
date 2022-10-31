@@ -65,6 +65,7 @@ Commands:
                  form.
   convert        Convert data to the vCard/iCalendar format.
   help           Print this help message.
+  version        Print the Guile-ICS version.
 
 Options:
   --help, -h                 Print this message and exit.
