@@ -24,7 +24,8 @@ SCM_TESTS = \
 	stream-parser.scm \
 	ics.scm		\
 	vcf.scm		\
-	types.scm
+	types.scm	\
+	cli.scm
 
 TESTS = ${SCM_TESTS}
 
