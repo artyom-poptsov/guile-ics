@@ -7,7 +7,7 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
-* Unreleased
+* Changes in version 0.4.0 (2022-10-31)
 ** =ics= program is improved
 *** =print=: New command
 iCalendar/vCard printer that prints the data in the specified format ("pretty"
