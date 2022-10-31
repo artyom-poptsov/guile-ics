@@ -73,7 +73,7 @@ Options:
                          (unless p
                            (error "Could not open a file" (car args)))
                          p)))
-           (stream (ics->stream port)))
+           (stream (ics->stream port #:parse-types? #t)))
       (case (string->symbol fmt)
         ((pretty)
          (stream-for-each (lambda (e)
