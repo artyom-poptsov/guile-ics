@@ -10,9 +10,22 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
 * Unreleased
 ** =ics= program is improved
 *** =print=: New command
+iCalendar/vCard printer that prints the data in the specified format ("pretty"
+and "org-mode" are available for now.)
 *** =describe=: New command
+This command allows to get human-readable description of iCalendar/vCard data.
 *** =convert=: New command.
+=ics convert= allows to convert DSV data to iCalendar/vCard format.
+
+As a practical example, this is very useful for producing vCard contact data
+from table data (e.g. from ODS files) for mass-importing contacts into a
+applications.
 ** Guile-ICS now can read vCard format
+As vCard (RFC 6350) format is very similar to iCalendar (RFC 5545), it seems
+reasonable to support both in one library/tool.
+
+There are unfinished parts in vCard support but that will be fixed in future
+Guile-ICS releases.
 ** =(ics)=: =ics-describe= is now more informative
 
 * Changes in version 0.3.0 (2022-09-03)
