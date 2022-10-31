@@ -19,6 +19,8 @@ Guile-ICS is an iCalendar ([[https://tools.ietf.org/html/rfc5545][RFC 5545]]) an
 ** Requirements
     - [[https://www.gnu.org/software/guile/][GNU Guile]], version 2.0.12 or later
     - [[https://github.com/artyom-poptsov/guile-smc][Guile-SMC]], version 0.5.2 or later
+    - [[https://github.com/artyom-poptsov/guile-dsv][Guile-DSV]], version 0.5.1 or later -- only required for the DSV converters;
+      the rest of Guile-ICS will work without this library.
 
 *** Build-time dependencies
 - GNU Guile development files (something with =dev= suffix, e.g.
@@ -51,6 +53,7 @@ $ sudo make install
 #+END_EXAMPLE
 
 ** Usage
+*** Reading and printing iCalendar data
     Let's suppose you have a file named =example.ics= with the
     following content:
  #+BEGIN_EXAMPLE
@@ -91,6 +94,7 @@ $ sudo make install
  END: VCALENDAR
  #+END_EXAMPLE
 
+*** Describing iCalendar/vCard data
     Now let's take a look on the =ics-object= structure more closely:
  #+BEGIN_EXAMPLE scheme
  (use-modules (ics))
@@ -102,20 +106,29 @@ $ sudo make install
 
     After we run the code we will see the following:
  #+BEGIN_EXAMPLE
- ;;; #<<class> <ics-object> ea4f30>                 VCALENDAR
- ;;;   properties:
- ;;;     #<<class> <ics-property> e573f0>           PRODID               TEXT
- ;;;     #<<class> <ics-property> e573f0>           VERSION              TEXT
- ;;;   components:
- ;;;     #<<class> <ics-object> ea4f30>             VEVENT
+;;;  VCALENDAR                                             
+;;;      PRODID (TEXT: Text type: RFC5545, 3.3.11)
+;;;         -//hacksw/handcal//NONSGML v1.0//EN
+;;;      VERSION (TEXT: Text type: RFC5545, 3.3.11)
+;;;         2.0
+;;;      VEVENT                                                
+;;;          UID (TEXT: Text type: RFC5545, 3.3.11)
+;;;             19970610T172345Z-AF23B2@example.com
+;;;          DTSTAMP (DATE-TIME: Date-Time type: RFC5545, 3.3.5)
+;;;             19970610T172345Z
+;;;          DTSTART (DATE-TIME: Date-Time type: RFC5545, 3.3.5)
+;;;             19970714T170000Z
+;;;          DTEND (DATE-TIME: Date-Time type: RFC5545, 3.3.5)
+;;;             19970715T040000Z
+;;;          SUMMARY (TEXT: Text type: RFC5545, 3.3.11)
+;;;             Bastille Day Party
  #+END_EXAMPLE
 
-    As can be seen from the example, the =<ics-object>= with name
-    =VCALENDAR= has two properties of type =TEXT= (=PRODID=, and
-    =VERSION=) and has one an only =VEVENT= component.  The
-    =ics-describe= method may be handy in REPL mode to get information
-    about iCalendar objects.  Now let's get the value of =SUMMARY=
-    property that belongs to the =VEVENT= component:
+    As can be seen from the example, the =<ics-object>= with name =VCALENDAR=
+    has two properties of type =TEXT= (=PRODID=, and =VERSION=) and has one an
+    only =VEVENT= component. The =ics-describe= method may be handy in REPL mode
+    to get information about iCalendar objects. Now let's get the value of
+    =SUMMARY= property that belongs to the =VEVENT= component:
  #+BEGIN_EXAMPLE scheme
  (use-modules (ics)
               (ics type object)
@@ -136,3 +149,92 @@ $ sudo make install
  #+END_EXAMPLE
 
     For more usage examples, see =examples= directory.
+* =ics= tool
+#+BEGIN_EXAMPLE
+Usage ics [command] [options]
+
+The default behaviour of the program is to read iCalendar/vCard stream from
+stdin and handle it according to the specified options.
+
+Commands:
+  print          Print the input iCalendar data in various formats.
+                 This is the default action if no command is provided.
+  describe       Describe the input iCalendar data in the human-readable
+                 form.
+  convert        Convert data to the vCard/iCalendar format.
+  help           Print this help message.
+
+Options:
+  --help, -h                 Print this message and exit.
+  --version                  Print Guile-ICS version.
+
+For each command there's '--help' option (or '-h' for short) that prints a help
+message for the given command.
+#+END_EXAMPLE
+
+** =print=
+This command allows to print iCalendar/vCard data in various formats:
+#+BEGIN_EXAMPLE
+$ ics print tests/example.ics 
+BEGIN: VCALENDAR
+    PRODID (TEXT): -//hacksw/handcal//NONSGML v1.0//EN
+    VERSION (TEXT): 2.0
+    BEGIN: VEVENT
+        UID (TEXT): 19970610T172345Z-AF23B2@example.com
+        DTSTAMP (DATE-TIME): 19970610T172345
+        DTSTART (DATE-TIME): 19970714T170000
+        DTEND (DATE-TIME): 19970715T040000
+        SUMMARY (TEXT): Bastille Day Party
+    END: VEVENT
+END: VCALENDAR
+#+END_EXAMPLE
+
+** =describe=
+#+BEGIN_EXAMPLE
+$ ics describe tests/example.ics
+;;;  VCALENDAR                                             
+;;;      PRODID (TEXT: Text type: RFC5545, 3.3.11)
+;;;         -//hacksw/handcal//NONSGML v1.0//EN
+;;;      VERSION (TEXT: Text type: RFC5545, 3.3.11)
+;;;         2.0
+;;;      VEVENT                                                
+;;;          UID (TEXT: Text type: RFC5545, 3.3.11)
+;;;             19970610T172345Z-AF23B2@example.com
+;;;          DTSTAMP (DATE-TIME: Date-Time type: RFC5545, 3.3.5)
+;;;             19970610T172345Z
+;;;          DTSTART (DATE-TIME: Date-Time type: RFC5545, 3.3.5)
+;;;             19970714T170000Z
+;;;          DTEND (DATE-TIME: Date-Time type: RFC5545, 3.3.5)
+;;;             19970715T040000Z
+;;;          SUMMARY (TEXT: Text type: RFC5545, 3.3.11)
+;;;             Bastille Day Party
+#+END_EXAMPLE
+
+** =convert=
+This command allows to convert input data into iCalendar/vCard format.
+
+Let's say we have the following data:
+#+BEGIN_EXAMPLE
+ORG,TITLE,FN,EMAIL
+Example Organisation,Programmer,Eva Luator,eva@example.org
+Example Organisation,Programmer,Random J. Hacker,rjh@example.org
+#+END_EXAMPLE
+
+Then we can convert it to vCard as follows:
+#+BEGIN_EXAMPLE
+$ ics convert test.csv
+BEGIN:VCARD
+EMAIL:eva@example.org
+FN:Eva Luator
+TITLE:Programmer
+ORG:Example Organisation
+END:VCARD
+
+BEGIN:VCARD
+EMAIL:rjh@example.org
+FN:Random J. Hacker
+TITLE:Programmer
+ORG:Example Organisation
+END:VCARD
+
+#+END_EXAMPLE
