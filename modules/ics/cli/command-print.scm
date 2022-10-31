@@ -70,7 +70,9 @@ Options:
       (case (string->symbol fmt)
         ((pretty)
          (stream-for-each (lambda (e)
-                            (ics-pretty-print e #:indent 4))
+                            (ics-pretty-print e
+                                              #:indent 4
+                                              #:show-types? #t))
                           stream))
         ((org-mode)
          (stream-for-each ics-object->org-mode stream))
