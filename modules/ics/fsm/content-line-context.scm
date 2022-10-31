@@ -183,13 +183,9 @@ EOF.)"
   (and (not (content-line:control? ctx ch))
        (not (guard:double-quote? ctx ch))))
 
-;; TODO: Handle "NON-US-ASCII"
-;; <https://datatracker.ietf.org/doc/html/rfc5545#section-3.1>
 (define (content-line:value-char? ctx ch)
   (let ((codepoint (char->integer ch)))
-    (or (guard:space? ctx ch)
-        (and (>= codepoint #x21)
-             (<= codepoint #x7E)))))
+    (>= codepoint #x20)))
 
 (define (content-line:valid-name-character? ctx ch)
   "Check if a character CH is a valid content line name."
