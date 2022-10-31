@@ -26,10 +26,6 @@
 ;;; Code:
 
 (use-modules (ice-9 getopt-long)
-             (ice-9 eval-string)
-             ((ice-9 pretty-print)
-              #:renamer (symbol-prefix-proc 'ice-9:))
-             (srfi srfi-41)
              (ics)
              (ics version)
              (ics object)
