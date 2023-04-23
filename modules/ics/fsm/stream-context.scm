@@ -175,7 +175,7 @@ CONTEXT.  Return the context."
              (log-error "~a:~a:~a ~a: ~a (~a)"
                                   (stream-context-port ctx)
                                   (stream-context-line-number ctx)
-                                  (char-context-col content-line-context)
+                                  (context-col-number content-line-context)
                                   message
                                   buffer
                                   ch)

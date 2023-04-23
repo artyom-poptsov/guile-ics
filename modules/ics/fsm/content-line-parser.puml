@@ -20,14 +20,14 @@ title RFC5545 Content Line parser.
 '   ; Vendor identification
 
 lookup_name: Skip empty space.
-lookup_name --> [*]: guard:eof-object?
-lookup_name --> read_name: content-line:valid-name-character? -> action:store
+lookup_name --> [*]: char:eof-object?
+lookup_name --> read_name: content-line:valid-name-character? -> push-event-to-buffer
 lookup_name ->  lookup_name
 
 read_name: Read content line name.
-read_name --> read_param_name: guard:semicolon? -> content-line:create
-read_name --> read_value:      guard:colon? -> content-line:create
-read_name --> read_name:       content-line:valid-name-character? -> action:store
+read_name --> read_param_name: char:semicolon? -> content-line:create
+read_name --> read_value:      char:colon? -> content-line:create
+read_name --> read_name:       content-line:valid-name-character? -> push-event-to-buffer
 read_name --> [*]:             guard:#t -> content-line:error-invalid-name
 
 ' ---------------------------------------------------------------------------
@@ -35,9 +35,9 @@ read_name --> [*]:             guard:#t -> content-line:error-invalid-name
 ' param-name    = iana-token / x-name
 
 read_param_name: Read parameter.
-read_param_name --> read_param_value: guard:equals-sign? -> content-line:store-param-name
-read_param_name --> [*]:              guard:eof-object? -> content-line:error-param-eof
-read_param_name ->  read_param_name:  guard:#t -> action:store
+read_param_name --> read_param_value: char:equals-sign? -> content-line:store-param-name
+read_param_name --> [*]:              char:eof-object? -> content-line:error-param-eof
+read_param_name ->  read_param_name:  guard:#t -> push-event-to-buffer
 
 ' ---------------------------------------------------------------------------
 ' param-value   = paramtext / quoted-string
@@ -48,17 +48,17 @@ read_param_name ->  read_param_name:  guard:#t -> action:store
 ' QSAFE-CHAR    = WSP / %x21 / %x23-7E / NON-US-ASCII
 '   ; Any character except CONTROL and DQUOTE
 
-read_param_value --> read_param_value_quoted:  guard:double-quote?
-read_param_value --> read_param_name:          guard:semicolon? -> content-line:store-param-value
-read_param_value --> read_param_value_escaped: guard:reverse-solidus?
-read_param_value --> read_value:               guard:colon? -> content-line:store-param-value
-read_param_value --> read_param_value_list:    guard:comma? -> content-line:store-param-value/list
-read_param_value ->  read_param_value:         content-line:safe-char? -> action:store
+read_param_value --> read_param_value_quoted:  char:double-quote?
+read_param_value --> read_param_name:          char:semicolon? -> content-line:store-param-value
+read_param_value --> read_param_value_escaped: char:reverse-solidus?
+read_param_value --> read_value:               char:colon? -> content-line:store-param-value
+read_param_value --> read_param_value_list:    char:comma? -> content-line:store-param-value/list
+read_param_value ->  read_param_value:         content-line:safe-char? -> push-event-to-buffer
 
 read_param_value_escaped --> read_param_value: guard:#t -> content-line:store-escaped
 
-read_param_value_quoted --> read_param_value:        guard:double-quote?
-read_param_value_quoted --> read_param_value_quoted: content-line:qsafe-char? -> action:store
+read_param_value_quoted --> read_param_value:        char:double-quote?
+read_param_value_quoted --> read_param_value_quoted: content-line:qsafe-char? -> push-event-to-buffer
 read_param_value_quoted --> [*]: guard:#t -> content-line:error-invalid-content-line
 
 ' ---------------------------------------------------------------------------
@@ -66,10 +66,10 @@ read_param_value_quoted --> [*]: guard:#t -> content-line:error-invalid-content-
 ' <https://datatracker.ietf.org/doc/html/rfc5545#section-3.1.1>
 
 read_param_value_list: Read and append parameter list value.
-read_param_value_list --> read_param_name:       guard:semicolon? -> content-line:store-param-value/list
-read_param_value_list --> read_value:            guard:colon? -> content-line:store-param-value/list
-read_param_value_list --> read_param_value_list: guard:comma? -> content-line:store-param-value/list
-read_param_value_list ->  read_param_value_list: content-line:safe-char? -> action:store
+read_param_value_list --> read_param_name:       char:semicolon? -> content-line:store-param-value/list
+read_param_value_list --> read_value:            char:colon? -> content-line:store-param-value/list
+read_param_value_list --> read_param_value_list: char:comma? -> content-line:store-param-value/list
+read_param_value_list ->  read_param_value_list: content-line:safe-char? -> push-event-to-buffer
 
 ' ---------------------------------------------------------------------------
 ' VALUE-CHAR    = WSP / %x21-7E / NON-US-ASCII
@@ -81,19 +81,19 @@ read_param_value_list ->  read_param_value_list: content-line:safe-char? -> acti
 '   ; All the controls except HTAB
 
 read_value: Read content line value.
-read_value --> read_line_feed:     guard:cr?
-read_value --> read_value_escaped: guard:reverse-solidus?
-read_value --> read_value:         guard:comma? -> content-line:store-value
-read_value ->  read_value:         content-line:value-char? -> action:store
+read_value --> read_line_feed:     char:cr?
+read_value --> read_value_escaped: char:reverse-solidus?
+read_value --> read_value:         char:comma? -> content-line:store-value
+read_value ->  read_value:         content-line:value-char? -> push-event-to-buffer
 read_value --> [*]:                guard:#t -> content-line:error-invalid-content-line
 
 read_value_escaped --> read_value: guard:#t -> content-line:store-escaped
 
-read_line_feed ->  check_for_multiline_text: guard:lf?
+read_line_feed ->  check_for_multiline_text: char:lf?
 read_line_feed --> [*]: guard:#t -> content-line:error-invalid-content-line
 
-check_for_multiline_text -> [*]: guard:eof-object? -> content-line:store-value
-check_for_multiline_text -> read_value: guard:space?
+check_for_multiline_text -> [*]: char:eof-object? -> content-line:store-value
+check_for_multiline_text -> read_value: char:space?
 check_for_multiline_text -> [*]: guard:#t -> content-line:store-value/unget-char
 
 @enduml

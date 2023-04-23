@@ -174,14 +174,14 @@ EOF.)"
 
 (define (content-line:safe-char? ctx ch)
   (and (not (content-line:control? ctx ch))
-       (not (guard:double-quote? ctx ch))
-       (not (guard:semicolon? ctx ch))
-       (not (guard:colon? ctx ch))
-       (not (guard:comma? ctx ch))))
+       (not (char:double-quote? ctx ch))
+       (not (char:semicolon? ctx ch))
+       (not (char:colon? ctx ch))
+       (not (char:comma? ctx ch))))
 
 (define (content-line:qsafe-char? ctx ch)
   (and (not (content-line:control? ctx ch))
-       (not (guard:double-quote? ctx ch))))
+       (not (char:double-quote? ctx ch))))
 
 (define (content-line:value-char? ctx ch)
   "Check if a CH is a valid character for a value."
@@ -190,7 +190,7 @@ EOF.)"
 
 (define (content-line:valid-name-character? ctx ch)
   "Check if a character CH is a valid content line name."
-  (or (guard:hyphen-minus? ctx ch)
+  (or (char:hyphen-minus? ctx ch)
       (char-set-contains? char-set:letter+digit ch)))
 
 
@@ -202,16 +202,15 @@ EOF.)"
 (define (content-line:store-escaped ctx ch)
   (case ch
     ((#\n #\N)
-     (action:store ctx #\newline))
+     (push-event-to-buffer ctx #\newline))
     (else
-     (action:store ctx ch))))
+     (push-event-to-buffer ctx ch))))
 
 (define (content-line:create ctx ch)
   (content-line-context-result-set! ctx
                                     (make <content-line>
                                       #:name (context-buffer->string ctx)))
-  (context-buffer-clear! ctx)
-  ctx)
+  (clear-buffer ctx))
 
 (define (content-line:store-value ctx ch)
   (let* ((content-line  (content-line-context-result ctx))
@@ -226,13 +225,11 @@ EOF.)"
                                      (append (list current-value)
                                              (list new-value))))
         (content-line-value-set! content-line new-value))
-    (context-buffer-clear! ctx)
-    ctx))
+    (clear-buffer ctx)))
 
 (define (content-line:store-param-name ctx ch)
   (content-line-context-buffer-set! ctx (context-buffer->string ctx))
-  (context-buffer-clear! ctx)
-  ctx)
+  (clear-buffer ctx))
 
 (define (content-line:store-param-value ctx ch)
   (let* ((content-line  (content-line-context-result ctx))
@@ -242,8 +239,7 @@ EOF.)"
     (when param-current
       (error "Duplicated parameter" param-name param-value))
     (content-line-parameter-set! content-line param-name param-value)
-    (context-buffer-clear! ctx)
-    ctx))
+    (clear-buffer ctx)))
 
 (define (content-line:store-param-value/list ctx ch)
   "Append a value to the list of parameter values for the parameter that is being
@@ -259,14 +255,13 @@ read."
         (content-line-parameter-set! content-line
                                      param-name
                                      (list param-value)))
-    (context-buffer-clear! ctx)
-    ctx))
+    (clear-buffer ctx)))
 
 (define (content-line:store-value/unget-char ctx ch)
   "Return a character CH to the iCalendar stream port from the context CTX.  Return
 the context."
   (content-line:store-value ctx ch)
-  (unget-char (char-context-port ctx) ch)
+  (unget-char (context-port ctx) ch)
   ctx)
 
 
@@ -275,27 +270,27 @@ the context."
 (define (content-line:error-invalid-name ctx ch)
   (let ((msg "Invalid name"))
     (log-error "~a:~a:~a: ~a"
-               (char-context-port ctx)
-               (char-context-row ctx)
-               (char-context-col ctx)
+               (context-port ctx)
+               (context-row-number ctx)
+               (context-col-number ctx)
                msg)
     (throw %content-line-error-key msg ctx ch)))
 
 (define (content-line:error-param-eof ctx ch)
   (let ((msg "Unexpected EOF during parameter read"))
     (log-error "~a:~a:~a: ~a"
-               (char-context-port ctx)
-               (char-context-row ctx)
-               (char-context-col ctx)
+               (context-port ctx)
+               (context-row-number ctx)
+               (context-col-number ctx)
                msg)
     (throw %content-line-error-key msg ctx ch)))
 
 (define (content-line:error-invalid-content-line ctx ch)
   (let ((msg "Invalid content line"))
     (log-error "~a:~a:~a: ~a"
-               (char-context-port ctx)
-               (char-context-row ctx)
-               (char-context-col ctx)
+               (context-port ctx)
+               (context-row-number ctx)
+               (context-col-number ctx)
                msg)
     (throw %content-line-error-key msg ctx ch)))
 

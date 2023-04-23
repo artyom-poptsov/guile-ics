@@ -44,6 +44,7 @@ godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ics/fsm/
 GUILE_SMC_CONTEXT_ARGS = \
 	--log-driver file \
 	--log-opt "file=context.log" \
+	--type oop \
 	-m "(ics fsm context)"
 
 GUILE_SMC_CONTENT_LINE_PARSER_ARGS = \
