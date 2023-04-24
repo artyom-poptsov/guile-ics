@@ -197,16 +197,16 @@ CONTEXT.  Return the context."
 (define (stream:object-begin? ctx content-line-ctx)
   "Check if CONTENT-LINE-CTX contains the beginning of an iCalendar object."
   (content-line-component-begin?
-   (content-line-context-result content-line-ctx)))
+   (context-result content-line-ctx)))
 
 (define (stream:object-end? ctx content-line-ctx)
   "Check if CONTENT-LINE-CTX contains the ending of an iCalendar object."
   (content-line-component-end?
-   (content-line-context-result content-line-ctx)))
+   (context-result content-line-ctx)))
 
 (define (stream:component-begin? ctx content-line-ctx)
   "Check if CONTENT-LINE-CTX contains the beginning of an iCalendar component."
-  (let ((content-line (content-line-context-result content-line-ctx)))
+  (let ((content-line (context-result content-line-ctx)))
     (and (content-line-component-begin? content-line)
          (let* ((name      (content-line-value content-line))
                 (component (ics-calendar-component-lookup name)))
@@ -218,7 +218,7 @@ CONTEXT.  Return the context."
 
 (define (stream:component-end? ctx content-line-ctx)
   "Check if CONTENT-LINE-CTX contains the ending of an iCalendar event."
-  (let ((content-line (content-line-context-result content-line-ctx)))
+  (let ((content-line (context-result content-line-ctx)))
     (content-line-component-end? content-line)))
 
 
@@ -228,7 +228,7 @@ CONTEXT.  Return the context."
   "Create a new <ics-object> instance from the content line that is stored inside
 CONTENT-LINE-CTX. The new object is stored in the current object slot inside
 <stream-context> CTX.  Return the context."
-  (let* ((content-line (content-line-context-result content-line-ctx))
+  (let* ((content-line (context-result content-line-ctx))
          (name         (content-line-value content-line)))
     (stream-context-current-object-set! ctx (make <ics-object>
                                               #:name name)))
@@ -244,7 +244,7 @@ current object slot is set to #f.  Return the context."
 (define (stream:append-property ctx content-line-ctx)
   "Append an iCalendar object property to the current object from <stream-context>
 CTX. Return the context."
-  (let* ((content-line (content-line-context-result content-line-ctx))
+  (let* ((content-line (context-result content-line-ctx))
          (property (make <ics-property>
                      #:name       (content-line-name content-line)
                      #:value      (content-line-value content-line)
@@ -259,8 +259,7 @@ CTX. Return the context."
     ctx))
 
 (define (stream:create-component ctx content-line-ctx)
-  (let ((name (content-line-value
-               (content-line-context-result content-line-ctx))))
+  (let ((name (content-line-value (context-result content-line-ctx))))
     (stream-context-current-component-set! ctx
                                            (make <ics-object>
                                              #:name name))
@@ -276,7 +275,7 @@ CTX. Return the context."
     ctx))
 
 (define (stream:append-component-property ctx content-line-ctx)
-  (let* ((content-line (content-line-context-result content-line-ctx))
+  (let* ((content-line (context-result content-line-ctx))
          (property-name (content-line-name content-line))
          (property (make <ics-property>
                      #:name       property-name

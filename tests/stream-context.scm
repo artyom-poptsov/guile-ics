@@ -48,7 +48,7 @@
                              #:name "BEGIN"
                              #:value "VCALENDAR"))
          (content-line-ctx (make <content-line-context>
-                             #:content-line content-line))
+                             #:result content-line))
          (ctx              (stream:create-object (make <stream-context>)
                                                  content-line-ctx)))
     (ics-object? (stream-context-current-object ctx))))
@@ -66,7 +66,7 @@
                              #:name "BEGIN"
                              #:value "VCALENDAR"))
          (content-line-ctx (make <content-line-context>
-                             #:content-line content-line))
+                             #:result content-line))
          (ctx              (stream:create-object (make <stream-context>)
                                                  content-line-ctx)))
     (stream:append-object ctx #f)
@@ -80,9 +80,9 @@
                                   #:name  "BEGIN"
                                   #:value "VCALENDAR")))
         (content-line-ctx (make <content-line-context>
-                            #:content-line (make <content-line>
-                                             #:name "VERSION"
-                                             #:value "2.0"))))
+                            #:result (make <content-line>
+                                       #:name "VERSION"
+                                       #:value "2.0"))))
     (stream:append-property ctx content-line-ctx)
     (let ((current-object (stream-context-current-object ctx)))
       (and (ics-object? current-object)
@@ -99,7 +99,7 @@
       (let ((ctx (stream:read (make <stream-context>
                                 #:port (current-input-port)))))
         (and (content-line-context? ctx)
-             (content-line? (content-line-context-result ctx)))))))
+             (content-line? (context-result ctx)))))))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))

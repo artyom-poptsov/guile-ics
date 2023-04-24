@@ -49,10 +49,6 @@
             <content-line-context>
             content-line-context?
             content-line-context-eof?
-            content-line-context-buffer
-            content-line-context-buffer-set!
-            content-line-context-result
-            content-line-context-result-set!
 
             ;; FSM procedures.
             content-line:valid-name-character?
@@ -121,23 +117,7 @@
   "Check if X is a <content-line> instance."
   (is-a? x <content-line>))
 
-(define-class <content-line-context> (<char-context>)
-  ;; The buffer to store the string that is being read.
-  ;;
-  ;; <string> | #f
-  (string-buffer
-   #:init-value   #f
-   #:getter       content-line-context-buffer
-   #:setter       content-line-context-buffer-set!)
-
-  ;; The result of the parser's work.  When no data is read the slot contains #f.
-  ;;
-  ;; <content-line> | #f
-  (result
-   #:init-value   #f
-   #:init-keyword #:content-line
-   #:getter       content-line-context-result
-   #:setter       content-line-context-result-set!))
+(define-class <content-line-context> (<char-context>))
 
 (define (content-line-context? x)
   "Check if X is a <content-line-context> instance."
@@ -146,7 +126,7 @@
 (define-method (content-line-context-eof? (context <content-line-context>))
   "Check if a CONTEXT contains no result (that is, the iCalendar stream ended with
 EOF.)"
-  (equal? (content-line-context-result context) #f))
+  (equal? (context-result context) '()))
 
 
 (define-method (content-line-parameter-set! (content-line <content-line>)
@@ -197,7 +177,7 @@ EOF.)"
 ;;; Actions.
 
 (define (context-buffer->string ctx)
-  (list->string (reverse (context-buffer ctx))))
+  (list->string (context-buffer/reversed ctx)))
 
 (define (content-line:store-escaped ctx ch)
   (case ch
@@ -207,13 +187,12 @@ EOF.)"
      (push-event-to-buffer ctx ch))))
 
 (define (content-line:create ctx ch)
-  (content-line-context-result-set! ctx
-                                    (make <content-line>
-                                      #:name (context-buffer->string ctx)))
+  (context-result-set! ctx (make <content-line>
+                             #:name (context-buffer->string ctx)))
   (clear-buffer ctx))
 
 (define (content-line:store-value ctx ch)
-  (let* ((content-line  (content-line-context-result ctx))
+  (let* ((content-line  (context-result ctx))
          (current-value (content-line-value content-line))
          (new-value     (context-buffer->string ctx)))
     (if current-value
@@ -225,27 +204,26 @@ EOF.)"
                                      (append (list current-value)
                                              (list new-value))))
         (content-line-value-set! content-line new-value))
-    (clear-buffer ctx)))
+    (clear-stanza (clear-buffer ctx))))
 
 (define (content-line:store-param-name ctx ch)
-  (content-line-context-buffer-set! ctx (context-buffer->string ctx))
-  (clear-buffer ctx))
+  (clear-buffer (push-event-to-stanza ctx (context-buffer->string ctx))))
 
 (define (content-line:store-param-value ctx ch)
-  (let* ((content-line  (content-line-context-result ctx))
-         (param-name    (string->symbol (content-line-context-buffer ctx)))
+  (let* ((content-line  (context-result ctx))
+         (param-name    (string->symbol (car (context-stanza ctx))))
          (param-value   (context-buffer->string ctx))
          (param-current (content-line-parameter content-line param-name)))
     (when param-current
       (error "Duplicated parameter" param-name param-value))
     (content-line-parameter-set! content-line param-name param-value)
-    (clear-buffer ctx)))
+    (clear-stanza (clear-buffer ctx))))
 
 (define (content-line:store-param-value/list ctx ch)
   "Append a value to the list of parameter values for the parameter that is being
 read."
-  (let* ((content-line  (content-line-context-result ctx))
-         (param-name    (string->symbol (content-line-context-buffer ctx)))
+  (let* ((content-line  (context-result ctx))
+         (param-name    (string->symbol (car (context-stanza ctx))))
          (param-value   (context-buffer->string ctx))
          (param-current (content-line-parameter content-line param-name)))
     (if param-current

@@ -103,8 +103,8 @@
                 (push-event-to-buffer ctx ch))
               data)
     (content-line:create ctx #f)
-    (and (content-line? (content-line-context-result ctx))
-         (string=? (content-line-name (content-line-context-result ctx))
+    (and (content-line? (context-result ctx))
+         (string=? (content-line-name (context-result ctx))
                    "hello"))))
 
 (test-equal "content-line:create: content line name check"
@@ -115,7 +115,7 @@
                 (push-event-to-buffer ctx ch))
               data)
     (content-line:create ctx #f)
-    (content-line-name (content-line-context-result ctx))))
+    (content-line-name (context-result ctx))))
 
 (test-equal "content-line:store-value"
   "world"
@@ -130,7 +130,7 @@
                 (push-event-to-buffer ctx ch))
               value)
     (content-line:store-value ctx #f)
-    (content-line-value (content-line-context-result ctx))))
+    (content-line-value (context-result ctx))))
 
 (test-equal "content-line:store-param-name"
   "param"
@@ -145,7 +145,7 @@
                 (push-event-to-buffer ctx ch))
               param-name)
     (content-line:store-param-name ctx #f)
-    (content-line-context-buffer ctx)))
+    (car (context-stanza ctx))))
 
 (test-equal "content-line:store-param-value"
   "param-value"
@@ -165,7 +165,7 @@
                 (push-event-to-buffer ctx ch))
               param-value)
     (content-line:store-param-value ctx #f)
-    (content-line-parameter (content-line-context-result ctx)
+    (content-line-parameter (context-result ctx)
                             'param)))
 
 

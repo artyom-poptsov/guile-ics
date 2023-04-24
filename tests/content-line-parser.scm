@@ -45,7 +45,7 @@
       (let* ((fsm (make <content-line-parser>))
              (ctx (fsm-run! fsm (make <content-line-context>
                                   #:port (current-input-port)))))
-        (content-line-name (content-line-context-result ctx))))))
+        (content-line-name (context-result ctx))))))
 
 (test-equal "correct input: value check"
   "2.0"
@@ -55,7 +55,7 @@
       (let* ((fsm (make <content-line-parser>))
              (ctx (fsm-run! fsm (make <content-line-context>
                                   #:port (current-input-port)))))
-        (content-line-value (content-line-context-result ctx))))))
+        (content-line-value (context-result ctx))))))
 
 
 (test-equal "correct input with parameter: name check"
@@ -66,7 +66,7 @@
       (let* ((fsm (make <content-line-parser>))
              (ctx (fsm-run! fsm (make <content-line-context>
                                   #:port (current-input-port)))))
-        (content-line-name (content-line-context-result ctx))))))
+        (content-line-name (context-result ctx))))))
 
 (test-equal "correct input with parameter: value check"
   "VALUE"
@@ -76,7 +76,7 @@
       (let* ((fsm (make <content-line-parser>))
              (ctx (fsm-run! fsm (make <content-line-context>
                                   #:port (current-input-port)))))
-        (content-line-value (content-line-context-result ctx))))))
+        (content-line-value (context-result ctx))))))
 
 (test-equal "correct input with parameter: parameter check"
   "PARAM_VALUE"
@@ -86,7 +86,7 @@
       (let* ((fsm (make <content-line-parser>))
              (ctx (fsm-run! fsm (make <content-line-context>
                                   #:port (current-input-port)))))
-        (content-line-parameter (content-line-context-result ctx)
+        (content-line-parameter (context-result ctx)
                                 'PARAM_NAME)))))
 
 
@@ -102,7 +102,7 @@
       (let* ((fsm (make <content-line-parser>))
              (ctx (fsm-run! fsm (make <content-line-context>
                                   #:port (current-input-port)))))
-        (content-line-name (content-line-context-result ctx))))))
+        (content-line-name (context-result ctx))))))
 
 (test-equal "correct multi-line input: value check"
   "This is a long string of text"
@@ -116,7 +116,7 @@
       (let* ((fsm (make <content-line-parser>))
              (ctx (fsm-run! fsm (make <content-line-context>
                                   #:port (current-input-port)))))
-        (content-line-value (content-line-context-result ctx))))))
+        (content-line-value (context-result ctx))))))
 
 
 (test-equal "content-line-context-eof?: #t"
@@ -147,7 +147,7 @@
       (let ((ctx (fsm-run! (make <content-line-parser>)
                            (make <content-line-context>
                              #:port (current-input-port)))))
-        (content-line-value (content-line-context-result ctx))))))
+        (content-line-value (context-result ctx))))))
 
 (test-equal "correct property: list of values with escaped comma"
   '("a" "b,c")
@@ -157,7 +157,7 @@
       (let ((ctx (fsm-run! (make <content-line-parser>)
                            (make <content-line-context>
                              #:port (current-input-port)))))
-        (content-line-value (content-line-context-result ctx))))))
+        (content-line-value (context-result ctx))))))
 
 (test-equal "correct property: parameter with a list of values"
   '("a" "b" "c")
@@ -167,7 +167,7 @@
       (let ((ctx (fsm-run! (make <content-line-parser>)
                            (make <content-line-context>
                              #:port (current-input-port)))))
-        (content-line-parameter (content-line-context-result ctx)
+        (content-line-parameter (context-result ctx)
                                 'PARAM)))))
 
 (test-equal "correct property: escaped characters"
@@ -179,7 +179,7 @@
                              #:debug-mode? #t)
                            (make <content-line-context>
                              #:port (current-input-port)))))
-        (content-line-value (content-line-context-result ctx))))))
+        (content-line-value (context-result ctx))))))
 
 (test-equal "value: URI"
   "http://example.com/my-report.txt"
@@ -190,7 +190,7 @@
                              #:debug-mode? #t)
                            (make <content-line-context>
                              #:port (current-input-port)))))
-        (content-line-value (content-line-context-result ctx))))))
+        (content-line-value (context-result ctx))))))
 
 (test-equal "value: multi-line"
   "Project XYZ Final Review\nConference Room - 3B\nCome Prepared."
@@ -201,7 +201,7 @@
                              #:debug-mode? #t)
                            (make <content-line-context>
                              #:port (current-input-port)))))
-        (content-line-value (content-line-context-result ctx))))))
+        (content-line-value (context-result ctx))))))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
