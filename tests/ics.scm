@@ -195,6 +195,22 @@
         (ics-property-value (ics-object-property-ref obj "DESCRIPTION"))))))
 
 
+
+(test-equal "ics->stream: GEO"
+  '(48.85299 2.36885)
+  (with-input-from-string
+      (string-append
+       "BEGIN:VCALENDAR\r\n"
+       "BEGIN:VEVENT\r\n"
+       "GEO:48.85299;2.36885\r\n"
+       "END:VEVENT\r\n"
+       "END:VCALENDAR\r\n")
+    (lambda ()
+      (let ((obj (stream-car (ics->stream #:parse-types? #t))))
+        (ics-property-value
+         (ics-object-property-ref (car (ics-object-components obj)) "GEO"))))))
+
+
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
 (test-end %test-suite-name)
