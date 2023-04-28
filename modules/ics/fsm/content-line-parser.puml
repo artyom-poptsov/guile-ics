@@ -84,6 +84,13 @@ read_value: Read content line value.
 read_value --> read_line_feed:     char:cr?
 read_value --> read_value_escaped: char:reverse-solidus?
 read_value --> read_value:         char:comma? -> content-line:store-value
+
+' Some property values are defined in terms of multiple parts.  These
+' structured property values MUST have their value parts separated by a
+' SEMICOLON character.
+'   <https://datatracker.ietf.org/doc/html/rfc5545#section-3.1.1>
+read_value --> read_value:         char:semicolon? -> content-line:store-value
+
 read_value ->  read_value:         content-line:value-char? -> push-event-to-buffer
 read_value --> [*]:                guard:#t -> content-line:error-invalid-content-line
 
