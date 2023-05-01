@@ -37,6 +37,8 @@
             content-line-parameter-set!
             content-line-value
             content-line-value-set!
+            content-line-value-type
+            content-line-value-type-set!
 
             ;; Content line types.
             content-line-name=?
@@ -103,6 +105,13 @@
    #:init-keyword #:parameters
    #:getter       content-line-parameters
    #:setter       content-line-parameters-set!)
+
+  ;; <symbol>
+  (value-type
+   #:init-value   'object
+   #:init-keyword #:value-type
+   #:getter       content-line-value-type
+   #:setter       content-line-value-type-set!)
 
   ;; The value of the content line.
   ;;
@@ -204,6 +213,11 @@ EOF.)"
                                      (append (list current-value)
                                              (list new-value))))
         (content-line-value-set! content-line new-value))
+    (case ch
+      ((#\,)
+       (content-line-value-type-set! content-line 'list))
+      ((#\;)
+       (content-line-value-type-set! content-line 'structure)))
     (clear-stanza (clear-buffer ctx))))
 
 (define (content-line:store-param-name ctx ch)

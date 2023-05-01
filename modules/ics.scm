@@ -112,12 +112,19 @@ CURRENT-INDENT for indentation."
                                       (cdr property)))
                             (ics-property-parameters e))
                   (let* ((raw-value (ics-property-value e))
-                         (value (if (list? raw-value)
-                                    (string-join
-                                     (map (cut escape-special-chars <> #\, #\\)
-                                          raw-value)
-                                     ",")
-                                    (escape-special-chars raw-value #\, #\\))))
+                         (value (cond
+                                 ((list? raw-value)
+                                  (string-join
+                                   (map (cut escape-special-chars <> #\, #\\)
+                                        raw-value)
+                                   ","))
+                                 ((vector? raw-value)
+                                  (string-join
+                                   (map (cut escape-special-chars <> #\, #\\)
+                                        (vector->list raw-value))
+                                   ";"))
+                                 (else
+                                  (escape-special-chars raw-value #\, #\\)))))
                     (format port ": ~a\n" value))))
 
               props))

@@ -245,9 +245,15 @@ current object slot is set to #f.  Return the context."
   "Append an iCalendar object property to the current object from <stream-context>
 CTX. Return the context."
   (let* ((content-line (context-result content-line-ctx))
+         (value-type   (content-line-value-type content-line))
          (property (make <ics-property>
                      #:name       (content-line-name content-line)
-                     #:value      (content-line-value content-line)
+                     #:value      (case value-type
+                                    ((object list)
+                                     (content-line-value content-line))
+                                    ((structure)
+                                     (list->vector
+                                      (content-line-value content-line))))
                      #:parameters (content-line-parameters content-line)))
          (property (if (stream-context-parse-types? ctx)
                        (ics-property->typed-property property)
@@ -277,9 +283,15 @@ CTX. Return the context."
 (define (stream:append-component-property ctx content-line-ctx)
   (let* ((content-line (context-result content-line-ctx))
          (property-name (content-line-name content-line))
+         (value-type   (content-line-value-type content-line))
          (property (make <ics-property>
                      #:name       property-name
-                     #:value      (content-line-value content-line)
+                     #:value      (case value-type
+                                    ((object list)
+                                     (content-line-value content-line))
+                                    ((structure)
+                                     (list->vector
+                                      (content-line-value content-line))))
                      #:parameters (content-line-parameters content-line)))
          (property (if (stream-context-parse-types? ctx)
                        (ics-property->typed-property property)

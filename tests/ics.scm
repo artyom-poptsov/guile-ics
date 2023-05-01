@@ -197,7 +197,7 @@
 
 
 (test-equal "ics->stream: GEO"
-  '(48.85299 2.36885)
+  #(48.85299 2.36885)
   (with-input-from-string
       (string-append
        "BEGIN:VCALENDAR\r\n"

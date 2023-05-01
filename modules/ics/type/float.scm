@@ -77,9 +77,13 @@ it is, #f otherwise."
   (let ((value (ics-property-value property)))
     (make <ics-property:float>
       #:name  (ics-property-name property)
-      #:value (if (list? value)
-                  (map string->number value)
-                  (string->number value))
+      #:value (cond
+               ((list? value)
+                (map string->number value))
+               ((vector? value)
+                (list->vector (map string->number (vector->list value))))
+               (else
+                (string->number value)))
       #:parameters (ics-property-parameters property))))
 
 (define-method (ics-typed-property->ics-property
@@ -87,9 +91,13 @@ it is, #f otherwise."
   (let ((value (ics-property-value property)))
     (make <ics-property>
       #:name       (ics-property-name property)
-      #:value      (if (list? value)
-                       (map number->string value)
-                       (number->string value))
+      #:value      (cond
+                    ((list? value)
+                     (map number->string value))
+                    ((vector? value)
+                     (list->vector (map number->string (vector->list value))))
+                    (else
+                     (number->string value)))
       #:parameters (ics-property-parameters property))))
 
 ;;; float.scm ends here.
