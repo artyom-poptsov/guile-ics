@@ -18,7 +18,7 @@ Guile-ICS is an iCalendar ([[https://tools.ietf.org/html/rfc5545][RFC 5545]]) an
 
 ** Requirements
     - [[https://www.gnu.org/software/guile/][GNU Guile]], version 2.0.12 or later
-    - [[https://github.com/artyom-poptsov/guile-smc][Guile-SMC]], version 0.5.2 or later
+    - [[https://github.com/artyom-poptsov/guile-smc][Guile-SMC]], version 0.6.0 or later
     - [[https://github.com/artyom-poptsov/guile-dsv][Guile-DSV]], version 0.5.1 or later -- only required for the DSV converters;
       the rest of Guile-ICS will work without this library.
 
@@ -29,6 +29,7 @@ Guile-ICS is an iCalendar ([[https://tools.ietf.org/html/rfc5545][RFC 5545]]) an
 - make
 - automake
 - autoconf
+- help2man
 
 ** Installation
 *** GNU Guix
