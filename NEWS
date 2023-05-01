@@ -7,6 +7,13 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Changes in version 0.5.0 (2023-05-01)
+** Handle structured property values                             :API_CHANGE:
+Structured property values are now stored as vectors instead of lists.  When a
+such values are serialized they stored as semicolon-separated lists.
+
+See <https://datatracker.ietf.org/doc/html/rfc5545#section-3.1.1>
+** Update to work with Guile-SMC 0.6
 * Changes in version 0.4.0 (2022-10-31)
 ** =ics= program is improved
 *** =print=: New command

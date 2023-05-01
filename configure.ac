@@ -3,7 +3,7 @@ dnl   Process this file with autoconf to produce configure.
 dnl
 
 define(GUILE_ICS_CONFIGURE_COPYRIGHT, [[
-Copyright (C) 2017-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+Copyright (C) 2017-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 
 This file is part of Guile-ICS.
 
@@ -21,7 +21,7 @@ You should have received a copy of the GNU General Public License
 along with Guile-ICS.  If not, see <http://www.gnu.org/licenses/>.
 ]])
 
-AC_INIT([Guile-ICS], [0.4.0], [poptsov.artyom@gmail.com],
+AC_INIT([Guile-ICS], [0.5.0], [poptsov.artyom@gmail.com],
                      [guile-ics],
                      [https://github.com/artyom-poptsov/guile-ics])
 
