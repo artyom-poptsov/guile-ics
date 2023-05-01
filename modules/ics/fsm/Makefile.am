@@ -29,7 +29,6 @@ BUILT_SOURCES =	\
 	context.scm
 
 EXTRA_DIST += \
-	context.scm	\
 	content-line-parser.puml \
 	content-line-parser.scm	\
 	stream-parser.puml	\
@@ -91,6 +90,11 @@ stream-context.scm: content-line-parser.scm
 stream-parser.scm: context.go content-line-parser.scm stream-context.go stream-parser.puml
 	@echo "  SMC      $@"
 	@$(GUILE_SMC_ENV) smc compile $(GUILE_SMC_STREAM_PARSER_ARGS) stream-parser.puml > $@
+
+# XXX: Automake does not remove those files for some reason.
+uninstall-hook:
+	rm -f $(DESTDIR)$(datadir)/guile/site/$(GUILE_EFFECTIVE_VERSION)/ics/fsm/context.scm \
+	$(DESTDIR)$(libdir)/guile/3.0/site-ccache/ics/fsm/context.scm
 
 CLEANFILES += \
 	content-line-parser.scm \
