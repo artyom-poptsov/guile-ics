@@ -1,4 +1,4 @@
-## Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-ICS.
 ##
@@ -20,7 +20,8 @@ include $(top_srcdir)/build-aux/am/guile.am
 SOURCES = \
 	common.scm						\
 	command-describe.scm	\
-	command-print.scm
+	command-print.scm	\
+	command-convert.scm
 
 moddir=$(prefix)/share/guile/site/$(GUILE_EFFECTIVE_VERSION)/ics/cli/
 godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ics/cli/
