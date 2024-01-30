@@ -1,6 +1,6 @@
 ;; guix.scm --- GNU Guix package recipe    -*- coding: utf-8 -*-
 ;;
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This file is part of Guile-ICS.
 ;;
@@ -45,8 +45,8 @@
              (gnu packages admin)
              (gnu packages guile-xyz)
              (gnu packages pkg-config)
-             (gnu packages tex)
              (gnu packages texinfo)
+             (gnu packages texlive)
              (gnu packages man))
 
 
