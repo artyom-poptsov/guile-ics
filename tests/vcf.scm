@@ -1,6 +1,6 @@
 ;;; ics.scm -- Tests for VCF parser.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -52,6 +52,19 @@
     (lambda ()
       (let ((obj (stream-car (ics->stream))))
         (ics-property-value (ics-object-property-ref obj "FN"))))))
+
+;; See <https://github.com/artyom-poptsov/guile-ics/issues/1>
+(test-equal "property with multiple instances of a parameter"
+  "bystander@vcard.broken"
+  (with-input-from-string
+      (string-append "BEGIN:VCARD\r\n"
+                     "VERSION:3.0\r\n"
+                     "FN:Bystander\r\n"
+                     "EMAIL;TYPE=INTERNET;TYPE=HOME:bystander@vcard.broken\r\n"
+                     "END:VCARD\r\n")
+    (lambda ()
+      (let ((obj (stream-car (ics->stream))))
+        (ics-property-value (ics-object-property-ref obj "EMAIL"))))))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
