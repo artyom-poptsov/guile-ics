@@ -228,9 +228,15 @@ EOF.)"
          (param-name    (string->symbol (car (context-stanza ctx))))
          (param-value   (context-buffer->string ctx))
          (param-current (content-line-parameter content-line param-name)))
-    (when param-current
-      (error "Duplicated parameter" param-name param-value))
-    (content-line-parameter-set! content-line param-name param-value)
+    (if param-current
+        (begin
+          (content-line-parameter-set! content-line
+                                       param-name
+                                       (list
+                                        (content-line-parameter content-line
+                                                                param-name)))
+          (content-line:store-param-value/list ctx ch))
+        (content-line-parameter-set! content-line param-name param-value))
     (clear-stanza (clear-buffer ctx))))
 
 (define (content-line:store-param-value/list ctx ch)

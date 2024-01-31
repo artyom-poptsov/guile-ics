@@ -203,6 +203,18 @@
                              #:port (current-input-port)))))
         (content-line-value (context-result ctx))))))
 
+;; See <https://github.com/artyom-poptsov/guile-ics/issues/1>
+(test-equal "multiple instances of a parameter"
+  '("work" "home")
+  (with-input-from-string
+      "EMAIL;TYPE=work;TYPE=home:avp@example.com\r\n"
+    (lambda ()
+      (let ((ctx (fsm-run! (make <content-line-parser>
+                             #:debug-mode? #t)
+                           (make <content-line-context>
+                             #:port (current-input-port)))))
+        (content-line-parameter (context-result ctx) 'TYPE)))))
+
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
