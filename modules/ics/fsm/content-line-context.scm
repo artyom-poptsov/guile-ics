@@ -1,6 +1,6 @@
 ;;; content-line-context.scm -- Context for the content line reader.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -230,6 +230,16 @@ EOF.)"
          (param-current (content-line-parameter content-line param-name)))
     (if param-current
         (begin
+          (log-warning (string-append "~a:~a:~a:"
+                                      " duplicated parameter '~a':"
+                                      " old value: '~a'; new value '~a'"
+                                      " -- assuming it is a value list")
+                       (context-port ctx)
+                       (context-row-number ctx)
+                       (context-col-number ctx)
+                       param-name
+                       param-current
+                       param-value)
           (content-line-parameter-set! content-line
                                        param-name
                                        (list
