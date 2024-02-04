@@ -1,6 +1,6 @@
 ## Makefile.am -- Config file for GNU Automake.
 ##
-## Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2022-2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-ICS.
 ##
@@ -94,7 +94,7 @@ stream-parser.scm: context.go content-line-parser.scm stream-context.go stream-p
 # XXX: Automake does not remove those files for some reason.
 uninstall-hook:
 	rm -f $(DESTDIR)$(datadir)/guile/site/$(GUILE_EFFECTIVE_VERSION)/ics/fsm/context.scm \
-	$(DESTDIR)$(libdir)/guile/3.0/site-ccache/ics/fsm/context.scm
+		$(DESTDIR)$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/ics/fsm/context.scm
 
 CLEANFILES += \
 	content-line-parser.scm \
