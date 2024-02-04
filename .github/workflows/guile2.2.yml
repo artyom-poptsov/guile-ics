@@ -17,7 +17,7 @@ jobs:
           sudo apt install guile-2.2 guile-2.2-libs guile-library
           sudo apt install guile-2.2-dev texinfo gettext
           sudo apt install automake autoconf help2man
-        
+
       - name: Install Guile-SMC
         run: |
           git clone https://github.com/artyom-poptsov/guile-smc
@@ -27,7 +27,7 @@ jobs:
           ./configure --with-guilesitedir=/usr/share/guile/site/2.2 --prefix=/usr
           sudo make -j$(nproc) install
 
-      - name: Checkout repository 
+      - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Autoreconf
@@ -41,3 +41,14 @@ jobs:
 
       - name: Test
         run: make -j$(nproc) check
+
+      - name: Distcheck
+        run: make -j$(nproc) distcheck
+
+      - name: Upload the artifact
+        id: upload-artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: guile-ics
+          compression-level: 0
+          path: "guile-ics-*.tar.gz"

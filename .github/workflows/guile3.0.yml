@@ -37,3 +37,14 @@ jobs:
 
       - name: Test
         run: make -j$(nproc) check
+
+      - name: Distcheck
+        run: make -j$(nproc) distcheck
+
+      - name: Upload the artifact
+        id: upload-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: guile-ics
+          compression-level: 0
+          path: "guile-ics-*.tar.gz"
