@@ -68,7 +68,11 @@
            gettext-minimal ; Gettext brings 'AC_LIB_LINKFLAGS_FROM_LIBS'.
            pkg-config
            guile-dsv
-           texlive))
+           texlive
+           ;; needed when cross-compiling.
+           guile-3.0
+           guile-lib
+           guile-smc))
     (inputs (list guile-3.0 which))
     (propagated-inputs (list guile-lib guile-smc))
     (home-page "https://github.com/artyom-poptsov/guile-ics")
