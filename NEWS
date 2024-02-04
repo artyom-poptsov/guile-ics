@@ -7,6 +7,29 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Changes in version 0.6.0 (2024-02-04)
+** Fix the content line parser                            :BUGFIX:API_CHANGE:
+Guile-ICS would throw an error when handling multiple instances of the same
+property parameter in one content line. According to RFC 6350 multiple instances
+of the same parameter in a content line should be read as multiple values for
+the same parameter (in the same way as the RFC specifies the value lists.)
+
+Now this error should be fixed.
+
+Reported by Felix Lechner in
+<https://github.com/artyom-poptsov/guile-ics/issues/1>
+** Fix uninstall script to work with different Guile versions        :BUGFIX:
+Now the "make uninstall" command uses actual Guile version instead of hardcoded
+"3.0" value.
+** Compilation does not rely on "which" command anymore
+The compilation process of the Scheme code does not depend on "which" command
+anymore.
+** guix.scm
+*** Add "texlive" to inputs
+*** Fix cross-compilation
+** Update the documentation
+** Add/update tests
+
 * Changes in version 0.5.0 (2023-05-01)
 ** Handle structured property values                             :API_CHANGE:
 Structured property values are now stored as vectors instead of lists.  When a
