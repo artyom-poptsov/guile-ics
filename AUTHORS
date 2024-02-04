@@ -4,3 +4,5 @@ Authors of Guile-ICS
   The author and current maintainer.
 * Alex Sassmannshausen <alex.sassmannshausen@gmail.com>
   The very first bug reporter of Guile-ICS.  :-)
+* Felix Lechner <felix.lechner@lease-up.com>
+  Bug reports for the parser.
