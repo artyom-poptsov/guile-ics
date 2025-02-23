@@ -1,6 +1,6 @@
 ;;; content-line-context.scm -- Context for the content line reader.
 
-;; Copyright (C) 2022-2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -121,6 +121,24 @@
    #:init-keyword #:value
    #:getter       content-line-value
    #:setter       content-line-value-set!))
+
+
+
+(define-method (%display (self <content-line>) (port <port>))
+  (format port "#<content-line name: ~a parameters: ~a value: ~a (~a) ~a>"
+          (content-line-name self)
+          (content-line-parameters self)
+          (content-line-value self)
+          (content-line-value-type self)
+          (object-address/hex-string self)))
+
+(define-method (display (self <content-line>) (port <port>))
+  (%display self port))
+
+(define-method (write (self <content-line>) (port <port>))
+  (%display self port))
+
+
 
 (define (content-line? x)
   "Check if X is a <content-line> instance."
