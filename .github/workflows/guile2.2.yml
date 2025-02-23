@@ -47,7 +47,7 @@ jobs:
 
       - name: Upload the artifact
         id: upload-artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: guile-ics
           compression-level: 0
