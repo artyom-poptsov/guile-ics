@@ -138,6 +138,22 @@
    #:getter       stream-context-line-number
    #:setter       stream-context-line-number-set!))
 
+
+
+(define-method (%display (self <stream-context>) (port <port>))
+  (format port "#<stream-context ~a:~a ~a>"
+          (stream-context-port self)
+          (stream-context-line-number self)
+          (object-address/hex-string self)))
+
+(define-method (display (self <stream-context>) (port <port>))
+  (%display self port))
+
+(define-method (write (self <stream-context>) (port <port>))
+  (%display self port))
+
+
+
 (define (stream-context? x)
   "Check if X is an <stream-context> instance."
   (is-a? x <stream-context>))
