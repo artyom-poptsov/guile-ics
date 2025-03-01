@@ -1,4 +1,4 @@
-;; Copyright (C) 2016-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2016-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -86,7 +86,17 @@
          (uri     . "https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.6")
          (purpose
           . ("Provide a grouping of component properties that define an"
-             " alarm.")))))))
+             " alarm."))))
+     (STANDARD
+      . ((title   . "Standard Time")
+         (uri     . "https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.5")
+         (purpose
+          . ("A collection of properties describing standard time."))))
+     (DAYLIGHT
+      . ((title   . "Daylight Saving Time")
+         (uri     . "https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.5")
+         (purpose
+          . ("A collection of properties describing daylight saving time")))))))
 
 (define-generic ics-calendar-component-lookup)
 
