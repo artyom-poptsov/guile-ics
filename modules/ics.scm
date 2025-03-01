@@ -1,6 +1,6 @@
 ;;; ics.scm -- iCalendar parser (main module)
 
-;; Copyright (C) 2016-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2016-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -161,10 +161,21 @@ for indentation."
   (ics-describe object 0))
 
 (define-method (ics-describe (object <ics-object>) (indent <number>))
-  (let ((indent-string (make-string indent #\space)))
-    (format #t ";;; ~a ~54a~%"
+  (let ((indent-string (make-string indent #\space))
+        (description (ics-calendar-component-lookup (ics-object-name object))))
+    (format #t ";;; ~a ~a~a~%"
             indent-string
-            (ics-object-name object))
+            (ics-object-name object)
+            (if description
+                (format #f " (~a)" (assoc-ref description 'title))
+                ""))
+    (when description
+      (format #t ";;; ~a * Description: ~a~%"
+              indent-string
+              (string-join (assoc-ref description 'purpose)))
+      (format #t ";;; ~a * Reference: ~a~%"
+              indent-string
+              (assoc-ref description 'uri)))
     (for-each (lambda (property)
                 (ics-describe property (+ indent 4)))
               (ics-object-properties object))
