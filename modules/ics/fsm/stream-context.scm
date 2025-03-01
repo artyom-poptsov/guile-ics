@@ -42,6 +42,10 @@
             stream-context-objects
             stream-context-objects-set!
             stream-context-objects-count
+            stream-context-stack
+            stream-context-stack-depth
+            stream-context-push-object!
+            stream-context-pop-object!
             stream-context-parse-types?
             stream-context-lazy?
 

@@ -60,6 +60,34 @@
                                  #:name "VCALENDAR")))))
     (stream-context-objects-count ctx)))
 
+(test-equal "stream-context-stack-depth: 0"
+  0
+  (let ((ctx (make <stream-context>)))
+    (stream-context-stack-depth ctx)))
+
+(test-equal "stream-context-push-object!"
+  1
+  (let ((ctx (make <stream-context>)))
+    (stream-context-push-object! ctx "VCALENDAR")
+    (stream-context-stack-depth ctx)))
+
+(test-equal "stream-context-pop-object!: stack depth check"
+  1
+  (let ((ctx (make <stream-context>
+               #:stack (list (make <ics-object> #:name "VTIMEZONE")
+                             (make <ics-object> #:name "VCALENDAR")))))
+    (stream-context-pop-object! ctx)
+    (stream-context-stack-depth ctx)))
+
+(test-equal "stream-context-pop-object!: nested object check"
+  "VTIMEZONE"
+  (let ((ctx (make <stream-context>
+               #:stack (list (make <ics-object> #:name "VTIMEZONE")
+                             (make <ics-object> #:name "VCALENDAR")))))
+    (stream-context-pop-object! ctx)
+    (let ((obj (car (stream-context-stack ctx))))
+      (ics-object-name (car (ics-object-components obj))))))
+
 (test-assert "stream:store-object"
   (let* ((content-line     (make <content-line>
                              #:name "BEGIN"
