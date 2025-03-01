@@ -8,6 +8,12 @@ lookup_object --> [*]:         stream:eof-object?
 lookup_object --> read_object: stream:object-begin? -> stream:create-object
 lookup_object --> lookup_object_error_corrupt_stream
 
+pop_object_from_stack: Pop an object from the object stack
+pop_object_from_stack:
+pop_object_from_stack: event-source: stream:dummy-event-source
+pop_object_from_stack --> check_laziness: stream:last-object? -> stream:store-object
+pop_object_from_stack --> read_object: guard:#t -> stream:update-object
+
 lookup_object_error_corrupt_stream: The ICalendar stream has unexpected content.
 lookup_object_error_corrupt_stream:
 lookup_object_error_corrupt_stream: event-source: stream:dummy-event-source
@@ -18,10 +24,10 @@ read_object: Read an ICalendar object from the stream.
 read_object: <https://datatracker.ietf.org/doc/html/rfc5545#section-3.4>
 read_object:
 read_object: event-source: stream:read
-read_object --> read_object_error_eof:  stream:eof-object?
-read_object --> check_laziness:         stream:object-end? -> stream:append-object
-read_object --> read_component:            stream:component-begin? -> stream:create-component
-read_object --> read_object:            guard:#t -> stream:append-property
+read_object --> read_object_error_eof: stream:eof-object?
+read_object --> pop_object_from_stack: stream:object-end?
+read_object --> read_object:           stream:component-begin? -> stream:create-object
+read_object --> read_object:           guard:#t -> stream:append-property
 
 check_laziness: Check if the FSM in the lazy mode.
 check_laziness: When it in the lazy mode then the FSM stops
@@ -35,19 +41,6 @@ read_object_error_eof: Unexpected EOF was read during VCALENDAR parsing.
 read_object_error_eof:
 read_object_error_eof: exit-action: stream:error-unexpected-eof-in-object
 read_object_error_eof -> [*]
-
-read_component: Read an iCalendar component.
-read_component:
-read_component: event-source: stream:read
-read_component --> read_component_error_eof:  stream:eof-object?
-read_component --> read_object:               stream:component-end? -> stream:append-component
-read_component --> read_component:            guard:#t -> stream:append-component-property
-
-read_component_error_eof: Unexpected EOF was read during VEVENT parsing.
-read_component_error_eof:
-read_component_error_eof: event-source: stream:dummy-event-source
-read_component_error_eof: exit-action:  stream:error-unexpected-eof-in-vevent
-read_component_error_eof --> [*]
 
 @enduml
 

@@ -1,6 +1,6 @@
 ;;; stream-context.scm -- Context for the iCalendar stream FSM.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -54,17 +54,16 @@
             stream:eof-object?
             stream:object-begin?
             stream:object-end?
+            stream:last-object?
             stream:component-begin?
             stream:component-end?
             stream:lazy?
 
             ;; FSM actions.
             stream:create-object
-            stream:append-object
+            stream:update-object
+            stream:store-object
             stream:append-property
-            stream:create-component
-            stream:append-component-property
-            stream:append-component
 
             ;; FSM error handling.
             stream:error
@@ -103,25 +102,20 @@
    #:init-keyword #:port
    #:getter       stream-context-port)
 
-  ;; Current iCalendar object that is being read.
+  ;; A list of iCalendar objects.  The first element of the list (the top of the
+  ;; stack) is the current object being read.  All the properties that are read
+  ;; stored in the current object.  Also the first element that added to the
+  ;; stack is the main object being read, while the rest of the objects are
+  ;; components of the main object.
   ;;
-  ;; <ics-object> | #f
-  (current-object
-   #:init-value   #f
-   #:init-keyword #:current-object
-   #:getter       stream-context-current-object
-   #:setter       stream-context-current-object-set!)
+  ;; <list> of <ics-object> | '()
+  (stack
+   #:init-value   '()
+   #:init-keyword #:stack
+   #:getter       stream-context-stack
+   #:setter       stream-context-stack-set!)
 
-  ;; Current iCalendar object component.
-  ;;
-  ;; <ics-object> | #f
-  (current-component
-   #:init-value   #f
-   #:init-keyword #:current-component
-   #:getter       stream-context-current-component
-   #:setter       stream-context-current-component-set!)
-
-  ;; The list of iCalendar objects from the current stream.
+  ;; The list of iCalendar objects read from the current stream.
   ;;
   ;; <list> of <ics-object>
   (objects
@@ -170,6 +164,37 @@ CONTEXT.  Return the context."
     (stream-context-objects-set! context (append objects (list current-object)))
     context))
 
+(define-method (stream-context-stack-depth (context <stream-context>))
+  "Get the stream CONTEXT stack depth."
+  (length (stream-context-stack context)))
+
+(define-method (stream-context-current-object (context <stream-context>))
+  "Get the current object from the object stack of a stream CONTEXT."
+  (car (stream-context-stack context)))
+
+(define-method (stream-context-previous-object (context <stream-context>))
+  "Get the previous object form the object stack of a stream CONTEXT."
+  (cadr (stream-context-stack context)))
+
+(define-method (stream-context-push-object! (context <stream-context>)
+                                            (name <string>))
+  "Create a new <ics-object> instance and push it to the objects stack of a
+stream CONTEXT."
+  (let ((stack (stream-context-stack context)))
+    (stream-context-stack-set! context
+                               (cons (make <ics-object>
+                                       #:name name)
+                                     stack))))
+
+(define-method (stream-context-pop-object! (context <stream-context>))
+  "Pop an <ics-object> from a stream CONTEXT stack.  Return value is undefined."
+  (let* ((stack           (stream-context-stack context))
+         (previous-object (cadr stack))
+         (last-object     (car stack))
+         (components      (ics-object-components previous-object)))
+    (ics-object-components-set! previous-object (cons last-object components))
+    (stream-context-stack-set! context (cdr stack))))
+
 (define-method (stream-context-objects-count (context <stream-context>))
   (length (stream-context-objects context)))
 
@@ -177,25 +202,25 @@ CONTEXT.  Return the context."
 (define (stream:read ctx)
   "Event source for the ICS stream parser."
   (catch 'content-line-error
-         (lambda ()
-           (let ((context-line
-                  (fsm-run! (make <content-line-parser>)
-                            (make <content-line-context>
-                              #:debug-mode? (context-debug-mode? ctx)
-                              #:port (stream-context-port ctx)))))
-             (stream-context-line-number++! ctx)
-             context-line))
-         (lambda (key message content-line-context ch)
-           (let* ((buffer (context-stanza content-line-context))
-                  (message "Invalid content line"))
-             (log-error "~a:~a:~a ~a: ~a (~a)"
-                                  (stream-context-port ctx)
-                                  (stream-context-line-number ctx)
-                                  (context-col-number content-line-context)
-                                  message
-                                  buffer
-                                  ch)
-             (error message ctx)))))
+    (lambda ()
+      (let ((context-line
+             (fsm-run! (make <content-line-parser>)
+                       (make <content-line-context>
+                         #:debug-mode? (context-debug-mode? ctx)
+                         #:port (stream-context-port ctx)))))
+        (stream-context-line-number++! ctx)
+        context-line))
+    (lambda (key message content-line-context ch)
+      (let* ((buffer (context-stanza content-line-context))
+             (message "Invalid content line"))
+        (log-error "~a:~a:~a ~a: ~a (~a)"
+                   (stream-context-port ctx)
+                   (stream-context-line-number ctx)
+                   (context-col-number content-line-context)
+                   message
+                   buffer
+                   ch)
+        (error message ctx)))))
 
 (define (stream:dummy-event-source ctx)
   #t)
@@ -212,6 +237,9 @@ CONTEXT.  Return the context."
 
 (define (stream:object-begin? ctx content-line-ctx)
   "Check if CONTENT-LINE-CTX contains the beginning of an iCalendar object."
+  (log-debug "stream:object-begin?: ~a: ~a"
+             ctx
+             content-line-ctx)
   (content-line-component-begin?
    (context-result content-line-ctx)))
 
@@ -220,17 +248,20 @@ CONTEXT.  Return the context."
   (content-line-component-end?
    (context-result content-line-ctx)))
 
+(define (stream:last-object? ctx content-line-ctx)
+  "Check if the objects stack has only one object."
+  (equal? (stream-context-stack-depth ctx) 1))
+
 (define (stream:component-begin? ctx content-line-ctx)
   "Check if CONTENT-LINE-CTX contains the beginning of an iCalendar component."
   (let ((content-line (context-result content-line-ctx)))
     (and (content-line-component-begin? content-line)
          (let* ((name      (content-line-value content-line))
                 (component (ics-calendar-component-lookup name)))
-           (if component
-               (begin
-                 (log-debug "BEGIN COMPONENT: ~a" name)
-                 #t)
-               #f)))))
+           (log-debug "BEGIN COMPONENT: ~a (~a)"
+                      name
+                      (or component "unknown"))
+           #t))))
 
 (define (stream:component-end? ctx content-line-ctx)
   "Check if CONTENT-LINE-CTX contains the ending of an iCalendar event."
@@ -246,15 +277,22 @@ CONTENT-LINE-CTX. The new object is stored in the current object slot inside
 <stream-context> CTX.  Return the context."
   (let* ((content-line (context-result content-line-ctx))
          (name         (content-line-value content-line)))
-    (stream-context-current-object-set! ctx (make <ics-object>
-                                              #:name name)))
+    (stream-context-push-object! ctx name)
+    (log-debug "stream:create-object: stack: ~a"
+               (stream-context-stack ctx))
+    ctx))
+
+(define (stream:update-object ctx content-line-ctx)
+  (stream-context-pop-object! ctx)
+  (log-debug "stream:update-object: stack: ~a"
+             (stream-context-stack ctx))
   ctx)
 
-(define (stream:append-object ctx content-line-ctx)
+(define (stream:store-object ctx content-line-ctx)
   "Append the current object of <stream-context> CTX to the list of objects. The
 current object slot is set to #f.  Return the context."
   (stream-context-append-object! ctx)
-  (stream-context-current-object-set! ctx #f)
+  (stream-context-stack-set! ctx '())
   ctx)
 
 (define (stream:append-property ctx content-line-ctx)
@@ -277,54 +315,17 @@ CTX. Return the context."
          (current-object (stream-context-current-object ctx))
          (current-object-properties (ics-object-properties current-object)))
     (ics-object-properties-set! current-object
-                                (cons property current-object-properties))
-    ctx))
-
-(define (stream:create-component ctx content-line-ctx)
-  (let ((name (content-line-value (context-result content-line-ctx))))
-    (stream-context-current-component-set! ctx
-                                           (make <ics-object>
-                                             #:name name))
-    ctx))
-
-(define (stream:append-component ctx content-line-ctx)
-  (let ((current-object    (stream-context-current-object ctx))
-        (current-component (stream-context-current-component ctx)))
-    (ics-object-components-set! current-object
-                                (append (ics-object-components current-object)
-                                        (list current-component)))
-    (stream-context-current-component-set! ctx #f)
-    ctx))
-
-(define (stream:append-component-property ctx content-line-ctx)
-  (let* ((content-line (context-result content-line-ctx))
-         (property-name (content-line-name content-line))
-         (value-type   (content-line-value-type content-line))
-         (property (make <ics-property>
-                     #:name       property-name
-                     #:value      (case value-type
-                                    ((object list)
-                                     (content-line-value content-line))
-                                    ((structure)
-                                     (list->vector
-                                      (content-line-value content-line))))
-                     #:parameters (content-line-parameters content-line)))
-         (property (if (stream-context-parse-types? ctx)
-                       (ics-property->typed-property property)
-                       property))
-         (current-component (stream-context-current-component ctx)))
-    (ics-object-properties-set! current-component
-                                (append (ics-object-properties current-component)
+                                (append current-object-properties
                                         (list property)))
     ctx))
 
 
 ;;; Error handlers.
 
-(define (stream:error ctx content-line-parser-ctx)
+(define* (stream:error ctx . rest)
   (error "Unexpected content in a stream"
          ctx
-         content-line-parser-ctx))
+         rest))
 
 (define (stream:error-unexpected-eof-in-object ctx content-line-parser-ctx)
   (error "Unexpected EOF in ICalendar object"

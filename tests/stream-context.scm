@@ -1,6 +1,6 @@
 ;;; ics.scm -- Tests for ICS parser.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -57,11 +57,10 @@
   1
   (let ((ctx (make <stream-context>
                #:objects (list (make <ics-object>
-                                 #:name "BEGIN"
-                                 #:value "VCALENDAR")))))
+                                 #:name "VCALENDAR")))))
     (stream-context-objects-count ctx)))
 
-(test-assert "stream:append-object"
+(test-assert "stream:store-object"
   (let* ((content-line     (make <content-line>
                              #:name "BEGIN"
                              #:value "VCALENDAR"))
@@ -69,24 +68,20 @@
                              #:result content-line))
          (ctx              (stream:create-object (make <stream-context>)
                                                  content-line-ctx)))
-    (stream:append-object ctx #f)
-    (and (not (stream-context-current-object ctx))
-         (= (stream-context-objects-count ctx) 1)
-         (ics-object? (car (stream-context-objects ctx))))))
+    (stream:store-object ctx #f)
+    (car (stream-context-objects ctx))))
 
-(test-assert "stream:append-property"
+(test-equal "stream:append-property"
+  1
   (let ((ctx (make <stream-context>
-               #:current-object (make <ics-object>
-                                  #:name  "BEGIN"
-                                  #:value "VCALENDAR")))
+               #:stack (list (make <ics-object>
+                               #:name "VCALENDAR"))))
         (content-line-ctx (make <content-line-context>
                             #:result (make <content-line>
-                                       #:name "VERSION"
+                                       #:name  "VERSION"
                                        #:value "2.0"))))
     (stream:append-property ctx content-line-ctx)
-    (let ((current-object (stream-context-current-object ctx)))
-      (and (ics-object? current-object)
-           (= (length (ics-object-properties current-object)) 1)))))
+    (length (ics-object-properties (stream-context-current-object ctx)))))
 
 
 (test-assert "stream:read"
