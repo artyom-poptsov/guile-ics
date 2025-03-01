@@ -96,7 +96,7 @@
       . ((title   . "Daylight Saving Time")
          (uri     . "https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.5")
          (purpose
-          . ("A collection of properties describing daylight saving time")))))))
+          . ("A collection of properties describing daylight saving time.")))))))
 
 (define-generic ics-calendar-component-lookup)
 
