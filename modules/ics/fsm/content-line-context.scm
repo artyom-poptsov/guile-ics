@@ -146,6 +146,17 @@
 
 (define-class <content-line-context> (<char-context>))
 
+(define-method (%display (self <content-line-context>) (port <port>))
+  (format port "#<content-line-context ~a ~a>"
+          (context-result self)
+          (object-address/hex-string self)))
+
+(define-method (display (self <content-line-context>) (port <port>))
+  (%display self port))
+
+(define-method (write (self <content-line-context>) (port <port>))
+  (%display self port))
+
 (define (content-line-context? x)
   "Check if X is a <content-line-context> instance."
   (is-a? x <content-line-context>))
