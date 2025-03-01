@@ -96,6 +96,7 @@ read_value --> [*]:                guard:#t -> content-line:error-invalid-conten
 
 read_value_escaped --> read_value: guard:#t -> content-line:store-escaped
 
+read_line_feed -> [*]: char:eof-object? -> content-line:error-param-eof
 read_line_feed ->  check_for_multiline_text: char:lf?
 read_line_feed --> [*]: guard:#t -> content-line:error-invalid-content-line
 
