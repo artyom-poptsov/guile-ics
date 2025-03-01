@@ -81,6 +81,7 @@ read_param_value_list ->  read_param_value_list: content-line:safe-char? -> push
 '   ; All the controls except HTAB
 
 read_value: Read content line value.
+read_value --> [*]: char:eof-object? -> content-line:error-param-eof
 read_value --> read_line_feed:     char:cr?
 read_value --> read_value_escaped: char:reverse-solidus?
 read_value --> read_value:         char:comma? -> content-line:store-value
