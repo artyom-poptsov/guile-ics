@@ -2,7 +2,7 @@ name: GNU Guile 2.2
 
 on:
   push:
-    branches: [ master ]
+    branches: [ '*' ]
   pull_request:
     branches: [ master ]
 
@@ -17,7 +17,10 @@ jobs:
           sudo apt install guile-2.2 guile-2.2-libs guile-library
           sudo apt install guile-2.2-dev texinfo gettext texlive
           sudo apt install automake autoconf help2man
-          sudo apt remove guile-3.0
+
+      - name: Select Guile 2.2
+        run: |
+          echo 1 | sudo update-alternatives --config guile
 
       - name: Install Guile-SMC
         run: |
