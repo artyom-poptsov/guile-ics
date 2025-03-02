@@ -7,6 +7,21 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Changes in version 0.7.0 (2025-03-02)
+** Allow to read ICS objects with arbitrary level of nesting :BUGFIX:API_CHANGE:
+Guile-ICS would always fail when present with an ICS object with more than two
+levels of nested components. This patch introduces more cleaner version of the
+ICS stream parser that allows to read ICS with arbitrary level of nesting. Also
+now parser can read unknown ICS object components.
+
+Reported by Sören Tempel in
+<https://github.com/artyom-poptsov/guile-ics/issues/3>
+** Properly handle EOFs in content lines
+Now Guile-ICS throws "content-line-error" on unexpected EOFs found in content
+lines.
+** Expand the test suite
+** =ics-describe= now prints the description of components
+
 * Changes in version 0.6.0 (2024-02-04)
 ** Fix the content line parser                            :BUGFIX:API_CHANGE:
 Guile-ICS would throw an error when handling multiple instances of the same
