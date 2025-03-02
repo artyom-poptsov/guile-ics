@@ -25,6 +25,7 @@ lookup_name --> read_name: content-line:valid-name-character? -> push-event-to-b
 lookup_name ->  lookup_name
 
 read_name: Read content line name.
+read_name --> [*]:             char:eof-object? -> content-line:error-param-eof
 read_name --> read_param_name: char:semicolon? -> content-line:create
 read_name --> read_value:      char:colon? -> content-line:create
 read_name --> read_name:       content-line:valid-name-character? -> push-event-to-buffer
@@ -35,8 +36,8 @@ read_name --> [*]:             guard:#t -> content-line:error-invalid-name
 ' param-name    = iana-token / x-name
 
 read_param_name: Read parameter.
-read_param_name --> read_param_value: char:equals-sign? -> content-line:store-param-name
 read_param_name --> [*]:              char:eof-object? -> content-line:error-param-eof
+read_param_name --> read_param_value: char:equals-sign? -> content-line:store-param-name
 read_param_name ->  read_param_name:  guard:#t -> push-event-to-buffer
 
 ' ---------------------------------------------------------------------------
@@ -48,6 +49,7 @@ read_param_name ->  read_param_name:  guard:#t -> push-event-to-buffer
 ' QSAFE-CHAR    = WSP / %x21 / %x23-7E / NON-US-ASCII
 '   ; Any character except CONTROL and DQUOTE
 
+read_param_value --> [*]:                      char:eof-object? -> content-line:error-param-eof
 read_param_value --> read_param_value_quoted:  char:double-quote?
 read_param_value --> read_param_name:          char:semicolon? -> content-line:store-param-value
 read_param_value --> read_param_value_escaped: char:reverse-solidus?
@@ -57,6 +59,7 @@ read_param_value ->  read_param_value:         content-line:safe-char? -> push-e
 
 read_param_value_escaped --> read_param_value: guard:#t -> content-line:store-escaped
 
+read_param_value_quoted --> [*]:                     char:eof-object? -> content-line:error-param-eof
 read_param_value_quoted --> read_param_value:        char:double-quote?
 read_param_value_quoted --> read_param_value_quoted: content-line:qsafe-char? -> push-event-to-buffer
 read_param_value_quoted --> [*]: guard:#t -> content-line:error-invalid-content-line
@@ -66,6 +69,7 @@ read_param_value_quoted --> [*]: guard:#t -> content-line:error-invalid-content-
 ' <https://datatracker.ietf.org/doc/html/rfc5545#section-3.1.1>
 
 read_param_value_list: Read and append parameter list value.
+read_param_value_list --> [*]:                   char:eof-object? -> content-line:error-param-eof
 read_param_value_list --> read_param_name:       char:semicolon? -> content-line:store-param-value/list
 read_param_value_list --> read_value:            char:colon? -> content-line:store-param-value/list
 read_param_value_list --> read_param_value_list: char:comma? -> content-line:store-param-value/list

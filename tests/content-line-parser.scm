@@ -216,6 +216,60 @@
         (content-line-parameter (context-result ctx) 'TYPE)))))
 
 
+;; Test errors.
+
+(test-error/assert "read_name: EOF"
+  'content-line-error
+  (with-input-from-string
+      "EMAIL"
+    (lambda ()
+      (fsm-run! (make <content-line-parser>
+                  #:debug-mode? #t)
+                (make <content-line-context>
+                  #:port (current-input-port))))))
+
+(test-error/assert "read_param_name: EOF"
+  'content-line-error
+  (with-input-from-string
+      "EMAIL;TYPE"
+    (lambda ()
+      (fsm-run! (make <content-line-parser>
+                  #:debug-mode? #t)
+                (make <content-line-context>
+                  #:port (current-input-port))))))
+
+(test-error/assert "read_param_value: EOF"
+  'content-line-error
+  (with-input-from-string
+      "EMAIL;TYPE=home"
+    (lambda ()
+      (fsm-run! (make <content-line-parser>
+                  #:debug-mode? #t)
+                (make <content-line-context>
+                  #:port (current-input-port))))))
+
+(test-error/assert "read_param_value_quoted: EOF"
+  'content-line-error
+  (with-input-from-string
+      "EMAIL;TYPE=\"home"
+    (lambda ()
+      (fsm-run! (make <content-line-parser>
+                  #:debug-mode? #t)
+                (make <content-line-context>
+                  #:port (current-input-port))))))
+
+
+(test-error/assert "read_param_value_list: EOF"
+  'content-line-error
+  (with-input-from-string
+      "NAME;PARAM=a,b,"
+    (lambda ()
+      (fsm-run! (make <content-line-parser>
+                  #:debug-mode? #t)
+                (make <content-line-context>
+                  #:port (current-input-port))))))
+
+
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
 (test-end %test-suite-name)

@@ -1,6 +1,6 @@
 ;;; cli.scm -- Guile-ICS common test code.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -27,10 +27,33 @@
 
 (define-module (tests common)
   #:use-module (oop goops)
+  #:use-module (srfi srfi-64)
   #:use-module (ics fsm context)
-  #:export (configure-test-logging!))
+  #:export (configure-test-logging! test-error/assert))
 
 (define-method (configure-test-logging! (test-suite-name <string>))
   (smc-log-init! "file" `((file . ,(string-append test-suite-name "-smc.log")))))
+
+(define-syntax test-error/assert
+  (syntax-rules ()
+    ((_ name expected-error body)
+     (test-equal name
+       expected-error
+       (begin
+         (test-result-set! (test-runner-current)
+                           'expected-error
+                           expected-error)
+         (test-result-set! (test-runner-current)
+                           'actual-value
+                           #f)
+         (catch #t
+           (lambda ()
+             body
+             #f)
+           (lambda (key . args)
+             (test-result-set! (test-runner-current)
+                               'actual-value
+                               key)
+             key)))))))
 
 ;;; common.scm ends here.
