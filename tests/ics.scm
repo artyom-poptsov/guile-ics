@@ -1,6 +1,6 @@
 ;;; ics.scm -- Tests for ICS parser.
 
-;; Copyright (C) 2016-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2016-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -209,6 +209,22 @@
       (let ((obj (stream-car (ics->stream #:parse-types? #t))))
         (ics-property-value
          (ics-object-property-ref (car (ics-object-components obj)) "GEO"))))))
+
+
+;; Recurrence Rule (RECUR)
+
+(test-assert "ics->stream: RRULE"
+  (with-input-from-string
+      (string-append
+       "BEGIN:VCALENDAR\r\n"
+       "BEGIN:VEVENT\r\n"
+       "RRULE:FREQ=YEARLY;INTERVAL=2;BYMONTH=1;BYDAY=SU;BYHOUR=8,9;BYMINUTE=30\r\n"
+       "END:VEVENT\r\n"
+       "END:VCALENDAR\r\n")
+    (lambda ()
+      (let ((obj (stream-car (ics->stream #:parse-types? #t))))
+        (ics-object-property-ref (car (ics-object-components obj))
+                                 "RRULE")))))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
