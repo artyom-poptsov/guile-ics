@@ -63,6 +63,9 @@
             content-line:store-name
             content-line:store-value
             content-line:store-value/unget-char
+            content-line:store-structured-name
+            content-line:store-structured-value
+            content-line:store-structured-value-list
             content-line:store-param-name
             content-line:store-param-value
             content-line:store-param-value/list
@@ -247,6 +250,44 @@ EOF.)"
        (content-line-value-type-set! content-line 'list))
       ((#\;)
        (content-line-value-type-set! content-line 'structure)))
+    (clear-stanza (clear-buffer ctx))))
+
+(define (content-line:store-structured-name ctx ch)
+  (let* ((content-line  (context-result ctx))
+         (current-value (content-line-value content-line))
+         (new-value     (context-buffer->string ctx)))
+    (content-line-value-type-set! content-line 'structure)
+    (if current-value
+        (content-line-value-set! content-line (cons (list new-value)
+                                                    current-value))
+        (content-line-value-set! content-line (list (list new-value))))
+    (clear-stanza (clear-buffer ctx))))
+
+(define (content-line:store-structured-value ctx ch)
+  (let* ((content-line  (context-result ctx))
+         (current-value (content-line-value content-line))
+         (new-value     (context-buffer->string ctx))
+         (last          (car current-value)))
+    (content-line-value-set! content-line (cons (cons (car last) new-value)
+                                                (cdr current-value)))
+    (clear-stanza (clear-buffer ctx))))
+
+(define (content-line:store-structured-value-list ctx ch)
+  (let* ((content-line  (context-result ctx))
+         (current-value (content-line-value content-line))
+         (new-value     (context-buffer->string ctx))
+         (last          (car current-value))
+         (name          (car last))
+         (value         (cdr last)))
+    (content-line-value-set! content-line
+                             (cons (cons name
+                                         (append (cond
+                                                  ((list? value)
+                                                   value)
+                                                  (else
+                                                   (list value)))
+                                                 (list new-value)))
+                                   (cdr current-value)))
     (clear-stanza (clear-buffer ctx))))
 
 (define (content-line:store-param-name ctx ch)

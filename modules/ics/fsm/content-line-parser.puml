@@ -84,10 +84,24 @@ read_param_value_list ->  read_param_value_list: content-line:safe-char? -> push
 ' CONTROL       = %x00-08 / %x0A-1F / %x7F
 '   ; All the controls except HTAB
 
+read_structured_list --> [*]: char:eof-object? -> content-line:error-param-eof
+read_structured_list -> read_structured_list: char:comma? -> content-line:store-structured-value-list
+read_structured_list --> read_value: char:semicolon? -> content-line:store-structured-value-list
+read_structured_list --> read_line_feed: char:cr? -> content-line:store-structured-value-list
+read_structured_list -> read_structured_list: content-line:value-char? -> push-event-to-buffer
+
+read_structured_value: Read a structured value.
+read_structured_value --> [*]: char:eof-object? -> content-line:error-param-eof
+read_structured_value --> read_line_feed:     char:cr? -> content-line:store-structured-value
+read_structured_value --> read_value: char:semicolon? -> content-line:store-structured-value
+read_structured_value --> read_structured_list:  char:comma? -> content-line:store-structured-value-list
+read_structured_value -> read_structured_value: content-line:value-char? -> push-event-to-buffer
+
 read_value: Read content line value.
 read_value --> [*]: char:eof-object? -> content-line:error-param-eof
 read_value --> read_line_feed:     char:cr?
 read_value --> read_value_escaped: char:reverse-solidus?
+read_value --> read_structured_value: char:equals-sign? -> content-line:store-structured-name
 read_value --> read_value:         char:comma? -> content-line:store-value
 
 ' Some property values are defined in terms of multiple parts.  These
