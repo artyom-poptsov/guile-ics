@@ -26,13 +26,15 @@
 (define-module (ics common)
   #:use-module ((srfi srfi-1) #:select (fold))
   #:use-module ((ice-9 regex) #:select (regexp-substitute/global))
+  #:use-module (ice-9 match)
   #:export (ics-debug-set!
             debug
             *debug?*
 
             case*
 
-            constructor-argument))
+            constructor-argument
+            in-range?))
 
 
 (define *debug?* #f)                    ; Is the debug mode enabled?
@@ -68,5 +70,20 @@
 (define (constructor-argument initargs key)
   (and (memq key initargs)
        (cadr (memq key initargs))))
+
+(define (in-range? value ranges)
+  "Check if a @var{value} is in a @var{range}.  @var{range} must be a pair or a
+list of pairs."
+  (and (number? value)
+       (match ranges
+         (((? number?) . (? number?))
+          (and (>= value (car ranges)) (<= value (cdr ranges))))
+         ((((? number?) . (? number?)) ...)
+          (fold (lambda (range prev)
+                  (or prev
+                      (and (>= value (car range))
+                           (<= value (cdr range)))))
+                #f
+                ranges)))))
 
 ;;; common.scm ends here
