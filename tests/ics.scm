@@ -213,18 +213,84 @@
 
 ;; Recurrence Rule (RECUR)
 
-(test-assert "ics->stream: RRULE"
+(test-assert "ics->stream: RRULE: raw value"
   (with-input-from-string
       (string-append
        "BEGIN:VCALENDAR\r\n"
        "BEGIN:VEVENT\r\n"
-       "RRULE:FREQ=YEARLY;INTERVAL=2;BYMONTH=1;BYDAY=SU;BYHOUR=8,9;BYMINUTE=30\r\n"
+       "RRULE:FREQ=YEARLY;INTERVAL=2;BYMONTH=1;BYDAY=SU;BYHOUR=8,9,10;BYMINUTE=30\r\n"
+       "END:VEVENT\r\n"
+       "END:VCALENDAR\r\n")
+    (lambda ()
+      (let ((obj (stream-car (ics->stream #:parse-types? #f))))
+        (ics-property-value
+         (ics-object-property-ref (car (ics-object-components obj))
+                                  "RRULE"))))))
+
+(test-assert "ics->stream: RRULE: parse types"
+  (with-input-from-string
+      (string-append
+       "BEGIN:VCALENDAR\r\n"
+       "BEGIN:VEVENT\r\n"
+       "RRULE:FREQ=YEARLY;INTERVAL=2;BYMONTH=1;BYDAY=SU;BYHOUR=8,9,10;BYMINUTE=30\r\n"
        "END:VEVENT\r\n"
        "END:VCALENDAR\r\n")
     (lambda ()
       (let ((obj (stream-car (ics->stream #:parse-types? #t))))
         (ics-object-property-ref (car (ics-object-components obj))
                                  "RRULE")))))
+
+(test-assert "ics->stream: RRULE: serialize"
+  (with-input-from-string
+      (string-append
+       "BEGIN:VCALENDAR\r\n"
+       "BEGIN:VEVENT\r\n"
+       "RRULE:FREQ=YEARLY;INTERVAL=2;BYMONTH=1;BYDAY=SU;BYHOUR=8,9,10;BYMINUTE=30\r\n"
+       "END:VEVENT\r\n"
+       "END:VCALENDAR\r\n")
+    (lambda ()
+      (let ((obj (stream-car (ics->stream #:parse-types? #t))))
+        (ics-property-value
+         (ics-typed-property->ics-property
+          (ics-object-property-ref (car (ics-object-components obj))
+                                   "RRULE")))))))
+
+(test-assert "rrule-part-freq-validate: valid value"
+  (rrule-part-freq-validate 'YEARLY #:verbose? #f))
+
+(test-error "rrule-part-freq-validate: error"
+  'guile-ics-rrule-error
+  (rrule-part-freq-validate 'WRONG-VALUE #:verbose? #f))
+
+(test-assert "rrule-part-count-validate: valid value"
+  (rrule-part-count-validate 42))
+
+(test-error "rrule-part-count-validate: error"
+  (rrule-part-count-validate "wrong value" #:verbose? #f))
+
+(test-assert "rrule-part-interval-validate: valid value"
+  (rrule-part-interval-validate 42))
+
+(test-error "rrule-part-interval-validate: error"
+  (rrule-part-interval-validate "wrong value" #:verbose? #f))
+
+(test-assert "rrule-part-bysecond-validate: valid single value"
+  (rrule-part-bysecond-validate 42))
+
+(test-assert "rrule-part-bysecond-validate: valid list"
+  (rrule-part-bysecond-validate '(1 2 3 4 5)))
+
+(test-error "rrule-part-bysecond-validate: invalid range: -1"
+  (rrule-part-bysecond-validate -1 #:verbose? #f))
+
+(test-error "rrule-part-bysecond-validate: invalid range: 61"
+  (rrule-part-bysecond-validate 61 #:verbose? #f))
+
+(test-error "rrule-part-bysecond-validate: invalid type"
+  (rrule-part-bysecond-validate "wrong value" #:verbose? #f))
+
+(test-error "rrule-part-bysecond-validate: invalid value in a list"
+  (rrule-part-bysecond-validate '(1 2 4 61 5) #:verbose? #f))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
