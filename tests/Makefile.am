@@ -1,6 +1,6 @@
 ## Config file for GNU Automake.
 ##
-## Copyright (C) 2016-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2016-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-ICS.
 ##
@@ -18,6 +18,7 @@
 ## along with Guile-ICS.  If not, see <http://www.gnu.org/licenses/>.
 
 SCM_TESTS = \
+	ics-common.scm \
 	content-line-context.scm \
 	content-line-parser.scm \
 	stream-context.scm \
