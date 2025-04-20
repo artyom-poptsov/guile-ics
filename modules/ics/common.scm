@@ -34,6 +34,7 @@
             case*
 
             constructor-argument
+            string-join/non-null
             in-range?))
 
 
@@ -85,5 +86,12 @@ list of pairs."
                            (<= value (cdr range)))))
                 #f
                 ranges)))))
+
+(define (string-join/non-null lst)
+  "Infix-join a list of strings @var{lst} with spaces as separators.  Only
+strings that are non-null are used; the empty strings get filtered out."
+  (string-join (filter (lambda (s) (not (string-null? s))) lst)
+               " "
+               'infix))
 
 ;;; common.scm ends here

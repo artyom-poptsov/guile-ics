@@ -57,6 +57,12 @@
   (in-range? 10 '((0 . 10) (a . -10))))
 
 
+
+(test-equal "string-join/non-null"
+  "this is a   test"
+  (string-join/non-null (list "" "this" "is" "" "a" " " "test" "")))
+
+
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
 (test-end %test-suite-name)
