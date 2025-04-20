@@ -1,6 +1,6 @@
 ;;; common.scm -- Common code for Guile-ICS.
 
-;; Copyright (C) 2015-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2015-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -30,7 +30,9 @@
             debug
             *debug?*
 
-            case*))
+            case*
+
+            constructor-argument))
 
 
 (define *debug?* #f)                    ; Is the debug mode enabled?
@@ -60,5 +62,11 @@
              `((or ,@(map (lambda (o) `(,pred ,key ,o))
                           datum)) ,exp)))))
        clauses)))
+
+
+
+(define (constructor-argument initargs key)
+  (and (memq key initargs)
+       (cadr (memq key initargs))))
 
 ;;; common.scm ends here
