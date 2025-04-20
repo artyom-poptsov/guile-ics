@@ -99,6 +99,37 @@ is intended for human to comprehent, not to a machine to parse."
   (define (print-icalprops props current-indent)
     "Print iCalendar properties from a PROPS list using a
 CURRENT-INDENT for indentation."
+    (define (vector->value-list raw-value)
+      (string-join
+       (map (lambda (element)
+              (cond
+               ((pair? element)
+                (let ((key   (car element))
+                      (value (cdr element)))
+                  (format #f "~a=~a"
+                          key
+                          (cond
+                           ((list? value)
+                            (string-join
+                             (map (lambda (e)
+                                    (cond
+                                     ((string? e)
+                                      e)
+                                     ((number? e)
+                                      (number->string e))
+                                     ((symbol? e)
+                                      (symbol->string e))
+                                     (else
+                                      e)))
+                                  value)
+                             ","))
+                           ((string? value)
+                            (escape-special-chars value #\, #\\ ))
+                           (else
+                            value)))))))
+            (vector->list raw-value))
+       "; "))
+
     (for-each (lambda (e)
                 (let ((s (make-string current-indent #\space))
                       (type (ics-property-type e))
@@ -119,10 +150,7 @@ CURRENT-INDENT for indentation."
                                         raw-value)
                                    ","))
                                  ((vector? raw-value)
-                                  (string-join
-                                   (map (cut escape-special-chars <> #\, #\\)
-                                        (vector->list raw-value))
-                                   ";"))
+                                  (vector->value-list raw-value))
                                  (else
                                   (escape-special-chars raw-value #\, #\\)))))
                     (format port ": ~a\n" value))))
