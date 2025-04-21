@@ -171,6 +171,14 @@
 
 ;;; DATE
 
+(test-equal "string->ics-date"
+  #(0 0 0 21 3 125 1 110 -1 0 #f)
+  (string->ics-date "20250421"))
+
+(test-equal "ics-date->string"
+  "20250421"
+  (ics-date->string #(0 0 0 21 3 125 1 110 -1 0 #f)))
+
 (test-assert "date: make"
   (let ((p (make <ics-property:date>
              #:name "RDATE"
