@@ -29,6 +29,7 @@
                 ics-property:date?
                 ics-property->ics-property:date
 
+                %date-fmt
                 string->ics-date
                 ics-date->string))
 

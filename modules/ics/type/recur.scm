@@ -25,9 +25,11 @@
   #:use-module (oop goops)
   #:use-module (ics common)
   #:use-module (ics type property)
+  #:use-module (ics type date)
   #:use-module (ice-9 regex)
   #:use-module (ice-9 hash-table)
   #:use-module (srfi srfi-1)
+  #:use-module (srfi srfi-26)
   #:export     (<ics-property:recur>
                 ics-property:recur?
                 ics-property->ics-property:recur
@@ -156,7 +158,6 @@
    "time format.  If not present, and the COUNT rule part is also not"
    "present, the \"RRULE\" is considered to repeat forever."))
 
-(define %date-fmt "%Y%m%d")
 (define %date-time-fmt "%Y%m%dT%H%M%S%Z")
 
 (define* (rrule-part-until-validate value #:key (verbose? #t))
@@ -166,7 +167,7 @@
   (cond
    ((string? value)
     (unless (or (catch #t
-                  (lambda () (strptime %date-fmt value))
+                  (lambda () (string->ics-date value))
                   (const #f))
                 (catch #t
                   (lambda () (strptime %date-time-fmt value))
@@ -772,7 +773,9 @@ vector."
                                 (else
                                  (object->string v)))))))
                 (list (p "FREQ"       ics-property:recur-freq)
-                      (p "UNTIL"      ics-property:recur-until)
+                      (p "UNTIL"      (lambda (prop)
+                                        (and=> (ics-property:recur-until prop)
+                                               (cut ics-date->string <>))))
                       (p "COUNT"      ics-property:recur-count)
                       (p "INTERVAL"   ics-property:recur-interval)
                       (p "BYSECOND"   ics-property:recur-by-second)
