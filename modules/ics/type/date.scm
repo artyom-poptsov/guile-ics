@@ -1,6 +1,6 @@
 ;;; date.scm -- iCalendar DATE (RFC5545, 3.3.4) type.
 
-;; Copyright (C) 2017-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2017-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -27,7 +27,10 @@
   #:use-module (ics type property)
   #:export     (<ics-property:date>
                 ics-property:date?
-                ics-property->ics-property:date))
+                ics-property->ics-property:date
+
+                string->ics-date
+                ics-date->string))
 
 
 ;;; Class definition.
@@ -76,26 +79,32 @@ is, #f otherwise."
 
 (define %date-fmt "%Y%m%d")
 
+(define-method (string->ics-date (str <string>))
+  "Parse an iCalendar date @var{string}, return parsed date as a vector."
+  (car (strptime %date-fmt str)))
+
+(define-method (ics-date->string (date <vector>))
+  "Convert a @var{date} vector to a iCalendar date string."
+  (strftime %date-fmt date))
+
 (define-method (ics-property->ics-property:date
                 (property <ics-property>))
-  (let ((date->tm (lambda (date) (car (strptime %date-fmt date))))
-        (value (ics-property-value property)))
+  (let ((value (ics-property-value property)))
     (make <ics-property:date>
       #:name       (ics-property-name property)
       #:value      (if (list? value)
-                       (map date->tm value)
-                       (date->tm value))
+                       (map string->ics-date value)
+                       (string->ics-date value))
       #:parameters (ics-property-parameters property))))
 
 (define-method (ics-typed-property->ics-property
                 (property <ics-property:date>))
-  (let ((tm->date (cut strftime %date-fmt <>))
-        (value    (ics-property-value property)))
+  (let ((value (ics-property-value property)))
     (make <ics-property>
       #:name        (ics-property-name property)
       #:value       (if (list? value)
-                        (map tm->date value)
-                        (tm->date value))
+                        (map ics-date->string value)
+                        (ics-date->string value))
       #:parameters  (ics-property-parameters property))))
 
 ;;; date.scm ends here.
