@@ -1,4 +1,4 @@
-;;; binary.scm -- iCalendar DATE-TIME (RFC5545, 3.3.5) type.
+;;; date-time.scm -- iCalendar DATE-TIME (RFC5545, 3.3.5) type.
 
 ;; Copyright (C) 2017-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
@@ -17,6 +17,8 @@
 
 
 ;;; Commentary:
+
+;; iCalendar DATE-TIME (RFC5545, 3.3.5) type implementation.
 
 
 ;;; Code:
