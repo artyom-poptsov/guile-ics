@@ -80,15 +80,22 @@ it is, #f otherwise."
 
 ;;; Converters.
 
-(define %date-time-fmt "%Y%m%dT%H%M%S%Z")
+(define %date-time-fmt "%Y%m%dT%H%M%S")
 
 (define-method (string->ics-date-time (str <string>))
   "Parse an iCalendar date-time @var{string}, return parsed date as a vector."
-  (car (strptime %date-time-fmt str)))
+  (let ((tm (car (strptime %date-time-fmt str))))
+    (when (equal? (string-take-right str 1) "Z")
+      (set-tm:zone tm "UTC"))
+    tm))
 
 (define-method (ics-date-time->string (date-time <vector>))
   "Convert a @var{date-time} vector to a iCalendar date-time string."
-  (strftime %date-time-fmt date-time))
+  (let ((str (strftime %date-time-fmt date-time)))
+    (if (or (not (tm:zone date-time))
+            (string=? (tm:zone date-time) "UTC"))
+        (string-append str "Z")
+        str)))
 
 (define-method (ics-property->ics-property:date-time
                 (property <ics-property>))

@@ -1,6 +1,6 @@
 ;;; ics.scm -- Type tests for ICS parser.
 
-;; Copyright (C) 2017-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2017-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -226,6 +226,14 @@
 
 
 ;;; DATE-TIME
+
+(test-equal "string->ics-date-time"
+  #(0 0 7 19 0 98 1 18 -1 0 "UTC")
+  (string->ics-date-time "19980119T070000Z"))
+
+(test-equal "ics-date-time->string"
+  "19980119T070000Z"
+  (ics-date-time->string #(0 0 7 19 0 98 1 18 -1 0 "UTC")))
 
 (test-assert "date-time: make"
   (let ((p (make <ics-property:date-time>
