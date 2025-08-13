@@ -225,7 +225,7 @@ for indentation."
     (format #t ";;; ~a    ~a~%" indent-string (ics-property-value property))
     (unless (null? (ics-property-parameters property))
       (for-each (lambda (parameter)
-                  (format #t ";;; ~a    ~50a ~20a~%"
+                  (format #t ";;; ~a    ~a: ~20a~%"
                           (make-string (+ indent 4) #\space)
                           (car parameter)
                           (cdr parameter)))
