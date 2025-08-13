@@ -215,6 +215,29 @@ for indentation."
 (define-method (ics-describe (property <ics-property>))
   (ics-describe property 0))
 
+(define-method (ics-describe-property-values (property <ics-property>)
+                                             (indent-string <string>))
+  "Print the description of PROPERTY values into standard output."
+  (let ((name (ics-property-name property)))
+    (case* string=? name
+      (("RRULE")
+       (for-each (lambda (value)
+                   (when (pair? value)
+                     (let ((k (car value))
+                           (v (cdr value)))
+                       (format #t
+                               ";;; ~a    ~a: ~a~%"
+                               indent-string
+                               k
+                               v))))
+                 (vector->list
+                  (ics-property-value property))))
+      (else
+       (format #t
+               ";;; ~a    ~a~%"
+               indent-string
+               (ics-property-value property))))))
+
 (define-method (ics-describe (property <ics-property>) (indent <number>))
   (let ((indent-string (make-string indent #\space)))
     (format #t ";;; ~a ~a (~a)~%"
@@ -222,7 +245,7 @@ for indentation."
             (ics-property-name property)
             (ics-describe-type (ics-property-name->type (ics-property-name property))))
     (ics-describe-type (ics-property-name->type (ics-property-name property)))
-    (format #t ";;; ~a    ~a~%" indent-string (ics-property-value property))
+    (ics-describe-property-values property indent-string)
     (unless (null? (ics-property-parameters property))
       (for-each (lambda (parameter)
                   (format #t ";;; ~a    ~a: ~20a~%"
