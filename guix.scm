@@ -1,6 +1,6 @@
 ;; guix.scm --- GNU Guix package recipe    -*- coding: utf-8 -*-
 ;;
-;; Copyright (C) 2022-2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2024, 2026 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This file is part of Guile-ICS.
 ;;
@@ -68,7 +68,7 @@
            gettext-minimal ; Gettext brings 'AC_LIB_LINKFLAGS_FROM_LIBS'.
            pkg-config
            guile-dsv
-           texlive
+           texlive-scheme-basic
            ;; needed when cross-compiling.
            guile-3.0
            guile-lib
