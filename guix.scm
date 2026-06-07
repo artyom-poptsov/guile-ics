@@ -46,7 +46,7 @@
              (gnu packages guile-xyz)
              (gnu packages pkg-config)
              (gnu packages texinfo)
-             (gnu packages texlive)
+             (gnu packages tex)
              (gnu packages man))
 
 
